@@ -5,11 +5,16 @@ Backbone.Validation = (function() {
 				return msg || attr + ' is required';
 			}
 		},
-		min: function(value, attr, msg, minValue) {
-		    if(value < minValue) {
-		        return attr + ' must be equal to or larger than ' + minValue;
-		    }
-		}
+        min: function(value, attr, msg, minValue) {
+            if(value < minValue) {
+                return attr + ' must be equal to or larger than ' + minValue;
+            }
+        },
+        max: function(value, attr, msg, maxValue) {
+            if(value > maxValue) {
+                return attr + ' must be equal to or less than ' + maxValue;
+            }
+        }
 	};
 
 	var getValidator = function(view, attr) {

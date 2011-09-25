@@ -202,15 +202,15 @@ buster.testCase("Backbone.Validation", {
 				assert.called(this.invalidSpy);
 			}
 		},
-		
-		"min": {
-		    setUp: function() {
-				this.model.validation = {
-					age: {
-						min: 1
-					}
-				};
-			},
+        
+        "min": {
+            setUp: function() {
+                this.model.validation = {
+                    age: {
+                        min: 1
+                    }
+                };
+            },
             
             "setting value lower than min should be invalid": function(){
                 this.model.set({age: 0});
@@ -223,6 +223,28 @@ buster.testCase("Backbone.Validation", {
                 
                 assert.called(this.validSpy);
             }
-		}
+        },
+               
+        "max": {
+            setUp: function() {
+                this.model.validation = {
+                    age: {
+                        max: 10
+                    }
+                };
+            },
+            
+            "setting value higher than max should be invalid": function(){
+                this.model.set({age: 11});
+                
+                assert.called(this.invalidSpy);
+            },
+                       
+            "setting value equal to max should be valid": function(){
+                this.model.set({age: 10});
+                
+                assert.called(this.validSpy);
+            }
+        }
 	}
 });
