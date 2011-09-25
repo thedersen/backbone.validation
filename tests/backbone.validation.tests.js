@@ -242,6 +242,20 @@ buster.testCase("Backbone.Validation builtin validators", {
 			});
 
 			assert.called(this.validSpy);
+		},
+		
+		"should override error msg when specified": function() {
+			this.model.validation = {
+				age: {
+					min: 1,
+					msg: 'Error'
+				}
+			};
+			this.model.set({
+				age: 0
+			});
+
+			assert.calledWith(this.invalidSpy, this.view, 'age', 'Error');
 		}
 	},
 
@@ -268,6 +282,20 @@ buster.testCase("Backbone.Validation builtin validators", {
 			});
 
 			assert.called(this.validSpy);
+		},
+		
+		"should override error msg when specified": function() {
+			this.model.validation = {
+				age: {
+					max: 1,
+					msg: 'Error'
+				}
+			};
+			this.model.set({
+				age: 2
+			});
+
+			assert.calledWith(this.invalidSpy, this.view, 'age', 'Error');
 		}
 	},
 
