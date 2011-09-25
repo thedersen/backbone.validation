@@ -1,31 +1,42 @@
 Backbone.Validation = (function() {
-    var validators = {
-        required: function(val) {
-            if(!val){
-                return "Required";
-            }
-        }
-    };
+	var validators = {
+		required: function(val) {
+			if (!val) {
+				return "Required";
+			}
+		}
+	};
+
+	var getValidator = function(view, attr) {
+		var val = view.model.validation[attr];
+
+        if (typeof val === 'function') {
+			return val;
+		} else {
+			return validators['required'];
+		}
+	};
 
 	return {
 		version: '0.0.1',
+		valid: function(view, attr) {
+			view.$("#" + attr).removeClass("invalid");
+		},
+		invalid: function(view, attr, error) {
+			view.$("#" + attr).data['error'] = error;
+			view.$("#" + attr).addClass("invalid");
+		},
+
 		bind: function(view) {
+			var that = this;
 			view.model.validate = function(attrs) {
 				for (attr in attrs) {
+					var result = getValidator(view, attr)(attrs[attr]);
 
-					var val = view.model.validation[attr];
-					var result;
-					if (typeof val === 'function') {
-						result = val(attrs[attr]);	
-					} else {
-					    result = validators['required'](attrs[attr]);
-					}
-					
 					if (result) {
-						view.$("#" + attr).data['error'] = result;
-						view.$("#" + attr).addClass("invalid");
+						that.invalid(view, attr, result);
 					} else {
-						view.$("#" + attr).removeClass("invalid");
+						that.valid(view, attr);
 					}
 				}
 			};

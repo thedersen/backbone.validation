@@ -77,29 +77,19 @@ buster.testCase("Backbone.Validation", {
 
 			this.el = $(this.view.$("#name"));
 		},
-
-		"invalid property": {
-			setUp: function() {
-				this.model.set({
-					name: ''
-				});
-			},
-
-			"should have invalid class": function() {
-				assert.isTrue(this.el.hasClass('invalid'));
-			}
+		
+		"invalid property should have invalid class": function() {
+			this.model.set({
+				name: ''
+			});
+			assert.isTrue(this.el.hasClass('invalid'));
 		},
 
-		"valid property": {
-			setUp: function() {
-				this.model.set({
-					name: 'valid'
-				});
-			},
-
-			"should not have invalid class": function() {
-				assert.isFalse(this.el.hasClass('invalid'));
-			}
+		"valid property should not have invalid class": function() {
+			this.model.set({
+				name: 'valid'
+			});
+			assert.isFalse(this.el.hasClass('invalid'));
 		}
 	}
 });
