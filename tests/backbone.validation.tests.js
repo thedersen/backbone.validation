@@ -1,4 +1,3 @@
-//var buster = require("buster");
 var assert = buster.assert;
 
 buster.testCase("Backbone.Validation", {
@@ -11,7 +10,7 @@ buster.testCase("Backbone.Validation", {
 				Backbone.Validation.bind(this);
 			}
 		});
-		
+
 		var Model = Backbone.Model.extend({});
 
 		this.model = new Model();
@@ -31,34 +30,40 @@ buster.testCase("Backbone.Validation", {
 					}
 				}
 			};
+			
+			this.el = $(this.view.$("#age"));			
 		},
-		
 
-    	"valid property should not have invalid class": function() {
-    		this.model.set({
-    			age: 1
-    		});
+		"valid property": {
+			setUp: function() {
+				this.model.set({
+					age: 1
+				});
+			},
 
-    		var el = $(this.view.$("#age"));
-    		assert.isFalse(el.hasClass('invalid'));
-    	},
+			"should not have invalid class": function() {
+				assert.isFalse(this.el.hasClass('invalid'));
+			},
+			
+			"should not have data property with error message": function(){
+			    assert.isUndefined(this.el.data['error']);
+			}
+		},
 
-    	"invalid property should have invalid class": function() {
-    		this.model.set({
-    			age: 0
-    		});
+		"invalid property": {
+			setUp: function() {
+				this.model.set({
+					age: 0
+				});
+			},
 
-    		var el = $(this.view.$("#age"));
-    		assert.isTrue(el.hasClass('invalid'));
-    	},
+			"invalid property should have invalid class": function() {
+				assert.isTrue(this.el.hasClass('invalid'));
+			},
 
-    	"invalid property should have data attribute with error message": function() {
-    		this.model.set({
-    			age: 0
-    		});
-
-    		var el = $(this.view.$("#age"));
-    		assert.equals(el.data['error'], 'Age is invalid');
-    	}
+			"invalid property should have data attribute with error message": function() {
+				assert.equals(this.el.data['error'], 'Age is invalid');
+			}
+		}
 	}
 });
