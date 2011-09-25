@@ -1,4 +1,11 @@
 Backbone.Validation = (function() {
+    var validators = {
+        required: function(val) {
+            if(!val){
+                return "Required";
+            }
+        }
+    };
 
 	return {
 		version: '0.0.1',
@@ -7,14 +14,18 @@ Backbone.Validation = (function() {
 				for (attr in attrs) {
 
 					var val = view.model.validation[attr];
+					var result;
 					if (typeof val === 'function') {
-						var result = val(attrs[attr]);
-						if (result) {
-							view.$("#" + attr).data['error'] = result;
-							view.$("#" + attr).addClass("invalid");
-						} else {
-							view.$("#" + attr).removeClass("invalid");
-						}
+						result = val(attrs[attr]);	
+					} else {
+					    result = validators['required'](attrs[attr]);
+					}
+					
+					if (result) {
+						view.$("#" + attr).data['error'] = result;
+						view.$("#" + attr).addClass("invalid");
+					} else {
+						view.$("#" + attr).removeClass("invalid");
 					}
 				}
 			};
