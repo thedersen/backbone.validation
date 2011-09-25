@@ -1,7 +1,7 @@
 Backbone.Validation = (function() {
 	var validators = {
-		required: function(val, attr, msg) {
-			if (!val) {
+		required: function(value, attr, msg) {
+			if (_.isNull(value) || _.isUndefined(value) || value.trim() === '') {
 				return msg || attr + ' is required';
 			}
 		}
@@ -10,7 +10,7 @@ Backbone.Validation = (function() {
 	var getValidator = function(view, attr) {
 		var val = view.model.validation[attr];
 
-        if (typeof val === 'function') {
+        if (_.isFunction(val)) {
 			return {
 			    fn: val
 			};
@@ -20,6 +20,11 @@ Backbone.Validation = (function() {
 			    msg: val['msg']
 		    };
 		}
+	};
+	
+	var validate = function(view, attr, value){
+	    var val = getValidator(view, attr);
+	    return val['fn'](value, attr, val['msg']);
 	};
 
 	return {
@@ -37,8 +42,7 @@ Backbone.Validation = (function() {
 			var that = this;
 			view.model.validate = function(attrs) {
 				for (attr in attrs) {
-				    var val = getValidator(view, attr);
-					var result = val['fn'](attrs[attr], attr, val['msg']);
+					var result = validate(view, attr, attrs[attr]);
 
 					if (result) {
 						that.invalid(view, attr, result);

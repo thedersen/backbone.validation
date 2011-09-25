@@ -140,21 +140,21 @@ buster.testCase("Backbone.Validation", {
 				};
 			},
 
-			"invalid property should have invalid class": function() {
-				this.model.set({
-					name: ''
-				});
+            "should call valid with correct arguments when property is valid": function() {
+                this.model.set({
+                    name: 'valid'
+                });
 
-				assert.calledWith(this.invalidSpy, this.view, 'name', 'name is required');
-			},
+                assert.calledWith(this.validSpy, this.view, 'name');
+            },
+            
+            "should call invalid with correct arguments when property is invalid": function() {
+                this.model.set({
+                    name: ''
+                });
 
-			"should be valid when property not empty": function() {
-				this.model.set({
-					name: 'valid'
-				});
-
-				assert.calledWith(this.validSpy, this.view, 'name');
-			},
+                assert.calledWith(this.invalidSpy, this.view, 'name', 'name is required');
+            },
 
 			"should override error msg when specified": function() {
 				this.model.validation = {
@@ -168,6 +168,54 @@ buster.testCase("Backbone.Validation", {
 				});
 
 				assert.calledWith(this.invalidSpy, this.view, 'name', 'Error');
+			},
+
+			"empty string should be invalid": function() {
+				this.model.set({
+					name: ''
+				});
+
+				assert.called(this.invalidSpy);
+			},
+
+			"blank string should be invalid": function() {
+				this.model.set({
+					name: '  '
+				});
+
+				assert.called(this.invalidSpy);
+			},
+
+			"null should be invalid": function() {
+				this.model.set({
+					name: null
+				});
+
+				assert.called(this.invalidSpy);
+			},
+
+			"undefined should be invalid": function() {
+				this.model.set({
+					name: undefined
+				});
+
+				assert.called(this.invalidSpy);
+			}
+		},
+		
+		"min": {
+		    setUp: function() {
+				this.model.validation = {
+					age: {
+						min: 1
+					}
+				};
+			},
+			
+			"setting value lower than min should be invalid": function(){
+			    this.model.set({age: 0});
+			    
+			    assert.called(this.invalidSpy);
 			}
 		}
 	}
