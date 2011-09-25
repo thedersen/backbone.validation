@@ -2,7 +2,7 @@ Backbone.Validation = (function() {
 	var validators = {
 		required: function(val) {
 			if (!val) {
-				return "Required";
+				return 'Required';
 			}
 		}
 	};
@@ -20,11 +20,12 @@ Backbone.Validation = (function() {
 	return {
 		version: '0.0.1',
 		valid: function(view, attr) {
-			view.$("#" + attr).removeClass("invalid");
+			view.$('#' + attr).removeClass('invalid');
+			view.$('#' + attr).removeData('error');
 		},
 		invalid: function(view, attr, error) {
-			view.$("#" + attr).data['error'] = error;
-			view.$("#" + attr).addClass("invalid");
+			view.$('#' + attr).data('error', error);
+			view.$('#' + attr).addClass('invalid');
 		},
 
 		bind: function(view) {
@@ -38,6 +39,8 @@ Backbone.Validation = (function() {
 					} else {
 						that.valid(view, attr);
 					}
+					
+					return result;
 				}
 			};
 		}

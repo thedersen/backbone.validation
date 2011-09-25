@@ -21,7 +21,7 @@ buster.testCase("Backbone.Validation", {
 		this.view.render();
 	},
 
-	"custom validator": {
+	"default behaviour": {
 		setUp: function() {
 			this.model.validation = {
 				age: function(val) {
@@ -34,7 +34,7 @@ buster.testCase("Backbone.Validation", {
 			this.el = $(this.view.$("#age"));
 		},
 
-		"valid property": {
+		"setting valid value": {
 			setUp: function() {
 				this.model.set({
 					age: 1
@@ -46,11 +46,17 @@ buster.testCase("Backbone.Validation", {
 			},
 
 			"should not have data property with error message": function() {
-				assert.isUndefined(this.el.data['error']);
+				assert.isUndefined(this.el.data('error'));
+			},
+
+			"should return the model": function() {
+				assert.equals(this.model.set({
+					age: 1
+				}), this.model);
 			}
 		},
 
-		"invalid property": {
+		"setting invalid value": {
 			setUp: function() {
 				this.model.set({
 					age: 0
@@ -62,9 +68,57 @@ buster.testCase("Backbone.Validation", {
 			},
 
 			"should have data attribute with error message": function() {
-				assert.equals(this.el.data['error'], 'Age is invalid');
+				assert.equals(this.el.data('error'), 'Age is invalid');
+			},
+
+			"should return false": function() {
+				assert.isFalse(this.model.set({
+					age: 0
+				}));
 			}
 		}
+	},
+	
+	"override default behaviour": {
+	    setUp: function() {
+	        this.model.validation = {
+    			age: function(val) {
+    				if (val === 0) {
+    					return "Age is invalid";
+    				}
+    			}
+    		};
+            
+	        this.oldValid = Backbone.Validation.valid;
+	        this.oldInvalid = Backbone.Validation.invalid;
+	    },
+	    
+	    tearDown: function() {
+	        Backbone.Validation.valid = this.oldValid;
+	        Backbone.Validation.invalid = this.oldInvalid;
+	    },
+	    
+	    "should call custom valid function": function() {
+	        var customCalled;
+	        Backbone.Validation.valid = function(view, attr) {
+	            customCalled = true;
+	        };
+	        
+	        this.model.set({age: 1});
+	        
+	        assert.isTrue(customCalled);
+	    },
+	    
+	    "should call custom invalid function": function() {
+	        var customCalled;
+	        Backbone.Validation.invalid = function(view, attr, error) {
+	            customCalled = true;
+	        };
+	        
+	        this.model.set({age: 0});
+	        
+	        assert.isTrue(customCalled);
+	    }
 	},
 
 	"required validator": {
@@ -77,7 +131,7 @@ buster.testCase("Backbone.Validation", {
 
 			this.el = $(this.view.$("#name"));
 		},
-		
+
 		"invalid property should have invalid class": function() {
 			this.model.set({
 				name: ''
