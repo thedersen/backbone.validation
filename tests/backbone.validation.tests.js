@@ -123,179 +123,194 @@ buster.testCase("Backbone.Validation", {
 
 			assert.isTrue(customCalled);
 		}
+	}
+});
+
+buster.testCase("Backbone.Validation builtin validators", {
+	setUp: function() {
+		var View = Backbone.View.extend({
+			render: function() {
+				Backbone.Validation.bind(this);
+			}
+		});
+
+		var Model = Backbone.Model.extend({});
+
+		this.model = new Model();
+		this.view = new View({
+			model: this.model
+		});
+
+		this.view.render();
+
+		this.invalidSpy = this.spy(Backbone.Validation, 'invalid');
+		this.validSpy = this.spy(Backbone.Validation, 'valid');
 	},
 
-	"builtin validators": {
+	"required": {
 		setUp: function() {
-			this.invalidSpy = this.spy(Backbone.Validation, 'invalid');
-			this.validSpy = this.spy(Backbone.Validation, 'valid');
+			this.model.validation = {
+				name: {
+					required: true
+				}
+			};
 		},
 
-		"required": {
-			setUp: function() {
-				this.model.validation = {
-					name: {
-						required: true
-					}
-				};
-			},
+		"should call valid with correct arguments when property is valid": function() {
+			this.model.set({
+				name: 'valid'
+			});
 
-			"should call valid with correct arguments when property is valid": function() {
-				this.model.set({
-					name: 'valid'
-				});
-
-				assert.calledWith(this.validSpy, this.view, 'name');
-			},
-
-			"should call invalid with correct arguments when property is invalid": function() {
-				this.model.set({
-					name: ''
-				});
-
-				assert.calledWith(this.invalidSpy, this.view, 'name', 'name is required');
-			},
-
-			"should override error msg when specified": function() {
-				this.model.validation = {
-					name: {
-						required: true,
-						msg: 'Error'
-					}
-				};
-				this.model.set({
-					name: ''
-				});
-
-				assert.calledWith(this.invalidSpy, this.view, 'name', 'Error');
-			},
-
-			"empty string should be invalid": function() {
-				this.model.set({
-					name: ''
-				});
-
-				assert.called(this.invalidSpy);
-			},
-
-			"blank string should be invalid": function() {
-				this.model.set({
-					name: '  '
-				});
-
-				assert.called(this.invalidSpy);
-			},
-
-			"null should be invalid": function() {
-				this.model.set({
-					name: null
-				});
-
-				assert.called(this.invalidSpy);
-			},
-
-			"undefined should be invalid": function() {
-				this.model.set({
-					name: undefined
-				});
-
-				assert.called(this.invalidSpy);
-			}
+			assert.calledWith(this.validSpy, this.view, 'name');
 		},
 
-		"min": {
-			setUp: function() {
-				this.model.validation = {
-					age: {
-						min: 1
-					}
-				};
-			},
+		"should call invalid with correct arguments when property is invalid": function() {
+			this.model.set({
+				name: ''
+			});
 
-			"setting value lower than min should be invalid": function() {
-				this.model.set({
-					age: 0
-				});
-
-				assert.called(this.invalidSpy);
-			},
-
-			"setting value equal to min should be valid": function() {
-				this.model.set({
-					age: 1
-				});
-
-				assert.called(this.validSpy);
-			}
+			assert.calledWith(this.invalidSpy, this.view, 'name', 'name is required');
 		},
 
-		"max": {
-			setUp: function() {
-				this.model.validation = {
-					age: {
-						max: 10
-					}
-				};
-			},
+		"should override error msg when specified": function() {
+			this.model.validation = {
+				name: {
+					required: true,
+					msg: 'Error'
+				}
+			};
+			this.model.set({
+				name: ''
+			});
 
-			"setting value higher than max should be invalid": function() {
-				this.model.set({
-					age: 11
-				});
-
-				assert.called(this.invalidSpy);
-			},
-
-			"setting value equal to max should be valid": function() {
-				this.model.set({
-					age: 10
-				});
-
-				assert.called(this.validSpy);
-			}
+			assert.calledWith(this.invalidSpy, this.view, 'name', 'Error');
 		},
 
-		"min && max": {
-			setUp: function() {
-				this.model.validation = {
-					age: {
-						min: 1,
-						max: 10
-					}
-				};
-			},
+		"empty string should be invalid": function() {
+			this.model.set({
+				name: ''
+			});
 
-			"setting value lower than min should be invalid": function() {
-				this.model.set({
-					age: 0
-				});
+			assert.called(this.invalidSpy);
+		},
 
-				assert.called(this.invalidSpy);
-			},
+		"blank string should be invalid": function() {
+			this.model.set({
+				name: '  '
+			});
 
-			"setting value equal to min should be valid": function() {
-				this.model.set({
-					age: 1
-				});
+			assert.called(this.invalidSpy);
+		},
 
-				assert.called(this.validSpy);
-			},
+		"null should be invalid": function() {
+			this.model.set({
+				name: null
+			});
 
-			"setting value higher than max should be invalid": function() {
-				this.model.set({
-					age: 11
-				});
+			assert.called(this.invalidSpy);
+		},
 
-				assert.called(this.invalidSpy);
-			},
+		"undefined should be invalid": function() {
+			this.model.set({
+				name: undefined
+			});
 
-			"setting value equal to max should be valid": function() {
-				this.model.set({
-					age: 10
-				});
+			assert.called(this.invalidSpy);
+		}
+	},
 
-				assert.called(this.validSpy);
-			}
+	"min": {
+		setUp: function() {
+			this.model.validation = {
+				age: {
+					min: 1
+				}
+			};
+		},
+
+		"setting value lower than min should be invalid": function() {
+			this.model.set({
+				age: 0
+			});
+
+			assert.called(this.invalidSpy);
+		},
+
+		"setting value equal to min should be valid": function() {
+			this.model.set({
+				age: 1
+			});
+
+			assert.called(this.validSpy);
+		}
+	},
+
+	"max": {
+		setUp: function() {
+			this.model.validation = {
+				age: {
+					max: 10
+				}
+			};
+		},
+
+		"setting value higher than max should be invalid": function() {
+			this.model.set({
+				age: 11
+			});
+
+			assert.called(this.invalidSpy);
+		},
+
+		"setting value equal to max should be valid": function() {
+			this.model.set({
+				age: 10
+			});
+
+			assert.called(this.validSpy);
+		}
+	},
+
+	"min && max": {
+		setUp: function() {
+			this.model.validation = {
+				age: {
+					min: 1,
+					max: 10
+				}
+			};
+		},
+
+		"setting value lower than min should be invalid": function() {
+			this.model.set({
+				age: 0
+			});
+
+			assert.called(this.invalidSpy);
+		},
+
+		"setting value equal to min should be valid": function() {
+			this.model.set({
+				age: 1
+			});
+
+			assert.called(this.validSpy);
+		},
+
+		"setting value higher than max should be invalid": function() {
+			this.model.set({
+				age: 11
+			});
+
+			assert.called(this.invalidSpy);
+		},
+
+		"setting value equal to max should be valid": function() {
+			this.model.set({
+				age: 10
+			});
+
+			assert.called(this.validSpy);
 		}
 	}
 });

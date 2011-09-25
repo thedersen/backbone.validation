@@ -1,5 +1,5 @@
 Backbone.Validation = (function() {
-	var validators = {
+	var builtinValidators = {
 		required: function(value, attr, msg) {
 			if (_.isNull(value) || _.isUndefined(value) || (_.isString(value) && value.trim() === '')) {
 				return msg || attr + ' is required';
@@ -17,28 +17,28 @@ Backbone.Validation = (function() {
         }
 	};
 
-	var getValidator = function(view, attr) {
+	var getValidators = function(view, attr) {
 		var validation = view.model.validation[attr];
 
         if (_.isFunction(validation)) {
 			return validation;
 		} else {
-		    var vals = [];
+		    var valdations = [];
 		    for(attr in validation) {
 		        if(attr !== 'msg' && validation.hasOwnProperty(attr)) {
-    			    vals.push({
-    			        fn: validators[attr],
+    			    valdations.push({
+    			        fn: builtinValidators[attr],
     			        val: validation[attr],
     			        msg: validation['msg']
     		        });   
 		        }
 		    }
-		    return vals;
+		    return valdations;
 		}
 	};
 	
 	var validate = function(view, attr, value){
-	    var validators = getValidator(view, attr);
+	    var validators = getValidators(view, attr);
 	    if(_.isFunction(validators)){
 	        return validators(value);
 	    } else {
