@@ -18,27 +18,41 @@ Backbone.Validation = (function() {
 	};
 
 	var getValidator = function(view, attr) {
-		var val = view.model.validation[attr];
+		var validation = view.model.validation[attr];
 
-        if (_.isFunction(val)) {
-			return {
-			    fn: val
-			};
+        if (_.isFunction(validation)) {
+			return validation;
 		} else {
-		    for(v in val) {
-    			return {
-    			    fn: validators[v],
-    			    val: val[v],
-    			    msg: val['msg']
-    		    };   
+		    var vals = [];
+		    for(attr in validation) {
+		        if(attr !== 'msg' && validation.hasOwnProperty(attr)) {
+    			    vals.push({
+    			        fn: validators[attr],
+    			        val: validation[attr],
+    			        msg: validation['msg']
+    		        });   
+		        }
 		    }
-		    return undefined;
+		    return vals;
 		}
 	};
 	
 	var validate = function(view, attr, value){
-	    var val = getValidator(view, attr);
-	    return val['fn'](value, attr, val['msg'], val['val']);
+	    var validators = getValidator(view, attr);
+	    if(_.isFunction(validators)){
+	        return validators(value);
+	    } else {
+	        var result = '';
+	        for (var i=0; i < validators.length; i++) {
+	           var validator = validators[i];
+	           var res = validator.fn(value, attr, validator.msg, validator.val);
+	           if(res){
+	               result += res;
+	           }
+	        };
+	        return result;
+	    }
+	    
 	};
 
 	return {
