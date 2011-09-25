@@ -11,7 +11,15 @@ buster.testCase("Backbone.Validation", {
 			}
 		});
 
-		var Model = Backbone.Model.extend({});
+		var Model = Backbone.Model.extend({
+			validation: {
+				age: function(val) {
+					if (val === 0) {
+						return "Age is invalid";
+					}
+				}
+			}
+		});
 
 		this.model = new Model();
 		this.view = new View({
@@ -19,121 +27,165 @@ buster.testCase("Backbone.Validation", {
 		});
 
 		this.view.render();
+		this.el = $(this.view.$("#age"));
 	},
 
-	"default behaviour": {
+	"setting valid value": {
 		setUp: function() {
-			this.model.validation = {
-				age: function(val) {
-					if (val === 0) {
-						return "Age is invalid";
-					}
-				}
-			};
-
-			this.el = $(this.view.$("#age"));
-		},
-
-		"setting valid value": {
-			setUp: function() {
-				this.model.set({
-					age: 1
-				});
-			},
-
-			"should not have invalid class": function() {
-				assert.isFalse(this.el.hasClass('invalid'));
-			},
-
-			"should not have data property with error message": function() {
-				assert.isUndefined(this.el.data('error'));
-			},
-
-			"should return the model": function() {
-				assert.equals(this.model.set({
-					age: 1
-				}), this.model);
-			}
-		},
-
-		"setting invalid value": {
-			setUp: function() {
-				this.model.set({
-					age: 0
-				});
-			},
-
-			"should have invalid class": function() {
-				assert.isTrue(this.el.hasClass('invalid'));
-			},
-
-			"should have data attribute with error message": function() {
-				assert.equals(this.el.data('error'), 'Age is invalid');
-			},
-
-			"should return false": function() {
-				assert.isFalse(this.model.set({
-					age: 0
-				}));
-			}
-		}
-	},
-
-	"override default behaviour": {
-		setUp: function() {
-			this.model.validation = {
-				age: function(val) {
-					if (val === 0) {
-						return "Age is invalid";
-					}
-				}
-			};
-
-			this.oldValid = Backbone.Validation.valid;
-			this.oldInvalid = Backbone.Validation.invalid;
-		},
-
-		tearDown: function() {
-			Backbone.Validation.valid = this.oldValid;
-			Backbone.Validation.invalid = this.oldInvalid;
-		},
-
-		"should call custom valid function": function() {
-			var customCalled;
-			Backbone.Validation.valid = function(view, attr) {
-				customCalled = true;
-			};
-
 			this.model.set({
 				age: 1
 			});
-
-			assert.isTrue(customCalled);
 		},
 
-		"should call custom invalid function": function() {
-			var customCalled;
-			Backbone.Validation.invalid = function(view, attr, error) {
-				customCalled = true;
-			};
+		"should not have invalid class": function() {
+			assert.isFalse(this.el.hasClass('invalid'));
+		},
 
+		"should not have data property with error message": function() {
+			assert.isUndefined(this.el.data('error'));
+		},
+
+		"should return the model": function() {
+			assert.equals(this.model.set({
+				age: 1
+			}), this.model);
+		}
+	},
+
+	"setting invalid value": {
+		setUp: function() {
 			this.model.set({
 				age: 0
 			});
+		},
 
-			assert.isTrue(customCalled);
+		"should have invalid class": function() {
+			assert.isTrue(this.el.hasClass('invalid'));
+		},
+
+		"should have data attribute with error message": function() {
+			assert.equals(this.el.data('error'), 'Age is invalid');
+		},
+
+		"should return false": function() {
+			assert.isFalse(this.model.set({
+				age: 0
+			}));
 		}
 	}
 });
 
-buster.testCase("Backbone.Validation builtin validators", {
+buster.testCase("Backbone.Validation cutomize", {
 	setUp: function() {
-		var View = Backbone.View.extend({
+		Backbone.Validation.valid = this.spy();
+		Backbone.Validation.invalid = this.spy();
+		
+	    var View = Backbone.View.extend({
 			render: function() {
 				Backbone.Validation.bind(this);
 			}
 		});
 
+		var Model = Backbone.Model.extend({
+			validation: {
+				age: function(val) {
+					if (val === 0) {
+						return "Age is invalid";
+					}
+				}
+			}
+		});
+		
+		this.model = new Model();
+		this.view = new View({
+			model: this.model
+		});
+
+		this.view.render();
+	},
+
+	"should call overridden valid function": function() {
+		this.model.set({
+			age: 1
+		});
+
+		assert.called(Backbone.Validation.valid);
+	},
+
+	"should call overridden invalid function": function() {
+		this.model.set({
+			age: 0
+		});
+
+		assert.called(Backbone.Validation.invalid);
+	}
+});
+
+buster.testCase("Backbone.Validation bind options", {
+	setUp: function() {
+		var that = this;
+		this.valid = this.spy();
+		this.invalid = this.spy();
+
+		var View = Backbone.View.extend({
+			render: function() {
+				Backbone.Validation.bind(this, {
+					valid: that.valid,
+					invalid: that.invalid
+				});
+			}
+		});
+
+		var Model = Backbone.Model.extend({
+			validation: {
+				age: function(val) {
+					if (val === 0) {
+						return "Age is invalid";
+					}
+				}
+			}
+		});
+
+		this.model = new Model();
+		this.view = new View({
+			model: this.model
+		});
+
+		this.view.render();
+	},
+
+    "should call valid function passed with options": function() {
+        this.model.set({
+            age: 1
+        });
+
+        assert.called(this.valid);
+    },
+    
+    "should call invalid function passed with options": function() {
+        this.model.set({
+            age: 0
+        });
+
+        assert.called(this.invalid);
+    }
+});
+
+buster.testCase("Backbone.Validation builtin validators", {
+	setUp: function() {
+		var that = this;
+		this.valid = this.spy();
+		this.invalid = this.spy();
+
+		var View = Backbone.View.extend({
+			render: function() {
+				Backbone.Validation.bind(this, {
+					valid: that.valid,
+					invalid: that.invalid
+				});
+			}
+		});
+
 		var Model = Backbone.Model.extend({});
 
 		this.model = new Model();
@@ -142,9 +194,6 @@ buster.testCase("Backbone.Validation builtin validators", {
 		});
 
 		this.view.render();
-
-		this.invalidSpy = this.spy(Backbone.Validation, 'invalid');
-		this.validSpy = this.spy(Backbone.Validation, 'valid');
 	},
 
 	"required": {
@@ -161,7 +210,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				name: 'valid'
 			});
 
-			assert.calledWith(this.validSpy, this.view, 'name');
+			assert.calledWith(this.valid, this.view, 'name');
 		},
 
 		"should call invalid with correct arguments when property is invalid": function() {
@@ -169,7 +218,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				name: ''
 			});
 
-			assert.calledWith(this.invalidSpy, this.view, 'name', 'name is required');
+			assert.calledWith(this.invalid, this.view, 'name', 'name is required');
 		},
 
 		"should override error msg when specified": function() {
@@ -183,7 +232,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				name: ''
 			});
 
-			assert.calledWith(this.invalidSpy, this.view, 'name', 'Error');
+			assert.calledWith(this.invalid, this.view, 'name', 'Error');
 		},
 
 		"empty string should be invalid": function() {
@@ -191,7 +240,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				name: ''
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		},
 
 		"blank string should be invalid": function() {
@@ -199,7 +248,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				name: '  '
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		},
 
 		"null should be invalid": function() {
@@ -207,7 +256,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				name: null
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		},
 
 		"undefined should be invalid": function() {
@@ -215,7 +264,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				name: undefined
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		}
 	},
 
@@ -233,7 +282,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 0
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		},
 
 		"setting value equal to min should be valid": function() {
@@ -241,9 +290,9 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 1
 			});
 
-			assert.called(this.validSpy);
+			assert.called(this.valid);
 		},
-		
+
 		"should override error msg when specified": function() {
 			this.model.validation = {
 				age: {
@@ -255,7 +304,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 0
 			});
 
-			assert.calledWith(this.invalidSpy, this.view, 'age', 'Error');
+			assert.calledWith(this.invalid, this.view, 'age', 'Error');
 		}
 	},
 
@@ -273,7 +322,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 11
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		},
 
 		"setting value equal to max should be valid": function() {
@@ -281,9 +330,9 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 10
 			});
 
-			assert.called(this.validSpy);
+			assert.called(this.valid);
 		},
-		
+
 		"should override error msg when specified": function() {
 			this.model.validation = {
 				age: {
@@ -295,7 +344,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 2
 			});
 
-			assert.calledWith(this.invalidSpy, this.view, 'age', 'Error');
+			assert.calledWith(this.invalid, this.view, 'age', 'Error');
 		}
 	},
 
@@ -314,7 +363,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 0
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		},
 
 		"setting value equal to min should be valid": function() {
@@ -322,7 +371,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 1
 			});
 
-			assert.called(this.validSpy);
+			assert.called(this.valid);
 		},
 
 		"setting value higher than max should be invalid": function() {
@@ -330,7 +379,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 11
 			});
 
-			assert.called(this.invalidSpy);
+			assert.called(this.invalid);
 		},
 
 		"setting value equal to max should be valid": function() {
@@ -338,7 +387,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 				age: 10
 			});
 
-			assert.called(this.validSpy);
+			assert.called(this.valid);
 		}
 	}
 });
