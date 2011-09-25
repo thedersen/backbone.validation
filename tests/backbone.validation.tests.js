@@ -4,7 +4,7 @@ buster.testCase("Backbone.Validation", {
 	setUp: function() {
 		var View = Backbone.View.extend({
 			render: function() {
-				var html = $('<input type="text" id="age">');
+				var html = $('<input type="text" id="name"><input type="text" id="age">');
 				this.$(this.el).append(html);
 
 				Backbone.Validation.bind(this);
