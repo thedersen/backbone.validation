@@ -72,6 +72,10 @@ buster.testCase("Backbone.Validation", {
                 age: 0
             }));
         }
+    },
+    
+    "should ignore property without validator": function(){
+        this.model.set({someProperty: true});
     }
 });
 

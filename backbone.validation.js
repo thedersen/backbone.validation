@@ -72,18 +72,18 @@ Backbone.Validation = (function() {
             var invalidFn = options.invalid || this.invalid;
             
             view.model.validate = function(attrs) {
+                var invalid = false;
                 for (attr in attrs) {
                     var result = validate(view, attr, attrs[attr]);
 
                     if (result) {
+                        invalid = true;
                         invalidFn(view, attr, result);
                     } else {
                         validFn(view, attr);
                     }
-                    
-                    return result;
                 }
-                return true;
+                return invalid;
             };
         }
     };
