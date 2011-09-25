@@ -211,12 +211,18 @@ buster.testCase("Backbone.Validation", {
 					}
 				};
 			},
-			
-			"setting value lower than min should be invalid": function(){
-			    this.model.set({age: 0});
-			    
-			    assert.called(this.invalidSpy);
-			}
+            
+            "setting value lower than min should be invalid": function(){
+                this.model.set({age: 0});
+                
+                assert.called(this.invalidSpy);
+            },
+                       
+            "setting value equal to min should be valid": function(){
+                this.model.set({age: 1});
+                
+                assert.called(this.validSpy);
+            }
 		}
 	}
 });

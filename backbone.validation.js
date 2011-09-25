@@ -1,9 +1,14 @@
 Backbone.Validation = (function() {
 	var validators = {
 		required: function(value, attr, msg) {
-			if (_.isNull(value) || _.isUndefined(value) || value.trim() === '') {
+			if (_.isNull(value) || _.isUndefined(value) || (_.isString(value) && value.trim() === '')) {
 				return msg || attr + ' is required';
 			}
+		},
+		min: function(value, attr, msg, minValue) {
+		    if(value < minValue) {
+		        return attr + ' must be equal to or larger than ' + minValue;
+		    }
 		}
 	};
 
@@ -15,16 +20,20 @@ Backbone.Validation = (function() {
 			    fn: val
 			};
 		} else {
-			return {
-			    fn: validators['required'],
-			    msg: val['msg']
-		    };
+		    for(v in val) {
+    			return {
+    			    fn: validators[v],
+    			    val: val[v],
+    			    msg: val['msg']
+    		    };   
+		    }
+		    return undefined;
 		}
 	};
 	
 	var validate = function(view, attr, value){
 	    var val = getValidator(view, attr);
-	    return val['fn'](value, attr, val['msg']);
+	    return val['fn'](value, attr, val['msg'], val['val']);
 	};
 
 	return {
@@ -52,6 +61,7 @@ Backbone.Validation = (function() {
 					
 					return result;
 				}
+				return undefined;
 			};
 		}
 	};
