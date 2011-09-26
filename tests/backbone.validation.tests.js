@@ -76,6 +76,30 @@ buster.testCase("Backbone.Validation", {
     
     "should ignore property without validator": function(){
         this.model.set({someProperty: true});
+    },
+    
+    "//should set isValid property on the model": function(){
+        
+    },
+    
+    "no conflict": {
+        setUp: function(){
+            this.previousBackbone = Backbone.noConflict();
+            this.previousUnderscore = _.noConflict();
+        },
+        
+        tearDown: function(){
+            Backbone = this.previousBackbone;
+            _ = this.previousUnderscore;
+        },
+        
+        "should work with backbone": function(){
+            this.model.set({someProperty: true});
+        },
+
+        "should work with underscore": function(){
+            this.model.set({someProperty: true});
+        }
     }
 });
 

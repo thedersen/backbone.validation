@@ -1,4 +1,4 @@
-Backbone.Validation = (function() {
+Backbone.Validation = (function(Backbone, _) {
     var builtinValidators = {
         required: function(value, attr, msg) {
             if (_.isNull(value) || _.isUndefined(value) || (_.isString(value) && value.trim() === '')) {
@@ -87,4 +87,4 @@ Backbone.Validation = (function() {
             };
         }
     };
-} ());
+} (Backbone, _));
