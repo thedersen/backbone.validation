@@ -1,7 +1,7 @@
 Backbone.Validation = (function(Backbone, _) {
     var builtinValidators = {
         required: function(value, attr, msg) {
-            if (_.isNull(value) || _.isUndefined(value) || (_.isString(value) && value.trim() === '')) {
+            if (_.isNull(value) || _.isUndefined(value) || (_.isString(value) && $.trim(value) === '')) {
                 return msg || attr + ' is required';
             }
         },
