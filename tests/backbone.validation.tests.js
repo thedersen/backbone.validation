@@ -724,11 +724,10 @@ buster.testCase("Backbone.Validation builtin validators", {
 
 buster.testCase('Backbone.Validation add custom validator', {
    setUp: function(){
-       var that = this;
-       this.customValue;
-       
        Backbone.Validation.addValidator('custom', function(value, attr, msg, customValue){
-           that.customValue = customValue;
+           if(value !== customValue){
+               return 'error';
+           }
        });
        
        var Model = Backbone.Model.extend({
@@ -744,9 +743,34 @@ buster.testCase('Backbone.Validation add custom validator', {
    },
    
    "should fire custom validator": function(){
-       this.model.set({age: 0});
+       assert(this.model.set({age: 1}));
+       assert.isFalse(this.model.set({age: 2}));
+   }
+});
+
+buster.testCase('Backbone.Validation override existing validator', {
+   setUp: function(){
+       Backbone.Validation.addValidator('min', function(value, attr, msg, customValue){
+           if(value !== customValue){
+               return 'error';
+           }
+       });
        
-       assert.equals(this.customValue, 1);
+       var Model = Backbone.Model.extend({
+           validation: {
+               age: {
+                   min: 1
+               }
+           }
+       });
+       
+       this.model = new Model();
+       Backbone.Validation.bind(new Backbone.View({model: this.model}));
+   },
+   
+   "should fire custom validator": function(){
+       assert(this.model.set({age: 1}));
+       assert.isFalse(this.model.set({age: 2}));
    }
 });
 
@@ -758,6 +782,28 @@ buster.testCase('Backbone.Validation add custom pattern', {
            validation: {
                name: {
                    pattern: 'custom'
+               }
+           }
+       });
+       
+       this.model = new Model();
+       Backbone.Validation.bind(new Backbone.View({model: this.model}));
+   },
+   
+   "should fire custom pattern validator": function(){
+       assert(this.model.set({name: 'test'}));
+       assert.isFalse(this.model.set({name: 'aa'}));
+   }
+});
+
+buster.testCase('Backbone.Validation override exising pattern', {
+   setUp: function(){
+       Backbone.Validation.addPattern('email', /^test/);
+       
+       var Model = Backbone.Model.extend({
+           validation: {
+               name: {
+                   pattern: 'email'
                }
            }
        });
