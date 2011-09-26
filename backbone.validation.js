@@ -10,18 +10,24 @@ Backbone.Validation = (function(Backbone, _) {
         },
         min: function(value, attr, msg, minValue) {
             if(value < minValue) {
-                return msg || attr + ' must be equal to or larger than ' + minValue;
+                return msg || attr + ' must be larger than or equal to ' + minValue;
             }
         },
         max: function(value, attr, msg, maxValue) {
             if(value > maxValue) {
-                return msg || attr + ' must be equal to or less than ' + maxValue;
+                return msg || attr + ' must be less than or equal to ' + maxValue;
             }
         },
         minLength: function(value, attr, msg, minLength){
             value = $.trim(value);
             if(_.isString(value) && value.length < minLength){
-                return msg || attr + ' must longer than ' + minLength + ' characters';
+                return msg || attr + ' must be longer than or equal to ' + minLength + ' characters';
+            }
+        },
+        maxLength: function(value, attr, msg, maxLength){
+            value = $.trim(value);
+            if(_.isString(value) && value.length > maxLength){
+                return msg || attr + ' must be shorter than or equal to' + maxLength + ' characters';
             }
         }
     };

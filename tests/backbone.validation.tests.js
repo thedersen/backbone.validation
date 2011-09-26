@@ -579,5 +579,45 @@ buster.testCase("Backbone.Validation builtin validators", {
 
             assert.calledWith(this.invalid, this.view, 'name', 'Error');
         }
+    },
+    
+    "maxLength": {
+        setUp: function() {
+            this.model.validation = {
+                name: {
+                    maxLength: 2
+                }
+            };
+        },
+
+        "setting value with length longer than maxLenght should be invalid": function() {
+            this.model.set({
+                name: 'aaa'
+            });
+
+            assert.called(this.invalid);
+        },
+
+        "setting value with length equal to maxLength should be valid": function() {
+            this.model.set({
+                name: 'aa'
+            });
+
+            assert.called(this.valid);
+        },
+
+        "should override error msg when specified": function() {
+            this.model.validation = {
+                name: {
+                    maxLength: 2,
+                    msg: 'Error'
+                }
+            };
+            this.model.set({
+                name: 'aaa'
+            });
+
+            assert.calledWith(this.invalid, this.view, 'name', 'Error');
+        }
     }
 });
