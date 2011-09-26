@@ -256,6 +256,34 @@ buster.testCase("Backbone.Validation cutomize", {
     }
 });
 
+buster.testCase('Backbone.Validation add custom validator', {
+   setUp: function(){
+       var that = this;
+       this.customValue;
+       
+       Backbone.Validation.addValidator('custom', function(value, attr, msg, customValue){
+           that.customValue = customValue;
+       });
+       
+       var Model = Backbone.Model.extend({
+           validation: {
+               age: {
+                   custom: 1
+               }
+           }
+       });
+       
+       this.model = new Model();
+       Backbone.Validation.bind(new Backbone.View({model: this.model}));
+   },
+   
+   "should fire custom validator": function(){
+       this.model.set({age: 0});
+       
+       assert.equals(this.customValue, 1);
+   }
+});
+
 buster.testCase("Backbone.Validation bind options", {
     setUp: function() {
         var that = this;

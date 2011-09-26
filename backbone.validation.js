@@ -81,6 +81,10 @@ Backbone.Validation = (function(Backbone, _) {
         }
         
     };
+    
+    var addValidator = function(name, fn){
+        builtinValidators[name] = fn;
+    };
 
     return {
         version: '0.0.1',
@@ -92,7 +96,9 @@ Backbone.Validation = (function(Backbone, _) {
             view.$('#' + attr).data('error', error);
             view.$('#' + attr).addClass('invalid');
         },
-
+        
+        addValidator: addValidator,
+        
         bind: function(view, options) {
             options = options || {};
             var validFn = options.valid || this.valid,
