@@ -619,5 +619,45 @@ buster.testCase("Backbone.Validation builtin validators", {
 
             assert.calledWith(this.invalid, this.view, 'name', 'Error');
         }
+    },
+    
+    "email": {
+        setUp: function() {
+            this.model.validation = {
+                email: {
+                    pattern: 'email'
+                }
+            };
+        },
+
+        "setting invalid email should be invalid": function() {
+            this.model.set({
+                email: 'aaa'
+            });
+
+            assert.called(this.invalid);
+        },
+
+        "setting valid email should be valid": function() {
+            this.model.set({
+                email: 'a@example.com'
+            });
+
+            assert.called(this.valid);
+        },
+
+        "should override error msg when specified": function() {
+            this.model.validation = {
+                email: {
+                    pattern: 'email',
+                    msg: 'Error'
+                }
+            };
+            this.model.set({
+                email: 'aaa'
+            });
+
+            assert.calledWith(this.invalid, this.view, 'email', 'Error');
+        }
     }
 });

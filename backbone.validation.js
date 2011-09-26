@@ -29,6 +29,12 @@ Backbone.Validation = (function(Backbone, _) {
             if(_.isString(value) && value.length > maxLength){
                 return msg || attr + ' must be shorter than or equal to' + maxLength + ' characters';
             }
+        },
+        pattern: function(value, attr, msg, pattern){
+            var emailPattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (_.isString(value) && !value.match(emailPattern)) {
+                return msg || attr + ' is not a valid ' + pattern;
+            }
         }
     };
 
