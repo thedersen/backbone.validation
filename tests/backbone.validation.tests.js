@@ -35,6 +35,16 @@ buster.testCase("Backbone.Validation", {
         this.age = $(this.view.$("#age"));
         this.name = $(this.view.$("#name"));
     },
+    
+    "bind sets up the models validate function": function() {
+        assert(this.model.validate);
+    },
+    
+    "unbind removes the validate function from the model": function(){
+        Backbone.Validation.unbind(this.view);
+        
+        assert.isUndefined(this.model.validate);
+    },
 
     "setting valid value": {
         setUp: function() {

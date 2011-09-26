@@ -81,10 +81,6 @@ Backbone.Validation = (function(Backbone, _) {
         }
         
     };
-    
-    var addValidator = function(name, fn){
-        builtinValidators[name] = fn;
-    };
 
     return {
         version: '0.0.1',
@@ -97,7 +93,9 @@ Backbone.Validation = (function(Backbone, _) {
             view.$('#' + attr).addClass('invalid');
         },
         
-        addValidator: addValidator,
+        addValidator: function(name, fn){
+            builtinValidators[name] = fn;
+        },
         
         bind: function(view, options) {
             options = options || {};
@@ -125,6 +123,10 @@ Backbone.Validation = (function(Backbone, _) {
                 view.model.set({isValid: _.compact(invalidAttrs).length === 0}, {silent: true});
                 return invalid;
             };
+        },
+        
+        unbind: function(view){
+            view.model.validate = undefined;
         }
     };
 } (Backbone, _));
