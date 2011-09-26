@@ -79,15 +79,16 @@ Backbone.Validation = (function(Backbone, _) {
             };
             return result;
         }
-        
     };
 
     return {
         version: '0.1.0',
+        
         valid: function(view, attr) {
             view.$('#' + attr).removeClass('invalid');
             view.$('#' + attr).removeData('error');
         },
+        
         invalid: function(view, attr, error) {
             view.$('#' + attr).data('error', error);
             view.$('#' + attr).addClass('invalid');
