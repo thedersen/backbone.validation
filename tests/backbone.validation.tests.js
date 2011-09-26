@@ -336,6 +336,9 @@ buster.testCase("Backbone.Validation builtin validators", {
             this.model.validation = {
                 name: {
                     required: true
+                },
+                agree: {
+                    required: true
                 }
             };
         },
@@ -400,6 +403,18 @@ buster.testCase("Backbone.Validation builtin validators", {
             });
 
             assert.called(this.invalid);
+        },
+        
+        "false boolean should be invalid": function(){
+            this.model.set({agree: false});
+            
+            assert.called(this.invalid);
+        },
+        
+        "true boolean should be valid": function(){
+            this.model.set({agree: true});
+            
+            assert.called(this.valid);
         }
     },
 
