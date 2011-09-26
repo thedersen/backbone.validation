@@ -539,5 +539,45 @@ buster.testCase("Backbone.Validation builtin validators", {
 
             assert.called(this.valid);
         }
+    },
+    
+    "minLength": {
+        setUp: function() {
+            this.model.validation = {
+                name: {
+                    minLength: 2
+                }
+            };
+        },
+
+        "setting value with length shorter than minLenght should be invalid": function() {
+            this.model.set({
+                name: 'a'
+            });
+
+            assert.called(this.invalid);
+        },
+
+        "setting value with length equal to minLength should be valid": function() {
+            this.model.set({
+                name: 'aa'
+            });
+
+            assert.called(this.valid);
+        },
+
+        "should override error msg when specified": function() {
+            this.model.validation = {
+                name: {
+                    minLength: 2,
+                    msg: 'Error'
+                }
+            };
+            this.model.set({
+                name: 'a'
+            });
+
+            assert.calledWith(this.invalid, this.view, 'name', 'Error');
+        }
     }
 });

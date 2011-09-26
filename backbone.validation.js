@@ -17,6 +17,12 @@ Backbone.Validation = (function(Backbone, _) {
             if(value > maxValue) {
                 return msg || attr + ' must be equal to or less than ' + maxValue;
             }
+        },
+        minLength: function(value, attr, msg, minLength){
+            value = $.trim(value);
+            if(_.isString(value) && value.length < minLength){
+                return msg || attr + ' must longer than ' + minLength + ' characters';
+            }
         }
     };
 
