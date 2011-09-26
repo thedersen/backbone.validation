@@ -36,7 +36,7 @@ Backbone.Validation = (function(Backbone, _) {
             }
         },
         pattern: function(value, attr, msg, pattern){
-            pattern = patterns[pattern];
+            pattern = patterns[pattern] || pattern;
             if (_.isString(value) && !value.match(pattern)) {
                 return msg || attr + ' is not a valid ' + pattern;
             }

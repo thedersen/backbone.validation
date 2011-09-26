@@ -699,5 +699,46 @@ buster.testCase("Backbone.Validation builtin validators", {
 
             assert.calledWith(this.invalid, this.view, 'url', 'Error');
         }
+    },
+    
+    "pattern": {
+        setUp: function() {
+            this.model.validation = {
+                name: {
+                    pattern: /^test/
+                }
+            };
+        },
+
+        "setting value not matching pattern should be invalid": function() {
+            this.model.set({
+                name: 'aaa'
+            });
+
+            assert.called(this.invalid);
+        },
+
+        "setting value matching pattern should be valid": function() {
+            this.model.set({
+                name: 'test'
+            });
+
+            assert.called(this.valid);
+        },
+
+        "should override error msg when specified": function() {
+            this.model.validation = {
+                name: {
+                    pattern: /^test/,
+                    msg: 'Error'
+                }
+            };
+            this.model.set({
+                name: 'aaa'
+            });
+
+            assert.calledWith(this.invalid, this.view, 'name', 'Error');
+        }
     }
+    
 });
