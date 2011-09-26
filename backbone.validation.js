@@ -82,7 +82,9 @@ Backbone.Validation = (function(Backbone, _) {
                     } else {
                         validFn(view, attr);
                     }
-                }
+                }    
+
+                view.model.set({isValid: !invalid}, {silent: true});
                 return invalid;
             };
         }

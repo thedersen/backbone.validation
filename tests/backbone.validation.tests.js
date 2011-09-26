@@ -49,6 +49,10 @@ buster.testCase("Backbone.Validation", {
             assert.equals(this.model.set({
                 age: 1
             }), this.model);
+        },
+
+        "should set isValid on the model to true": function(){
+            assert.isTrue(this.model.get('isValid'));
         }
     },
 
@@ -71,15 +75,15 @@ buster.testCase("Backbone.Validation", {
             assert.isFalse(this.model.set({
                 age: 0
             }));
+        },
+
+        "should set isValid on the model to false": function(){
+            assert.isFalse(this.model.get('isValid'));
         }
     },
     
     "should ignore property without validator": function(){
         this.model.set({someProperty: true});
-    },
-    
-    "//should set isValid property on the model": function(){
-        
     },
     
     "no conflict": {
