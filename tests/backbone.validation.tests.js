@@ -214,12 +214,6 @@ buster.testCase("Backbone.Validation cutomize", {
     setUp: function() {
         Backbone.Validation.valid = this.spy();
         Backbone.Validation.invalid = this.spy();
-        
-        var View = Backbone.View.extend({
-            render: function() {
-                Backbone.Validation.bind(this);
-            }
-        });
 
         var Model = Backbone.Model.extend({
             validation: {
@@ -232,11 +226,8 @@ buster.testCase("Backbone.Validation cutomize", {
         });
         
         this.model = new Model();
-        this.view = new View({
-            model: this.model
-        });
 
-        this.view.render();
+        Backbone.Validation.bind(new Backbone.View({model: this.model}));
     },
 
     "should call overridden valid function": function() {
@@ -286,19 +277,6 @@ buster.testCase('Backbone.Validation add custom validator', {
 
 buster.testCase("Backbone.Validation bind options", {
     setUp: function() {
-        var that = this;
-        this.valid = this.spy();
-        this.invalid = this.spy();
-
-        var View = Backbone.View.extend({
-            render: function() {
-                Backbone.Validation.bind(this, {
-                    valid: that.valid,
-                    invalid: that.invalid
-                });
-            }
-        });
-
         var Model = Backbone.Model.extend({
             validation: {
                 age: function(val) {
@@ -310,11 +288,13 @@ buster.testCase("Backbone.Validation bind options", {
         });
 
         this.model = new Model();
-        this.view = new View({
-            model: this.model
-        });
+        this.valid = this.spy();
+        this.invalid = this.spy();
 
-        this.view.render();
+        Backbone.Validation.bind(new Backbone.View({model: this.model}), {
+            valid: this.valid,
+            invalid: this.invalid
+        });
     },
 
     "should call valid function passed with options": function() {
@@ -336,27 +316,16 @@ buster.testCase("Backbone.Validation bind options", {
 
 buster.testCase("Backbone.Validation builtin validators", {
     setUp: function() {
-        var that = this;
         this.valid = this.spy();
         this.invalid = this.spy();
 
-        var View = Backbone.View.extend({
-            render: function() {
-                Backbone.Validation.bind(this, {
-                    valid: that.valid,
-                    invalid: that.invalid
-                });
-            }
+        this.model = new Backbone.Model();
+        this.view = new Backbone.View({model: this.model});
+        
+        Backbone.Validation.bind(this.view, {
+            valid: this.valid,
+            invalid: this.invalid
         });
-
-        var Model = Backbone.Model.extend({});
-
-        this.model = new Model();
-        this.view = new View({
-            model: this.model
-        });
-
-        this.view.render();
     },
 
     "required": {
