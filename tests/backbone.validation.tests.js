@@ -659,5 +659,45 @@ buster.testCase("Backbone.Validation builtin validators", {
 
             assert.calledWith(this.invalid, this.view, 'email', 'Error');
         }
+    },
+    
+    "url": {
+        setUp: function() {
+            this.model.validation = {
+                url: {
+                    pattern: 'url'
+                }
+            };
+        },
+
+        "setting invalid url should be invalid": function() {
+            this.model.set({
+                url: 'aaa'
+            });
+
+            assert.called(this.invalid);
+        },
+
+        "setting valid url should be valid": function() {
+            this.model.set({
+                url: 'http://www.example.com?something=true&'
+            });
+
+            assert.called(this.valid);
+        },
+
+        "should override error msg when specified": function() {
+            this.model.validation = {
+                url: {
+                    pattern: 'url',
+                    msg: 'Error'
+                }
+            };
+            this.model.set({
+                url: 'aaa'
+            });
+
+            assert.calledWith(this.invalid, this.view, 'url', 'Error');
+        }
     }
 });
