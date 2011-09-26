@@ -98,6 +98,10 @@ Backbone.Validation = (function(Backbone, _) {
             builtinValidators[name] = fn;
         },
         
+        addPattern: function(name, pattern){
+            patterns[name] = pattern;
+        },
+        
         bind: function(view, options) {
             options = options || {};
             var validFn = options.valid || this.valid,

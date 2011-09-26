@@ -257,34 +257,6 @@ buster.testCase("Backbone.Validation cutomize", {
     }
 });
 
-buster.testCase('Backbone.Validation add custom validator', {
-   setUp: function(){
-       var that = this;
-       this.customValue;
-       
-       Backbone.Validation.addValidator('custom', function(value, attr, msg, customValue){
-           that.customValue = customValue;
-       });
-       
-       var Model = Backbone.Model.extend({
-           validation: {
-               age: {
-                   custom: 1
-               }
-           }
-       });
-       
-       this.model = new Model();
-       Backbone.Validation.bind(new Backbone.View({model: this.model}));
-   },
-   
-   "should fire custom validator": function(){
-       this.model.set({age: 0});
-       
-       assert.equals(this.customValue, 1);
-   }
-});
-
 buster.testCase("Backbone.Validation bind options", {
     setUp: function() {
         var Model = Backbone.Model.extend({
@@ -748,4 +720,54 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     }
     
+});
+
+buster.testCase('Backbone.Validation add custom validator', {
+   setUp: function(){
+       var that = this;
+       this.customValue;
+       
+       Backbone.Validation.addValidator('custom', function(value, attr, msg, customValue){
+           that.customValue = customValue;
+       });
+       
+       var Model = Backbone.Model.extend({
+           validation: {
+               age: {
+                   custom: 1
+               }
+           }
+       });
+       
+       this.model = new Model();
+       Backbone.Validation.bind(new Backbone.View({model: this.model}));
+   },
+   
+   "should fire custom validator": function(){
+       this.model.set({age: 0});
+       
+       assert.equals(this.customValue, 1);
+   }
+});
+
+buster.testCase('Backbone.Validation add custom pattern', {
+   setUp: function(){
+       Backbone.Validation.addPattern('custom', /^test/);
+       
+       var Model = Backbone.Model.extend({
+           validation: {
+               name: {
+                   pattern: 'custom'
+               }
+           }
+       });
+       
+       this.model = new Model();
+       Backbone.Validation.bind(new Backbone.View({model: this.model}));
+   },
+   
+   "should fire custom pattern validator": function(){
+       assert(this.model.set({name: 'test'}));
+       assert.isFalse(this.model.set({name: 'aa'}));
+   }
 });
