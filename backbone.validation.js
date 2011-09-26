@@ -70,21 +70,26 @@ Backbone.Validation = (function(Backbone, _) {
             options = options || {};
             var validFn = options.valid || this.valid;
             var invalidFn = options.invalid || this.invalid;
-            
+            var invalidAttrs = view.model.invalidAttrs = view.model.invalidAttrs || [];
+             
             view.model.validate = function(attrs) {
-                var invalid = false;
-                for (attr in attrs) {
-                    var result = validate(view, attr, attrs[attr]);
+                var invalid = false,
+                    modelValid = true;
+                    
+                for (changedAttr in attrs) {
+                    delete invalidAttrs[_.indexOf(invalidAttrs, changedAttr)];
+                    var result = validate(view, changedAttr, attrs[changedAttr]);
 
                     if (result) {
                         invalid = true;
-                        invalidFn(view, attr, result);
+                        invalidAttrs.push(changedAttr);
+                        invalidFn(view, changedAttr, result);
                     } else {
-                        validFn(view, attr);
+                        validFn(view, changedAttr);
                     }
-                }    
-
-                view.model.set({isValid: !invalid}, {silent: true});
+                }
+                
+                view.model.set({isValid: _.compact(invalidAttrs).length === 0}, {silent: true});
                 return invalid;
             };
         }

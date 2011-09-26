@@ -57,6 +57,10 @@ buster.testCase("Backbone.Validation", {
             }), this.model);
         },
 
+        "should update the model": function(){
+            assert.equals(this.model.get('age'), 1);
+        },
+        
         "should set isValid on the model to true": function(){
             assert.isTrue(this.model.get('isValid'));
         }
@@ -81,6 +85,10 @@ buster.testCase("Backbone.Validation", {
             assert.isFalse(this.model.set({
                 age: 0
             }));
+        },
+        
+        "should not update the model": function(){
+            assert.isUndefined(this.model.get('age'));
         },
 
         "should set isValid on the model to false": function(){
@@ -150,6 +158,30 @@ buster.testCase("Backbone.Validation", {
             "should set isValid on the model to false": function(){
                 assert.isFalse(this.model.get('isValid'));
             }
+        }
+    },
+    
+    "setting a property on invalid model": {
+        setUp: function(){
+            this.model.set({
+                age: 0
+            });
+        },
+        
+        "model should still be invalid when setting different property": function(){
+            assert.isFalse(this.model.get('isValid'));
+            
+            this.model.set({name: 'hello'});
+            
+            assert.isFalse(this.model.get('isValid'));
+        },
+        
+        "model should be valid when setting valid value": function(){            
+            assert.isFalse(this.model.get('isValid'));
+            
+            this.model.set({age: 1});
+            
+            assert.isTrue(this.model.get('isValid'));
         }
     },
     
