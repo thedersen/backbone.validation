@@ -15,7 +15,12 @@ buster.testCase("Backbone.Validation", {
             validation: {
                 age: function(val) {
                     if (val === 0) {
-                        return "Age is invalid";
+                        return 'Age is invalid';
+                    }
+                },
+                name: function(val) {
+                    if(val === '') {
+                        return 'Name is invalid';
                     }
                 }
             }
@@ -27,7 +32,8 @@ buster.testCase("Backbone.Validation", {
         });
 
         this.view.render();
-        this.el = $(this.view.$("#age"));
+        this.age = $(this.view.$("#age"));
+        this.name = $(this.view.$("#name"));
     },
 
     "setting valid value": {
@@ -38,11 +44,11 @@ buster.testCase("Backbone.Validation", {
         },
 
         "should not have invalid class": function() {
-            assert.isFalse(this.el.hasClass('invalid'));
+            assert.isFalse(this.age.hasClass('invalid'));
         },
 
         "should not have data property with error message": function() {
-            assert.isUndefined(this.el.data('error'));
+            assert.isUndefined(this.age.data('error'));
         },
 
         "should return the model": function() {
@@ -64,11 +70,11 @@ buster.testCase("Backbone.Validation", {
         },
 
         "should have invalid class": function() {
-            assert.isTrue(this.el.hasClass('invalid'));
+            assert.isTrue(this.age.hasClass('invalid'));
         },
 
         "should have data attribute with error message": function() {
-            assert.equals(this.el.data('error'), 'Age is invalid');
+            assert.equals(this.age.data('error'), 'Age is invalid');
         },
 
         "should return false": function() {
@@ -79,6 +85,71 @@ buster.testCase("Backbone.Validation", {
 
         "should set isValid on the model to false": function(){
             assert.isFalse(this.model.get('isValid'));
+        }
+    },
+    
+    "setting multiple values": {
+        "both valid": {
+            setUp: function(){
+                this.model.set({
+                    age: 1,
+                    name: 'hello'
+                });                
+            },
+            
+            "age should not have invalid class": function() {
+                assert.isFalse(this.age.hasClass('invalid'));
+            },
+                        
+            "name should not have invalid class": function() {
+                assert.isFalse(this.name.hasClass('invalid'));
+            },
+
+            "should set isValid on the model to true": function(){
+                assert.isTrue(this.model.get('isValid'));
+            }
+        },
+        
+        "both invalid": {
+            setUp: function(){
+                this.model.set({
+                    age: 0,
+                    name: ''
+                });                
+            },
+            
+            "age should have invalid class": function() {
+                assert.isTrue(this.age.hasClass('invalid'));
+            },
+                        
+            "name should have invalid class": function() {
+                assert.isTrue(this.name.hasClass('invalid'));
+            },
+
+            "should set isValid on the model to false": function(){
+                assert.isFalse(this.model.get('isValid'));
+            }
+        },
+        
+        "one invalid and one valid": {
+            setUp: function(){
+                this.model.set({
+                    age: 1,
+                    name: ''
+                });                
+            },
+            
+            "age should not have invalid class": function() {
+                assert.isFalse(this.age.hasClass('invalid'));
+            },
+                        
+            "name should have invalid class": function() {
+                assert.isTrue(this.name.hasClass('invalid'));
+            },
+
+            "should set isValid on the model to false": function(){
+                assert.isFalse(this.model.get('isValid'));
+            }
         }
     },
     
