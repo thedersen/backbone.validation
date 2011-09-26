@@ -37,8 +37,9 @@ Backbone.Validation = (function(Backbone, _) {
         }
     };
     
-    var validate = function(view, attr, value){
+    var validateAttr = function(view, attr, value){
         var validators = getValidators(view, attr);
+        
         if(_.isFunction(validators)){
             return validators(value);
         } else {
@@ -68,9 +69,9 @@ Backbone.Validation = (function(Backbone, _) {
 
         bind: function(view, options) {
             options = options || {};
-            var validFn = options.valid || this.valid;
-            var invalidFn = options.invalid || this.invalid;
-            var invalidAttrs = view.model.invalidAttrs = view.model.invalidAttrs || [];
+            var validFn = options.valid || this.valid,
+                invalidFn = options.invalid || this.invalid,
+                invalidAttrs = view.model.invalidAttrs = view.model.invalidAttrs || [];
              
             view.model.validate = function(attrs) {
                 var invalid = false,
@@ -78,7 +79,7 @@ Backbone.Validation = (function(Backbone, _) {
                     
                 for (changedAttr in attrs) {
                     delete invalidAttrs[_.indexOf(invalidAttrs, changedAttr)];
-                    var result = validate(view, changedAttr, attrs[changedAttr]);
+                    var result = validateAttr(view, changedAttr, attrs[changedAttr]);
 
                     if (result) {
                         invalid = true;
