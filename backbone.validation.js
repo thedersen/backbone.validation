@@ -1,9 +1,9 @@
 // Backbone.Validation v0.1.0
 //
 // Copyright (C)2011 Thomas Pedersen
-// Distributed Under MIT Liscene
+// Distributed under MIT License
 //
-// Documentation and Full Licence Availabe at:
+// Documentation and full license availabe at:
 // http://github.com/thedersen/backbone.validation
 
 // ----------------------------
