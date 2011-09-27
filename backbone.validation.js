@@ -1,3 +1,15 @@
+// Backbone.Validation v0.1.0
+//
+// Copyright (C)2011 Thomas Pedersen
+// Distributed Under MIT Liscene
+//
+// Documentation and Full Licence Availabe at:
+// http://github.com/thedersen/backbone.validation
+
+// ----------------------------
+// Backbone.Validation
+// ----------------------------
+
 Backbone.Validation = (function(Backbone, _) {
     var patterns = {
         email: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
