@@ -26,12 +26,12 @@ Backbone.Validation = (function(Backbone, _) {
             }
         },
         min: function(value, attr, msg, minValue) {
-            if(value < minValue) {
+            if(!_.isNumber(value) || value < minValue) {
                 return msg || attr + ' must be larger than or equal to ' + minValue;
             }
         },
         max: function(value, attr, msg, maxValue) {
-            if(value > maxValue) {
+            if(!_.isNumber(value) || value > maxValue) {
                 return msg || attr + ' must be less than or equal to ' + maxValue;
             }
         },

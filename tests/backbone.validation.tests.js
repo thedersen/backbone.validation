@@ -379,6 +379,10 @@ buster.testCase("Backbone.Validation builtin validators", {
         "setting value lower than min should be invalid": function() {
             assert.isFalse(this.model.set({age: 0}));
         },
+        
+        "setting non numeric value should be invalid": function(){
+            assert.isFalse(this.model.set({age: 'error'}));
+        },
 
         "setting value equal to min should be valid": function() {
             assert(this.model.set({age: 1}));
@@ -403,6 +407,10 @@ buster.testCase("Backbone.Validation builtin validators", {
 
         "setting value higher than max should be invalid": function() {
             assert.isFalse(this.model.set({age: 11}));
+        },
+
+        "setting non numeric value should be invalid": function(){
+            assert.isFalse(this.model.set({age: 'error'}));
         },
 
         "setting value equal to max should be valid": function() {
