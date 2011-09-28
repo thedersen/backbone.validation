@@ -551,6 +551,31 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
     
+    "number": {
+        setUp: function() {
+            this.model.validation = {
+                age: {
+                    pattern: 'number',
+                    msg: 'Error'
+                }
+            };
+        },
+
+        "setting non numeric value should be invalid": function() {
+            assert.isFalse(this.model.set({age: '1a'}));
+        },
+
+        "setting numeric value should be valid": function() {
+            assert(this.model.set({age: 1}));
+        },
+
+        "should override error msg when specified": function() {
+            this.model.set({age: 'a'});
+
+            assert.calledWith(this.invalid, this.view, 'age', 'Error');
+        }
+    },
+    
     "pattern": {
         setUp: function() {
             this.model.validation = {
