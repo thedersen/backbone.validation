@@ -1,4 +1,4 @@
-// Backbone.Validation v0.1.0
+// Backbone.Validation v0.1.1
 //
 // Copyright (C)2011 Thomas Pedersen
 // Distributed under MIT License
@@ -97,7 +97,7 @@ Backbone.Validation = (function(Backbone, _) {
     };
 
     return {
-        version: '0.1.0',
+        version: '0.1.1',
         
         valid: function(view, attr) {
             view.$('#' + attr).removeClass('invalid');
