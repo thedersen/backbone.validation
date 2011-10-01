@@ -16,12 +16,12 @@ Backbone.Validation = (function(Backbone, _) {
         if (_.isFunction(validation)) {
             return validation;
         } else {
-            for (attr in validation) {
-                if (attr !== 'msg' && validation.hasOwnProperty(attr)) {
+            for (var validator in validation) {
+                if (validator !== 'msg' && validation.hasOwnProperty(validator)) {
                     validators.push({
-                        fn: Backbone.Validation.validators[attr],
-                        val: validation[attr],
-                        msg: validation['msg']
+                        fn: Backbone.Validation.validators[validator],
+                        val: validation[validator],
+                        msg: validation.msg
                     });
                 }
             }
@@ -32,7 +32,8 @@ Backbone.Validation = (function(Backbone, _) {
     var validateAttr = function(model, attr, value) {
         var validators = getValidators(model, attr),
             error = '',
-            validator, result;
+            validator, 
+            result;
 
         if (_.isFunction(validators)) {
             return validators(value);
@@ -62,7 +63,7 @@ Backbone.Validation = (function(Backbone, _) {
                     isValid = true,
                     error;
 
-                for (changedAttr in attrs) {
+                for (var changedAttr in attrs) {
                     if (changedAttr === 'isValid') {
                         return false;
                     }
@@ -81,8 +82,8 @@ Backbone.Validation = (function(Backbone, _) {
                         isValid: false
                     });
                 } else {
-                    for (attr in model.validation) {
-                        if (_.isUndefined(attrs[attr]) && validateAttr(model, attr, model.get(attr))) {
+                    for (var validatedAttr in model.validation) {
+                        if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validatedAttr, model.get(validatedAttr))) {
                             isValid = false;
                             break;
                         }
