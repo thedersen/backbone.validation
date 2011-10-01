@@ -17,17 +17,17 @@ Backbone.Validation = (function(Backbone, _) {
         if (_.isFunction(validation)) {
             return validation;
         } else {
-            var valdations = [];
+            var validations = [];
             for(attr in validation) {
                 if(attr !== 'msg' && validation.hasOwnProperty(attr)) {
-                    valdations.push({
+                    validations.push({
                         fn: Backbone.Validation.validators[attr],
                         val: validation[attr],
                         msg: validation['msg']
                     });   
                 }
             }
-            return valdations;
+            return validations;
         }
     };
     
