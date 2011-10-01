@@ -391,6 +391,10 @@ buster.testCase("Backbone.Validation builtin validators", {
             };
         },
 
+        "undefined should be invalid": function() {
+            assert.isFalse(this.model.set({age: undefined}));
+        },
+        
         "setting value lower than min should be invalid": function() {
             assert.isFalse(this.model.set({age: 0}));
         },
@@ -424,6 +428,10 @@ buster.testCase("Backbone.Validation builtin validators", {
             };
         },
 
+        "undefined should be invalid": function() {
+            assert.isFalse(this.model.set({age: undefined}));
+        },
+        
         "setting value higher than max should be invalid": function() {
             assert.isFalse(this.model.set({age: 11}));
         },
@@ -484,6 +492,10 @@ buster.testCase("Backbone.Validation builtin validators", {
             };
         },
 
+        "undefined should be invalid": function() {
+            assert.isFalse(this.model.set({name: undefined}));
+        },
+        
         "setting value with length shorter than minLenght should be invalid": function() {
             assert.isFalse(this.model.set({name: 'a'}));
         },
