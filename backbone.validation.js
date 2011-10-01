@@ -27,11 +27,13 @@ Backbone.Validation = (function(Backbone, _) {
             }
         },
         min: function(value, attr, msg, minValue) {
+            value = parseInt(value, 10);
             if(!_.isNumber(value) || value < minValue) {
                 return msg || attr + ' must be larger than or equal to ' + minValue;
             }
         },
         max: function(value, attr, msg, maxValue) {
+            value = parseInt(value, 10);
             if(!_.isNumber(value) || value > maxValue) {
                 return msg || attr + ' must be less than or equal to ' + maxValue;
             }
@@ -99,12 +101,12 @@ Backbone.Validation = (function(Backbone, _) {
         
         valid: function(view, attr) {
             view.$('#' + attr).removeClass('invalid');
-            view.$('#' + attr).removeData('error');
+            view.$('#' + attr).removeAttr('data-error');
         },
         
         invalid: function(view, attr, error) {
-            view.$('#' + attr).data('error', error);
             view.$('#' + attr).addClass('invalid');
+            view.$('#' + attr).attr('data-error', error);
         },
         
         addValidator: function(name, fn){
@@ -122,13 +124,19 @@ Backbone.Validation = (function(Backbone, _) {
                 invalidAttrs = view.model.invalidAttrs = view.model.invalidAttrs || [];
              
             view.model.validate = function(attrs) {
-                var invalid = false,
-                    modelValid = true;
+                var invalid = false;
                     
                 for (changedAttr in attrs) {
-                    delete invalidAttrs[_.indexOf(invalidAttrs, changedAttr)];
+                    if(changedAttr === 'isValid'){
+                        return false;
+                    }
+                    
+                    var i = _.indexOf(invalidAttrs, changedAttr);
+                    if(i !== -1){
+                        delete invalidAttrs[i];
+                    }
+                    
                     var result = validateAttr(view, changedAttr, attrs[changedAttr]);
-
                     if (result) {
                         invalid = true;
                         invalidAttrs.push(changedAttr);
@@ -138,7 +146,8 @@ Backbone.Validation = (function(Backbone, _) {
                     }
                 }
                 
-                view.model.set({isValid: _.compact(invalidAttrs).length === 0}, {silent: true});
+                view.model.set({isValid: _.compact(invalidAttrs).length === 0});
+                
                 return invalid;
             };
         },

@@ -387,7 +387,11 @@ buster.testCase("Backbone.Validation builtin validators", {
         "setting value equal to min should be valid": function() {
             assert(this.model.set({age: 1}));
         },
-
+        
+        "setting numeric string value equal to min should be valid": function(){
+            assert(this.model.set({age: '1'}));
+        },
+        
         "should override error msg when specified": function() {
             this.model.set({age: 0});
 
@@ -415,6 +419,10 @@ buster.testCase("Backbone.Validation builtin validators", {
 
         "setting value equal to max should be valid": function() {
             assert(this.model.set({age: 10}));
+        },
+
+        "setting numeric string value equal to max should be valid": function(){
+            assert(this.model.set({age: '10'}));
         },
 
         "should override error msg when specified": function() {
@@ -569,6 +577,10 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({age: 1}));
         },
 
+        "setting numeric string value should be valid": function() {
+            assert(this.model.set({age: "1"}));
+        },
+        
         "should override error msg when specified": function() {
             this.model.set({age: 'a'});
 
