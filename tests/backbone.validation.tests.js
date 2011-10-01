@@ -617,9 +617,11 @@ buster.testCase("Backbone.Validation builtin validators", {
 
 buster.testCase('Backbone.Validation add custom validator', {
    setUp: function(){
-       Backbone.Validation.addValidator('custom', function(value, attr, msg, customValue){
-           if(value !== customValue){
-               return 'error';
+       _.extend(Backbone.Validation.validators, {
+           custom: function(value, attr, msg, customValue){
+               if(value !== customValue){
+                   return 'error';
+               }
            }
        });
        
@@ -643,9 +645,11 @@ buster.testCase('Backbone.Validation add custom validator', {
 
 buster.testCase('Backbone.Validation override existing validator', {
    setUp: function(){
-       Backbone.Validation.addValidator('min', function(value, attr, msg, customValue){
-           if(value !== customValue){
-               return 'error';
+       _.extend(Backbone.Validation.validators, {
+           min: function(value, attr, msg, customValue){
+               if(value !== customValue){
+                   return 'error';
+               }
            }
        });
        
@@ -669,7 +673,7 @@ buster.testCase('Backbone.Validation override existing validator', {
 
 buster.testCase('Backbone.Validation add custom pattern', {
    setUp: function(){
-       Backbone.Validation.addPattern('custom', /^test/);
+       _.extend(Backbone.Validation.patterns, {custom: /^test/});
        
        var Model = Backbone.Model.extend({
            validation: {
@@ -691,7 +695,7 @@ buster.testCase('Backbone.Validation add custom pattern', {
 
 buster.testCase('Backbone.Validation override exising pattern', {
    setUp: function(){
-       Backbone.Validation.addPattern('email', /^test/);
+       _.extend(Backbone.Validation.patterns, {email: /^test/});
        
        var Model = Backbone.Model.extend({
            validation: {
