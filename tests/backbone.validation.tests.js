@@ -222,9 +222,14 @@ buster.testCase("Backbone.Validation", {
 
 buster.testCase("Backbone.Validation cutomize", {
     setUp: function() {
-        Backbone.Validation.valid = this.spy();
-        Backbone.Validation.invalid = this.spy();
-
+        this.valid = this.spy();
+        this.invalid = this.spy();
+        
+        _.extend(Backbone.Validation.callbacks, {
+           valid: this.valid,
+           invalid: this.invalid 
+        });
+        
         var Model = Backbone.Model.extend({
             validation: {
                 age: function(val) {
@@ -245,7 +250,7 @@ buster.testCase("Backbone.Validation cutomize", {
             age: 1
         });
 
-        assert.called(Backbone.Validation.valid);
+        assert.called(this.valid);
     },
 
     "should call overridden invalid function": function() {
@@ -253,7 +258,7 @@ buster.testCase("Backbone.Validation cutomize", {
             age: 0
         });
 
-        assert.called(Backbone.Validation.invalid);
+        assert.called(this.invalid);
     }
 });
 
