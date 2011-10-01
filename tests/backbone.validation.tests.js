@@ -14,12 +14,12 @@ buster.testCase("Backbone.Validation", {
         var Model = Backbone.Model.extend({
             validation: {
                 age: function(val) {
-                    if (val === 0) {
+                    if (!val) {
                         return 'Age is invalid';
                     }
                 },
                 name: function(val) {
-                    if(val === '') {
+                    if(!val) {
                         return 'Name is invalid';
                     }
                 }
@@ -45,7 +45,11 @@ buster.testCase("Backbone.Validation", {
         
         assert.isUndefined(this.model.validate);
     },
-
+        
+    "should ignore property without validator": function(){
+        this.model.set({someProperty: true});
+    },
+    
     "setting valid value": {
         setUp: function() {
             this.model.set({
@@ -69,10 +73,6 @@ buster.testCase("Backbone.Validation", {
 
         "should update the model": function(){
             assert.equals(this.model.get('age'), 1);
-        },
-        
-        "should set isValid on the model to true": function(){
-            assert.isTrue(this.model.get('isValid'));
         }
     },
 
@@ -99,10 +99,6 @@ buster.testCase("Backbone.Validation", {
         
         "should not update the model": function(){
             assert.isUndefined(this.model.get('age'));
-        },
-
-        "should set isValid on the model to false": function(){
-            assert.isFalse(this.model.get('isValid'));
         }
     },
     
@@ -121,10 +117,6 @@ buster.testCase("Backbone.Validation", {
                         
             "name should not have invalid class": function() {
                 assert.isFalse(this.name.hasClass('invalid'));
-            },
-
-            "should set isValid on the model to true": function(){
-                assert.isTrue(this.model.get('isValid'));
             }
         },
         
@@ -142,10 +134,6 @@ buster.testCase("Backbone.Validation", {
                         
             "name should have invalid class": function() {
                 assert.isTrue(this.name.hasClass('invalid'));
-            },
-
-            "should set isValid on the model to false": function(){
-                assert.isFalse(this.model.get('isValid'));
             }
         },
         
@@ -163,40 +151,62 @@ buster.testCase("Backbone.Validation", {
                         
             "name should have invalid class": function() {
                 assert.isTrue(this.name.hasClass('invalid'));
-            },
-
-            "should set isValid on the model to false": function(){
-                assert.isFalse(this.model.get('isValid'));
             }
         }
     },
     
-    "setting a property on invalid model": {
-        setUp: function(){
+    "isValid": {
+        "one undefined and one valid value makes the model invalid": function() {
+            delete this.model.attributes.age;
             this.model.set({
-                age: 0
+                name: 'hello'
             });
+
+            assert.isFalse(this.model.get('isValid'));
         },
         
-        "model should still be invalid when setting different property": function(){
+        "one invalid and one valid value makes the model invalid": function() {
+            this.model.set({
+                age: 0,
+                name: 'hello'
+            });
+
+            assert.isFalse(this.model.get('isValid'));
+        },
+        
+        "both invalid values makes the model invalid": function() {
+            this.model.set({
+                age: 0,
+                name: ''
+            });
+
+            assert.isFalse(this.model.get('isValid'));
+        },
+                
+        "both valid values makes the model valid": function() {
+            this.model.set({
+                age: 1,
+                name: 'hello'
+            });
+
+            assert.isTrue(this.model.get('isValid'));
+        },        
+        
+        "setting one value at a time": function() {
+            assert.isUndefined(this.model.get('isValid'));
+            
+            this.model.set({age: 0});
+            assert.isFalse(this.model.get('isValid'));
+
+            this.model.set({age: 1});
             assert.isFalse(this.model.get('isValid'));
             
             this.model.set({name: 'hello'});
-            
-            assert.isFalse(this.model.get('isValid'));
-        },
-        
-        "model should be valid when setting valid value": function(){            
-            assert.isFalse(this.model.get('isValid'));
-            
-            this.model.set({age: 1});
-            
             assert.isTrue(this.model.get('isValid'));
+            
+            this.model.set({age: 0});
+            assert.isFalse(this.model.get('isValid'));
         }
-    },
-    
-    "should ignore property without validator": function(){
-        this.model.set({someProperty: true});
     },
     
     "no conflict": {

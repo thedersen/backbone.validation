@@ -55,8 +55,7 @@ Backbone.Validation = (function(Backbone, _) {
         bind: function(view, options) {
             options = options || {};
             var validFn = options.valid || Backbone.Validation.callbacks.valid,
-                invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
-                invalidAttrs = view.model.invalidAttrs = view.model.invalidAttrs || [];
+                invalidFn = options.invalid || Backbone.Validation.callbacks.invalid;
              
             view.model.validate = function(attrs) {
                 var invalid = false;
@@ -66,23 +65,28 @@ Backbone.Validation = (function(Backbone, _) {
                         return false;
                     }
                     
-                    var i = _.indexOf(invalidAttrs, changedAttr);
-                    if(i !== -1){
-                        delete invalidAttrs[i];
-                    }
-                    
                     var result = validateAttr(view, changedAttr, attrs[changedAttr]);
                     if (result) {
                         invalid = true;
-                        invalidAttrs.push(changedAttr);
                         invalidFn(view, changedAttr, result);
                     } else {
                         validFn(view, changedAttr);
                     }
                 }
                 
-                view.model.set({isValid: _.compact(invalidAttrs).length === 0});
-                
+                if(invalid) {
+                    view.model.set({isValid: false});
+                } else {
+                    var isValid = true;
+                    for(attr in view.model.validation) {
+                        if(_.isUndefined(attrs[attr]) && validateAttr(view, attr, view.model.get(attr))) {
+                            isValid = false;
+                            break;
+                        }
+                    }
+                    view.model.set({isValid: isValid});
+                }
+                                
                 return invalid;
             };
         },
