@@ -445,7 +445,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 
         "setting non numeric value should be invalid": function() {
             assert.isFalse(this.model.set({
-                age: 'error'
+                age: '10error'
             }));
         },
 
@@ -494,7 +494,7 @@ buster.testCase("Backbone.Validation builtin validators", {
 
         "setting non numeric value should be invalid": function() {
             assert.isFalse(this.model.set({
-                age: 'error'
+                age: '10error'
             }));
         },
 

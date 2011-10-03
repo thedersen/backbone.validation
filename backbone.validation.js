@@ -122,6 +122,11 @@ Backbone.Validation.patterns = {
 };
 
 Backbone.Validation.validators = (function(patterns, _, $) {
+    var numberPattern = patterns.number;
+    var isNumber = function(value){
+        return _.isNumber(value) || (_.isString(value) && value.match(numberPattern));
+    };
+    
     return {
         required: function(value, attr, msg) {
             var isEmptyString = _.isString(value) && $.trim(value) === '';
@@ -132,14 +137,12 @@ Backbone.Validation.validators = (function(patterns, _, $) {
             }
         },
         min: function(value, attr, msg, minValue) {
-            value = parseInt(value, 10);
-            if (!_.isNumber(value) || value < minValue) {
+            if (!isNumber(value) || value < minValue) {
                 return msg || attr + ' must be larger than or equal to ' + minValue;
             }
         },
         max: function(value, attr, msg, maxValue) {
-            value = parseInt(value, 10);
-            if (!_.isNumber(value) || value > maxValue) {
+            if (!isNumber(value) || value > maxValue) {
                 return msg || attr + ' must be less than or equal to ' + maxValue;
             }
         },
