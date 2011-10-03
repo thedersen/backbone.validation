@@ -111,6 +111,20 @@ You can also override these per view when binding:
 		}
 	  }
 	});
+	
+#### named function validator
+
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+	    name: 'validateName'
+	  },
+	  validateName: function(value) {
+		if(value !== 'something') {
+		  // return an error message if the value is invalid; otherwise, return undefined
+          return 'Name is invalid';
+        }
+	  }
+	});
 
 #### required
 
@@ -234,6 +248,10 @@ If you have custom patterns that are used several places in your code, you can e
 
 
 # Release notes
+
+### v0.1.4
+
+* Added named function validator
 
 ### v0.1.3
 
