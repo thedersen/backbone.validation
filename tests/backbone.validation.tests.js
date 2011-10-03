@@ -692,15 +692,21 @@ buster.testCase("Backbone.Validation builtin validators", {
             }));
         },
 
-        "setting numeric value should be valid": function() {
+        "setting numeric value with one digit should be valid": function() {
             assert(this.model.set({
                 age: 1
             }));
         },
-
+        
+        "setting numeric value with several digits should be valid": function() {
+            assert(this.model.set({
+                age: 1234
+            }));
+        },
+        
         "setting numeric string value should be valid": function() {
             assert(this.model.set({
-                age: "1"
+                age: "1234"
             }));
         },
 
