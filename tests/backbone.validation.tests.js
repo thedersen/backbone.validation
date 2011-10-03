@@ -346,6 +346,24 @@ buster.testCase("Backbone.Validation builtin validators", {
             invalid: this.invalid
         });
     },
+    
+    "named function": {
+        setUp: function() {
+            this.model.validation = {
+                name: 'validateName'
+            };
+            
+            this.model.validateName = function(val){
+                if(!name) {
+                    return 'Error';
+                }
+            };
+        },
+        
+        "should call specified method on the model": function() {
+            assert.isFalse(this.model.set({name: ''}));
+        }
+    },
 
     "required": {
         setUp: function() {
