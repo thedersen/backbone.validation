@@ -235,6 +235,12 @@ If you have custom patterns that are used several places in your code, you can e
 
 # Release notes
 
+### v0.1.3
+
+* Fixed issue where min and max validators treated strings with leading digits as numbers
+* Fixed issue with undefined Backbone reference when running Backbone in no conflict mode
+* Fixed issue with numeric string with more than one number not being recognized as a number
+
 ### v0.1.2
 
 * Initial release
