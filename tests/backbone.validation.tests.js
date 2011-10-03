@@ -217,6 +217,14 @@ buster.testCase("Backbone.Validation", {
         setUp: function() {
             this.previousBackbone = Backbone.noConflict();
             this.previousUnderscore = _.noConflict();
+            
+            this.model.validation = {
+                someProperty: {
+                    pattern: 'number',
+                    min: 0,
+                    max: 5
+                }
+            };
         },
 
         tearDown: function() {
@@ -226,13 +234,13 @@ buster.testCase("Backbone.Validation", {
 
         "should work with backbone": function() {
             this.model.set({
-                someProperty: true
+                someProperty: 1
             });
         },
 
         "should work with underscore": function() {
             this.model.set({
-                someProperty: true
+                someProperty: 1
             });
         }
     }
