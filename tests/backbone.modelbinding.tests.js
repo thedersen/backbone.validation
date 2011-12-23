@@ -1,5 +1,3 @@
-var assert = buster.assert;
-
 buster.testCase('Works with Backbone.Modelbinding', {
     setUp: function() {
         var that = this;
@@ -50,7 +48,7 @@ buster.testCase('Works with Backbone.Modelbinding', {
     },
 
     "input should not have invalid class by default": function() {
-        assert.isFalse(this.input.hasClass('invalid'));
+        refute(this.input.hasClass('invalid'));
     },
 
     "invalid input": {
