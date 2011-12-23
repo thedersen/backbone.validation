@@ -352,7 +352,7 @@ buster.testCase("Backbone.Validation builtin validators", {
             };
             
             this.model.validateName = function(val){
-                if(!name) {
+                if(name !== 'backbone') {
                     return 'Error';
                 }
             };
