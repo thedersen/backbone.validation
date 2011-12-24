@@ -7,7 +7,20 @@ buster.testCase("Backbone.Validation", {
             }
         });
 
-        var Model = Backbone.Model.extend();
+        var Model = Backbone.Model.extend({
+            validation: {
+                age: function(val) {
+                    if (!val) {
+                        return 'Age is invalid';
+                    }
+                },
+                name: function(val) {
+                    if (!val) {
+                        return 'Name is invalid';
+                    }
+                }
+            }
+        });
 
         this.model = new Model();
         this.view = new View({
@@ -31,6 +44,34 @@ buster.testCase("Backbone.Validation", {
 	    "the model's validate function is defined": function() {
 	        assert.defined(this.model.validate);
 	    },
+	    
+	    "and passing custom callbacks with the options": {
+	        setUp: function(){
+	            this.valid = this.spy();
+                this.invalid = this.spy();
+
+                Backbone.Validation.bind(this.view, {
+                    valid: this.valid,
+                    invalid: this.invalid
+                });
+	        },
+	        
+	        "should call valid callback passed with options": function() {
+                this.model.set({
+                    age: 1
+                });
+
+                assert.called(this.valid);
+            },
+
+            "should call invalid callback passed with options": function() {
+                this.model.set({
+                    age: 0
+                });
+
+                assert.called(this.invalid);
+            }
+	    }
 	},
 
 	"when unbinding":{
@@ -41,24 +82,11 @@ buster.testCase("Backbone.Validation", {
 		
     	"the model's validate function is undefined": function() {
         	refute.defined(this.model.validate);
-    	},
+    	}
 	},
 
 	"when bound to model with to validated attributes": {
-		setUp: function() {
-		    this.model.validation = {
-                age: function(val) {
-                    if (!val) {
-                        return 'Age is invalid';
-                    }
-                },
-                name: function(val) {
-                    if (!val) {
-                        return 'Name is invalid';
-                    }
-                }
-            };
-            
+		setUp: function() {            
 	        Backbone.Validation.bind(this.view);
 		},
 		
@@ -86,7 +114,7 @@ buster.testCase("Backbone.Validation", {
     	        },
 
     	        "should return the model": function() {
-    	            assert.equals(this.model.set({
+    	            assert.same(this.model.set({
     	                age: 1
     	            }), this.model);
     	        },

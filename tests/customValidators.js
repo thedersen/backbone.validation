@@ -1,4 +1,4 @@
-buster.testCase('Backbone.Validation add custom validator', {
+buster.testCase('Extending Backbone.Validation with custom validator', {
     setUp: function() {
         _.extend(Backbone.Validation.validators, {
             custom: function(value, attr, msg, customValue) {
@@ -22,7 +22,7 @@ buster.testCase('Backbone.Validation add custom validator', {
         }));
     },
 
-    "should fire custom validator": function() {
+    "should execute the custom validator": function() {
         assert(this.model.set({
             age: 1
         }));
@@ -32,7 +32,7 @@ buster.testCase('Backbone.Validation add custom validator', {
     }
 });
 
-buster.testCase('Backbone.Validation override existing validator', {
+buster.testCase('Overriding builtin validator in Backbone.Validation', {
     setUp: function() {
 		this.builtinMin = Backbone.Validation.validators.min;
 		
@@ -62,7 +62,7 @@ buster.testCase('Backbone.Validation override existing validator', {
 		Backbone.Validation.validators.min = this.builtinMin;
 	},
 	
-    "should fire custom validator": function() {
+    "should execute the overridden validator": function() {
         assert(this.model.set({
             age: 1
         }));
