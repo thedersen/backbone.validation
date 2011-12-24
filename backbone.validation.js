@@ -61,8 +61,7 @@ Backbone.Validation = (function(Backbone, _) {
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid;
 
             model.validate = function(attrs) {
-                var invalidAttr = false,
-                    isValid = true,
+                var isValid = true,
                     error;
 
                 for (var changedAttr in attrs) {
@@ -72,14 +71,13 @@ Backbone.Validation = (function(Backbone, _) {
 
                     error = validateAttr(model, changedAttr, attrs[changedAttr]);
                     if (error) {
-                        invalidAttr = true;
                         invalidFn(view, changedAttr, error);
                     } else {
                         validFn(view, changedAttr);
                     }
                 }
 
-                if (invalidAttr) {
+                if (error) {
                     model.set({
                         isValid: false
                     });
@@ -95,7 +93,7 @@ Backbone.Validation = (function(Backbone, _) {
                     });
                 }
 
-                return invalidAttr;
+                return error;
             };
         },
 
