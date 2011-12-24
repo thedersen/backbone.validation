@@ -238,6 +238,23 @@ buster.testCase("Backbone.Validation", {
 	            });
 	            refute(this.model.get('isValid'));
 	        }
+	    },
+	    
+	    "and custom error message is specified": {
+	        setUp: function() {
+	            this.model.validation = {
+	                age: {
+	                    min: 1,
+	                    msg: 'Custom error'
+	                }
+	            }
+	            
+	            this.model.set({age: 0});
+	        },
+	        
+            "element should have data attribute with the custom error message": function() {
+	            assert.equals(this.age.data('error'), 'Custom error');
+	        }
 	    }
 	}
 });
