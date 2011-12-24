@@ -196,6 +196,40 @@ buster.testCase("Backbone.Validation builtin validator", {
         }
     },
 
+    "'length'": {
+        setUp: function() {
+            this.model.validation = {
+                postalCode: {
+                    length: 2,
+                }
+            };
+        },
+
+        "undefined should be invalid": function() {
+            refute(this.model.set({
+                postalCode: undefined
+            }));
+        },
+
+        "setting value with length shorter than length should be invalid": function() {
+            refute(this.model.set({
+                postalCode: 'a'
+            }));
+        },
+
+        "setting value with length longer than length should be invalid": function() {
+            refute(this.model.set({
+                postalCode: 'aaa'
+            }));
+        },
+
+        "setting value with length equal to length should be valid": function() {
+            assert(this.model.set({
+                postalCode: 'aa'
+            }));
+        }  
+    },
+    
     "'minLength'": {
         setUp: function() {
             this.model.validation = {
