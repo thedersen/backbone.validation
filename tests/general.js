@@ -235,6 +235,7 @@ buster.testCase("Backbone.Validation", {
             
 	            this.model.validation = {
 	                someProperty: {
+	                    pattern: 'number',
 	                    min: 0,
 	                    max: 5
 	                }
