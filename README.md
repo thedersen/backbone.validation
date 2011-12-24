@@ -155,7 +155,17 @@ You can also override these per view when binding:
 		}
 	  }
 	});
-	
+
+#### length
+
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+	    postalCode: {
+		  length: 4
+		}
+	  }
+	});
+			
 #### minLength
 
 	var SomeModel = Backbone.Model.extend({
@@ -252,6 +262,7 @@ If you have custom patterns that are used several places in your code, you can e
 ### v0.1.4
 
 * Added named function validator
+* Added length validator
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 

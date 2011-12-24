@@ -148,6 +148,12 @@ Backbone.Validation.validators = (function(patterns, _, $) {
                 return attr + ' must be less than or equal to ' + maxValue;
             }
         },
+        length: function(value, attr, length) {
+          value = $.trim(value);
+            if (_.isString(value) && value.length !== length) {
+                return attr + ' must have exact ' + length + ' characters';
+            }  
+        },
         minLength: function(value, attr, minLength) {
             value = $.trim(value);
             if (_.isString(value) && value.length < minLength) {
