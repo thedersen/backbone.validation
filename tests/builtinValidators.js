@@ -14,13 +14,38 @@ buster.testCase("Backbone.Validation builtin validator", {
         });
     },
     
+    "'function'": {
+        setUp: function() {
+            var that = this;
+            this.model.validation = {
+                name: function(val){
+                    that.ctx = this;
+                    if(name !== 'backbone') {
+                        return 'Error';
+                    }
+                }
+            };
+        },
+        
+        "should call specified method": function() {
+            refute(this.model.set({name: ''}));
+        },
+                
+        "context should be the model": function() {
+            this.model.set({name: ''});
+            assert.same(this.ctx, this.model);
+        }
+    },
+
     "'named function'": {
         setUp: function() {
+            var that = this;
             this.model.validation = {
                 name: 'validateName'
             };
             
             this.model.validateName = function(val){
+                that.ctx = this;
                 if(name !== 'backbone') {
                     return 'Error';
                 }
@@ -29,6 +54,11 @@ buster.testCase("Backbone.Validation builtin validator", {
         
         "should call specified method on the model": function() {
             refute(this.model.set({name: ''}));
+        },
+        
+        "context should be the model": function() {
+            this.model.set({name: ''});
+            assert.same(this.ctx, this.model);
         }
     },
 

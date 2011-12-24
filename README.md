@@ -266,6 +266,7 @@ If you have custom patterns that are used several places in your code, you can e
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)
+	* Context (this) in the function validators is now the model instead of the global object (Fixes issue # 6)
 
 ### v0.1.3
 
