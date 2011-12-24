@@ -263,6 +263,7 @@ If you have custom patterns that are used several places in your code, you can e
 
 * Added named function validator
 * Added length validator
+* Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)

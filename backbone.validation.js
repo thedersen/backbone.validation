@@ -9,6 +9,16 @@
 // Backbone.Validation
 // ----------------------------
 Backbone.Validation = (function(Backbone, _) {
+    var getValidatedAttrs = function(model){
+        var validatedAttrs = {};
+        for (var attr in model.validation) {
+            if(model.validation.hasOwnProperty(attr)){
+                validatedAttrs[attr] = undefined;
+            }
+        }
+        return validatedAttrs;      
+    };
+    
     var getValidators = function(model, attr) {
         var validation = model.validation[attr],
             validators = [];
@@ -61,6 +71,10 @@ Backbone.Validation = (function(Backbone, _) {
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid;
 
             model.validate = function(attrs) {
+                if(!attrs){
+                    return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
+                }
+                
                 var isValid = true,
                     error;
 
