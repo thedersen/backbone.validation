@@ -252,6 +252,8 @@ If you have custom patterns that are used several places in your code, you can e
 ### v0.1.4
 
 * Added named function validator
+* Possible breaking changes:
+	* Removed the unused msg parameter when adding custom validators
 
 ### v0.1.3
 
