@@ -248,7 +248,7 @@ buster.testCase("Backbone.Validation", {
 	                    min: 1,
 	                    msg: 'Custom error'
 	                }
-	            }
+	            };
 	            
     	        this.model.bind('error', function(model, error){
     	            that.error = error;
