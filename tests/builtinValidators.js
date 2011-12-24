@@ -1,4 +1,4 @@
-buster.testCase("Backbone.Validation builtin validators", {
+buster.testCase("Backbone.Validation builtin validator", {
     setUp: function() {
         this.valid = this.spy();
         this.invalid = this.spy();
@@ -14,7 +14,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         });
     },
     
-    "named function": {
+    "'named function'": {
         setUp: function() {
             this.model.validation = {
                 name: 'validateName'
@@ -32,7 +32,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "required": {
+    "'required'": {
         setUp: function() {
             this.model.validation = {
                 name: {
@@ -82,7 +82,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "min": {
+    "'min'": {
         setUp: function() {
             this.model.validation = {
                 age: {
@@ -123,7 +123,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "max": {
+    "'max'": {
         setUp: function() {
             this.model.validation = {
                 age: {
@@ -164,7 +164,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "min && max": {
+    "'min' and 'max'": {
         setUp: function() {
             this.model.validation = {
                 age: {
@@ -199,7 +199,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "minLength": {
+    "'minLength'": {
         setUp: function() {
             this.model.validation = {
                 name: {
@@ -228,7 +228,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "maxLength": {
+    "'maxLength'": {
         setUp: function() {
             this.model.validation = {
                 name: {
@@ -251,7 +251,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "email": {
+    "'email pattern'": {
         setUp: function() {
             this.model.validation = {
                 email: {
@@ -274,7 +274,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "url": {
+    "'url pattern'": {
         setUp: function() {
             this.model.validation = {
                 url: {
@@ -305,7 +305,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "number": {
+    "'number pattern'": {
         setUp: function() {
             this.model.validation = {
                 age: {
@@ -340,7 +340,7 @@ buster.testCase("Backbone.Validation builtin validators", {
         }
     },
 
-    "pattern": {
+    "'pattern'": {
         setUp: function() {
             this.model.validation = {
                 name: {
