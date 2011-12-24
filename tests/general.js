@@ -85,7 +85,7 @@ buster.testCase("Backbone.Validation", {
     	}
 	},
 
-	"when bound to model with to validated attributes": {
+	"when bound to model with two validated attributes": {
 		setUp: function() {            
 	        Backbone.Validation.bind(this.view);
 		},
@@ -264,6 +264,52 @@ buster.testCase("Backbone.Validation", {
 	        "event triggered should contain the custom error message": function() {
 	            assert.equals('Custom error', this.error);
 	        }
+	    },
+	    
+	    "and validate is explicitly called with no parameters": {
+	        setUp: function() {
+                this.invalid = this.spy();
+                this.valid = this.spy();
+	            this.model.validation = {
+	                age: {
+	                    min: 1,
+	                    msg: 'error'
+	                },
+	                name: {
+	                    required: true,
+	                    msg: 'error'
+	                }
+	            };
+                Backbone.Validation.bind(this.view, {
+                    valid: this.valid,
+                    invalid: this.invalid
+                });
+	        },
+            
+            "all attributes on the model is validated when nothing has been set": function(){
+                this.model.validate();
+                
+                assert.calledWith(this.invalid, this.view, 'age', 'error');
+                assert.calledWith(this.invalid, this.view, 'name', 'error');
+            },
+            
+            "all attributes on the model is validated when one property has been set silently": function(){
+                this.model.set({age: 1}, {silent:true});
+                
+                this.model.validate();
+                
+                assert.calledWith(this.valid, this.view, 'age');
+                assert.calledWith(this.invalid, this.view, 'name', 'error');
+            },
+                        
+            "all attributes on the model is validated when one property has been set silently": function(){
+                this.model.set({age: 1, name: 'name'}, {silent:true});
+                
+                this.model.validate();
+                
+                assert.calledWith(this.valid, this.view, 'age');
+                assert.calledWith(this.valid, this.view, 'name');
+            }
 	    }
 	}
 });
