@@ -7,20 +7,7 @@ buster.testCase("Backbone.Validation", {
             }
         });
 
-        var Model = Backbone.Model.extend({
-            validation: {
-                age: function(val) {
-                    if (!val) {
-                        return 'Age is invalid';
-                    }
-                },
-                name: function(val) {
-                    if (!val) {
-                        return 'Name is invalid';
-                    }
-                }
-            }
-        });
+        var Model = Backbone.Model.extend();
 
         this.model = new Model();
         this.view = new View({
@@ -48,6 +35,7 @@ buster.testCase("Backbone.Validation", {
 
 	"when unbinding":{
 		setUp: function(){
+	        Backbone.Validation.bind(this.view);
 			Backbone.Validation.unbind(this.view);	
 		},
 		
@@ -56,8 +44,21 @@ buster.testCase("Backbone.Validation", {
     	},
 	},
 
-	"when bound": {
+	"when bound to model with to validated attributes": {
 		setUp: function() {
+		    this.model.validation = {
+                age: function(val) {
+                    if (!val) {
+                        return 'Age is invalid';
+                    }
+                },
+                name: function(val) {
+                    if (!val) {
+                        return 'Name is invalid';
+                    }
+                }
+            };
+            
 	        Backbone.Validation.bind(this.view);
 		},
 		
@@ -66,60 +67,69 @@ buster.testCase("Backbone.Validation", {
 	            someProperty: true
 	        }));
 	    },
-	
-	    "and setting valid value": {
-	        setUp: function() {
-	            this.model.set({
-	                age: 1
-	            });
-	        },
-
-	        "element should not have invalid class": function() {
-	            refute(this.age.hasClass('invalid'));
-	        },
-
-	        "element should not have data property with error message": function() {
-	            refute.defined(this.age.data('error'));
-	        },
-
-	        "should return the model": function() {
-	            assert.equals(this.model.set({
-	                age: 1
-	            }), this.model);
-	        },
-
-	        "should update the model": function() {
-	            assert.equals(this.model.get('age'), 1);
-	        }
-	    },
-	
-	    "and setting invalid value": {
-	        setUp: function() {
-	            this.model.set({
-	                age: 0
-	            });
-	        },
-
-	        "element should have invalid class": function() {
-	            assert(this.age.hasClass('invalid'));
-	        },
-
-	        "element should have data attribute with error message": function() {
-	            assert.equals(this.age.data('error'), 'Age is invalid');
-	        },
-
-	        "should return false": function() {
-	            refute(this.model.set({
-	                age: 0
-	            }));
-	        },
-
-	        "should not update the model": function() {
-	            refute.defined(this.model.get('age'));
-	        }
-	    },
-	
+		
 	    "and setting": {
+	
+	        "one valid value": {
+    	        setUp: function() {
+    	            this.model.set({
+    	                age: 1
+    	            });
+    	        },
+
+    	        "element should not have invalid class": function() {
+    	            refute(this.age.hasClass('invalid'));
+    	        },
+
+    	        "element should not have data property with error message": function() {
+    	            refute.defined(this.age.data('error'));
+    	        },
+
+    	        "should return the model": function() {
+    	            assert.equals(this.model.set({
+    	                age: 1
+    	            }), this.model);
+    	        },
+
+    	        "should update the model": function() {
+    	            assert.equals(this.model.get('age'), 1);
+    	        },
+    	        
+                "model should be invalid": function() {
+    	            refute(this.model.get('isValid'));
+    	        }
+    	    },
+    	   
+    	    "one invalid value": {
+    	        setUp: function() {
+    	            this.model.set({
+    	                age: 0
+    	            });
+    	        },
+
+    	        "element should have invalid class": function() {
+    	            assert(this.age.hasClass('invalid'));
+    	        },
+
+    	        "element should have data attribute with error message": function() {
+    	            assert.equals(this.age.data('error'), 'Age is invalid');
+    	        },
+
+    	        "should return false": function() {
+    	            refute(this.model.set({
+    	                age: 0
+    	            }));
+    	        },
+
+    	        "should not update the model": function() {
+    	            refute.defined(this.model.get('age'));
+    	        },
+    	        
+                "model should be invalid": function() {
+    	            refute(this.model.get('isValid'));
+    	        }
+    	    },
+    	    
 	        "two valid values": {
 	            setUp: function() {
 	                this.model.set({
@@ -131,7 +141,11 @@ buster.testCase("Backbone.Validation", {
 	            "elements should not have invalid class": function() {
 	                refute(this.age.hasClass('invalid'));
 	                refute(this.name.hasClass('invalid'));
-	            }
+                },
+
+                "model should be valid": function() {
+    	            assert(this.model.get('isValid'));
+    	        }
 	        },
 
 	        "two invalid values": {
@@ -145,7 +159,11 @@ buster.testCase("Backbone.Validation", {
 	            "elements should have invalid class": function() {
 	                assert(this.age.hasClass('invalid'));
 	                assert(this.name.hasClass('invalid'));
-	            }
+	            },
+	            	            
+	            "model should be invalid": function() {
+    	            refute(this.model.get('isValid'));
+    	        }
 	        },
 
 	        "one invalid and one valid value": {
@@ -162,48 +180,14 @@ buster.testCase("Backbone.Validation", {
 
 	            "element should have invalid class": function() {
 	                assert(this.name.hasClass('invalid'));
-	            }
-	        }
-	    },
-
-	    "isValid": {
-	        "one undefined and one valid value makes the model invalid": function() {
-	            delete this.model.attributes.age;
-	            this.model.set({
-	                name: 'hello'
-	            });
-
-	            refute(this.model.get('isValid'));
+	            },
+	            
+	            "model should be invalid": function() {
+    	            refute(this.model.get('isValid'));
+    	        }
 	        },
-
-	        "one invalid and one valid value makes the model invalid": function() {
-	            this.model.set({
-	                age: 0,
-	                name: 'hello'
-	            });
-
-	            refute(this.model.get('isValid'));
-	        },
-
-	        "both values invalid makes the model invalid": function() {
-	            this.model.set({
-	                age: 0,
-	                name: ''
-	            });
-
-	            refute(this.model.get('isValid'));
-	        },
-
-	        "both values valid makes the model valid": function() {
-	            this.model.set({
-	                age: 1,
-	                name: 'hello'
-	            });
-
-	            assert(this.model.get('isValid'));
-	        },
-
-	        "setting one value at a time": function() {
+	        
+	        "one value at a time correctly marks the model as either valid or invalid": function() {
 	            refute.defined(this.model.get('isValid'));
 
 	            this.model.set({
