@@ -45,30 +45,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             };
         },
 
-        "should call valid with correct arguments when property is valid": function() {
-            this.model.set({
-                name: 'valid'
-            });
-
-            assert.calledWith(this.valid, this.view, 'name');
-        },
-
-        "should call invalid with correct arguments when property is invalid": function() {
-            this.model.set({
-                agree: false
-            });
-
-            assert.calledWith(this.invalid, this.view, 'agree', 'agree is required');
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                name: ''
-            });
-
-            assert.calledWith(this.invalid, this.view, 'name', 'Error');
-        },
-
         "empty string should be invalid": function() {
             refute(this.model.set({
                 name: ''
@@ -144,14 +120,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({
                 age: '1'
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                age: 0
-            });
-
-            assert.calledWith(this.invalid, this.view, 'age', 'Error');
         }
     },
 
@@ -193,14 +161,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({
                 age: '10'
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                age: 11
-            });
-
-            assert.calledWith(this.invalid, this.view, 'age', 'Error');
         }
     },
 
@@ -265,14 +225,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({
                 name: 'aa'
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                name: 'a'
-            });
-
-            assert.calledWith(this.invalid, this.view, 'name', 'Error');
         }
     },
 
@@ -296,14 +248,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({
                 name: 'aa'
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                name: 'aaa'
-            });
-
-            assert.calledWith(this.invalid, this.view, 'name', 'Error');
         }
     },
 
@@ -327,14 +271,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({
                 email: 'a@example.com'
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                email: 'aaa'
-            });
-
-            assert.calledWith(this.invalid, this.view, 'email', 'Error');
         }
     },
 
@@ -401,14 +337,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({
                 age: "1234"
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                age: 'a'
-            });
-
-            assert.calledWith(this.invalid, this.view, 'age', 'Error');
         }
     },
 
@@ -432,14 +360,6 @@ buster.testCase("Backbone.Validation builtin validators", {
             assert(this.model.set({
                 name: 'test'
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                name: 'aaa'
-            });
-
-            assert.calledWith(this.invalid, this.view, 'name', 'Error');
         }
     }
 
