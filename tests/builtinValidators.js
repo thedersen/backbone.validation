@@ -37,7 +37,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 name: {
                     required: true,
-                    msg: 'Error'
                 },
                 agree: {
                     required: true
@@ -87,7 +86,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 age: {
                     min: 1,
-                    msg: 'Error'
                 }
             };
         },
@@ -128,7 +126,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 age: {
                     max: 10,
-                    msg: 'Error'
                 }
             };
         },
@@ -204,7 +201,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 name: {
                     minLength: 2,
-                    msg: 'Error'
                 }
             };
         },
@@ -233,7 +229,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 name: {
                     maxLength: 2,
-                    msg: 'Error'
                 }
             };
         },
@@ -256,7 +251,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 email: {
                     pattern: 'email',
-                    msg: 'Error'
                 }
             };
         },
@@ -279,7 +273,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 url: {
                     pattern: 'url',
-                    msg: 'Error'
                 }
             };
         },
@@ -294,14 +287,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             assert(this.model.set({
                 url: 'http://www.example.com?something=true&'
             }));
-        },
-
-        "should override error msg when specified": function() {
-            this.model.set({
-                url: 'aaa'
-            });
-
-            assert.calledWith(this.invalid, this.view, 'url', 'Error');
         }
     },
 
@@ -310,7 +295,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 age: {
                     pattern: 'number',
-                    msg: 'Error'
                 }
             };
         },
@@ -345,7 +329,6 @@ buster.testCase("Backbone.Validation builtin validator", {
             this.model.validation = {
                 name: {
                     pattern: /^test/,
-                    msg: 'Error'
                 }
             };
         },
