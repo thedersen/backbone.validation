@@ -66,7 +66,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 name: {
-                    required: true,
+                    required: true
                 },
                 agree: {
                     required: true
@@ -115,7 +115,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 age: {
-                    min: 1,
+                    min: 1
                 }
             };
         },
@@ -155,7 +155,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 age: {
-                    max: 10,
+                    max: 10
                 }
             };
         },
@@ -230,7 +230,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 postalCode: {
-                    length: 2,
+                    length: 2
                 }
             };
         },
@@ -264,7 +264,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 name: {
-                    minLength: 2,
+                    minLength: 2
                 }
             };
         },
@@ -292,7 +292,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 name: {
-                    maxLength: 2,
+                    maxLength: 2
                 }
             };
         },
@@ -314,7 +314,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 email: {
-                    pattern: 'email',
+                    pattern: 'email'
                 }
             };
         },
@@ -336,7 +336,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 url: {
-                    pattern: 'url',
+                    pattern: 'url'
                 }
             };
         },
@@ -358,7 +358,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 age: {
-                    pattern: 'number',
+                    pattern: 'number'
                 }
             };
         },
@@ -404,7 +404,7 @@ buster.testCase("Backbone.Validation builtin validator", {
         setUp: function() {
             this.model.validation = {
                 name: {
-                    pattern: /^test/,
+                    pattern: /^test/
                 }
             };
         },
@@ -421,5 +421,4 @@ buster.testCase("Backbone.Validation builtin validator", {
             }));
         }
     }
-
 });
