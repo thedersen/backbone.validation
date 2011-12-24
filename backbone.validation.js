@@ -42,9 +42,9 @@ Backbone.Validation = (function(Backbone, _) {
         } else {
             for (var i = 0; i < validators.length; i++) {
                 validator = validators[i];
-                result = validator.fn(value, attr, validator.msg, validator.val);
+                result = validator.fn(value, attr, validator.val);
                 if (result) {
-                    error += result;
+                    error += validator.msg || result;
                 }
             };
             return error;
@@ -130,40 +130,40 @@ Backbone.Validation.validators = (function(patterns, _, $) {
     };
     
     return {
-        required: function(value, attr, msg) {
+        required: function(value, attr) {
             var isEmptyString = _.isString(value) && $.trim(value) === '';
             var isFalseBoolean = _.isBoolean(value) && value === false;
 
             if (_.isNull(value) || _.isUndefined(value) || isEmptyString || isFalseBoolean) {
-                return msg || attr + ' is required';
+                return attr + ' is required';
             }
         },
-        min: function(value, attr, msg, minValue) {
+        min: function(value, attr, minValue) {
             if (!isNumber(value) || value < minValue) {
-                return msg || attr + ' must be larger than or equal to ' + minValue;
+                return attr + ' must be larger than or equal to ' + minValue;
             }
         },
-        max: function(value, attr, msg, maxValue) {
+        max: function(value, attr, maxValue) {
             if (!isNumber(value) || value > maxValue) {
-                return msg || attr + ' must be less than or equal to ' + maxValue;
+                return attr + ' must be less than or equal to ' + maxValue;
             }
         },
-        minLength: function(value, attr, msg, minLength) {
+        minLength: function(value, attr, minLength) {
             value = $.trim(value);
             if (_.isString(value) && value.length < minLength) {
-                return msg || attr + ' must be longer than or equal to ' + minLength + ' characters';
+                return attr + ' must be longer than or equal to ' + minLength + ' characters';
             }
         },
-        maxLength: function(value, attr, msg, maxLength) {
+        maxLength: function(value, attr, maxLength) {
             value = $.trim(value);
             if (_.isString(value) && value.length > maxLength) {
-                return msg || attr + ' must be shorter than or equal to' + maxLength + ' characters';
+                return attr + ' must be shorter than or equal to' + maxLength + ' characters';
             }
         },
-        pattern: function(value, attr, msg, pattern) {
+        pattern: function(value, attr, pattern) {
             pattern = patterns[pattern] || pattern;
             if (_.isString(value) && !value.match(pattern)) {
-                return msg || attr + ' is not a valid ' + pattern;
+                return attr + ' is not a valid ' + pattern;
             }
         }
     };
