@@ -8,7 +8,7 @@
 // ----------------------------
 // Backbone.Validation
 // ----------------------------
-Backbone.Validation = (function(Backbone, _) {
+Backbone.Validation = (function(Backbone, _, undefined) {
     var getValidatedAttrs = function(model){
         var validatedAttrs = {};
         for (var attr in model.validation) {
