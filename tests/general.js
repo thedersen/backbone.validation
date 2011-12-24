@@ -226,38 +226,6 @@ buster.testCase("Backbone.Validation", {
 	            });
 	            refute(this.model.get('isValid'));
 	        }
-	    },
-
-	    "no conflict": {
-	        setUp: function() {
-	            this.previousBackbone = Backbone.noConflict();
-	            this.previousUnderscore = _.noConflict();
-            
-	            this.model.validation = {
-	                someProperty: {
-	                    pattern: 'number',
-	                    min: 0,
-	                    max: 5
-	                }
-	            };
-	        },
-
-	        tearDown: function() {
-	            Backbone = this.previousBackbone;
-	            _ = this.previousUnderscore;
-	        },
-
-	        "should work with backbone": function() {
-	            assert(this.model.set({
-	                someProperty: 1
-	            }));
-	        },
-
-	        "should work with underscore": function() {
-	            assert(this.model.set({
-	                someProperty: 1
-	            }));
-	        }
 	    }
 	}
 });
