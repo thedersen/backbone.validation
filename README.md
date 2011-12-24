@@ -265,6 +265,7 @@ If you have custom patterns that are used several places in your code, you can e
 * Added length validator
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
+	* Number pattern matches negative numbers (Fixes issue #4)
 
 ### v0.1.3
 

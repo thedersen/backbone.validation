@@ -345,6 +345,12 @@ buster.testCase("Backbone.Validation builtin validator", {
             }));
         },
         
+        "setting negative numeric value with one digit should be valid": function() {
+            assert(this.model.set({
+                age: -1
+            }));
+        },
+        
         "setting numeric value with several digits should be valid": function() {
             assert(this.model.set({
                 age: 1234
@@ -354,6 +360,12 @@ buster.testCase("Backbone.Validation builtin validator", {
         "setting numeric string value should be valid": function() {
             assert(this.model.set({
                 age: "1234"
+            }));
+        },
+        
+        "setting negative numeric string value should be valid": function() {
+            assert(this.model.set({
+                age: "-1234"
             }));
         }
     },
