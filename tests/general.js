@@ -242,6 +242,7 @@ buster.testCase("Backbone.Validation", {
 	    
 	    "and custom error message is specified": {
 	        setUp: function() {
+	            var that = this;
 	            this.model.validation = {
 	                age: {
 	                    min: 1,
@@ -249,11 +250,19 @@ buster.testCase("Backbone.Validation", {
 	                }
 	            }
 	            
+    	        this.model.bind('error', function(model, error){
+    	            that.error = error;
+    	        });
+	            
 	            this.model.set({age: 0});
 	        },
 	        
             "element should have data attribute with the custom error message": function() {
-	            assert.equals(this.age.data('error'), 'Custom error');
+	            assert.equals('Custom error', this.age.data('error'));
+	        },
+	        
+	        "event triggered should contain the custom error message": function() {
+	            assert.equals('Custom error', this.error);
 	        }
 	    }
 	}
