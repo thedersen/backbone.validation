@@ -123,15 +123,30 @@ Backbone.Validation.patterns = {
     url: /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
 };
 
-Backbone.Validation.validators = (function(patterns, _, $) {
+Backbone.Validation.validators = (function(patterns, _) {
     var numberPattern = patterns.number;
     var isNumber = function(value){
         return _.isNumber(value) || (_.isString(value) && value.match(numberPattern));
     };
-    
+
+    var trim = String.prototype.trim ?
+    		function(text) {
+    			return text == null ?
+    				"" :
+    				String.prototype.trim.call(text);
+    		} :
+    		function(text) {
+    		    var trimLeft = /^\s+/,
+                    trimRight = /\s+$/;
+                    
+    			return text == null ?
+    				"" :
+    				text.toString().replace(trimLeft, "").replace(trimRight, "");
+    		};
+    		
     return {
         required: function(value, attr) {
-            var isEmptyString = _.isString(value) && $.trim(value) === '';
+            var isEmptyString = _.isString(value) && trim(value) === '';
             var isFalseBoolean = _.isBoolean(value) && value === false;
 
             if (_.isNull(value) || _.isUndefined(value) || isEmptyString || isFalseBoolean) {
@@ -149,19 +164,19 @@ Backbone.Validation.validators = (function(patterns, _, $) {
             }
         },
         length: function(value, attr, length) {
-          value = $.trim(value);
+          value = trim(value);
             if (_.isString(value) && value.length !== length) {
                 return attr + ' must have exact ' + length + ' characters';
             }  
         },
         minLength: function(value, attr, minLength) {
-            value = $.trim(value);
+            value = trim(value);
             if (_.isString(value) && value.length < minLength) {
                 return attr + ' must be longer than or equal to ' + minLength + ' characters';
             }
         },
         maxLength: function(value, attr, maxLength) {
-            value = $.trim(value);
+            value = trim(value);
             if (_.isString(value) && value.length > maxLength) {
                 return attr + ' must be shorter than or equal to' + maxLength + ' characters';
             }
@@ -173,4 +188,4 @@ Backbone.Validation.validators = (function(patterns, _, $) {
             }
         }
     };
-} (Backbone.Validation.patterns, _, jQuery));
+} (Backbone.Validation.patterns, _));
