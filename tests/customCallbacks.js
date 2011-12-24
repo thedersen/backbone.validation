@@ -1,4 +1,4 @@
-buster.testCase("Backbone.Validation override callbacks", {
+buster.testCase("Overriding default callbacks in Backbone.Validation", {
     setUp: function() {
 		this.originalCallbacks = {};
 		_.extend(this.originalCallbacks, Backbone.Validation.callbacks);
@@ -32,7 +32,7 @@ buster.testCase("Backbone.Validation override callbacks", {
 	    _.extend(Backbone.Validation.callbacks, this.originalCallbacks);
 	},
 
-    "should call overridden valid function": function() {
+    "should call overridden valid callback": function() {
         this.model.set({
             age: 1
         });
@@ -40,7 +40,7 @@ buster.testCase("Backbone.Validation override callbacks", {
         assert.called(this.valid);
     },
 
-    "should call overridden invalid function": function() {
+    "should call overridden invalid callback": function() {
         this.model.set({
             age: 0
         });
