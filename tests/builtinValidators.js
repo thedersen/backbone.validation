@@ -1,16 +1,13 @@
 buster.testCase("Backbone.Validation builtin validator", {
     setUp: function() {
-        this.valid = this.spy();
-        this.invalid = this.spy();
-
         this.model = new Backbone.Model();
         this.view = new Backbone.View({
             model: this.model
         });
 
         Backbone.Validation.bind(this.view, {
-            valid: this.valid,
-            invalid: this.invalid
+            valid: this.spy(),
+            invalid: this.spy()
         });
     },
     
@@ -27,11 +24,15 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
         
-        "should call specified method": function() {
+        "is invalid when method returns truthy value": function() {
             refute(this.model.set({name: ''}));
         },
                 
-        "context should be the model": function() {
+        "is valid when method returns falsy value": function() {
+            refute(this.model.set({name: 'backbone'}));
+        },
+                
+        "context is the model": function() {
             this.model.set({name: ''});
             assert.same(this.ctx, this.model);
         }
@@ -52,11 +53,15 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
         
-        "should call specified method on the model": function() {
+        "is invalid when method returns truthy value": function() {
             refute(this.model.set({name: ''}));
         },
+                
+        "is valid when method returns falsy value": function() {
+            refute(this.model.set({name: 'backbone'}));
+        },
         
-        "context should be the model": function() {
+        "context is the model": function() {
             this.model.set({name: ''});
             assert.same(this.ctx, this.model);
         }
@@ -74,37 +79,43 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "empty string should be invalid": function() {
+        "empty string is invalid": function() {
             refute(this.model.set({
                 name: ''
             }));
         },
+        
+        "non-empty string is valid": function() {
+            assert(this.model.set({
+                name: 'a'
+            }));
+        },
 
-        "blank string should be invalid": function() {
+        "blank string is invalid": function() {
             refute(this.model.set({
                 name: '  '
             }));
         },
 
-        "null should be invalid": function() {
+        "null is invalid": function() {
             refute(this.model.set({
                 name: null
             }));
         },
 
-        "undefined should be invalid": function() {
+        "undefined is invalid": function() {
             refute(this.model.set({
                 name: undefined
             }));
         },
 
-        "false boolean should be invalid": function() {
+        "false boolean is invalid": function() {
             refute(this.model.set({
                 agree: false
             }));
         },
 
-        "true boolean should be valid": function() {
+        "true boolean is valid": function() {
             assert(this.model.set({
                 agree: true
             }));
@@ -120,31 +131,31 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "undefined should be invalid": function() {
+        "undefined is invalid": function() {
             refute(this.model.set({
                 age: undefined
             }));
         },
 
-        "setting value lower than min should be invalid": function() {
+        "value lower than min is invalid": function() {
             refute(this.model.set({
                 age: 0
             }));
         },
 
-        "setting non numeric value should be invalid": function() {
+        "non numeric value is invalid": function() {
             refute(this.model.set({
                 age: '10error'
             }));
         },
 
-        "setting value equal to min should be valid": function() {
+        "value equal to min is valid": function() {
             assert(this.model.set({
                 age: 1
             }));
         },
 
-        "setting numeric string value equal to min should be valid": function() {
+        "numeric string value equal to min is valid": function() {
             assert(this.model.set({
                 age: '1'
             }));
@@ -160,31 +171,31 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "undefined should be invalid": function() {
+        "undefined is invalid": function() {
             refute(this.model.set({
                 age: undefined
             }));
         },
 
-        "setting value higher than max should be invalid": function() {
+        "value higher than max is invalid": function() {
             refute(this.model.set({
                 age: 11
             }));
         },
 
-        "setting non numeric value should be invalid": function() {
+        "non numeric value is invalid": function() {
             refute(this.model.set({
                 age: '10error'
             }));
         },
 
-        "setting value equal to max should be valid": function() {
+        "value equal to max is valid": function() {
             assert(this.model.set({
                 age: 10
             }));
         },
 
-        "setting numeric string value equal to max should be valid": function() {
+        "numeric string value equal to max is valid": function() {
             assert(this.model.set({
                 age: '10'
             }));
@@ -201,25 +212,25 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "setting value lower than min should be invalid": function() {
+        "value lower than min is invalid": function() {
             refute(this.model.set({
                 age: 0
             }));
         },
 
-        "setting value equal to min should be valid": function() {
+        "value equal to min is valid": function() {
             assert(this.model.set({
                 age: 1
             }));
         },
 
-        "setting value higher than max should be invalid": function() {
+        "value higher than max is invalid": function() {
             refute(this.model.set({
                 age: 11
             }));
         },
 
-        "setting value equal to max should be valid": function() {
+        "value equal to max is valid": function() {
             assert(this.model.set({
                 age: 10
             }));
@@ -235,25 +246,25 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "undefined should be invalid": function() {
+        "undefined is invalid": function() {
             refute(this.model.set({
                 postalCode: undefined
             }));
         },
 
-        "setting value with length shorter than length should be invalid": function() {
+        "value with length shorter than length is invalid": function() {
             refute(this.model.set({
                 postalCode: 'a'
             }));
         },
 
-        "setting value with length longer than length should be invalid": function() {
+        "value with length longer than length is invalid": function() {
             refute(this.model.set({
                 postalCode: 'aaa'
             }));
         },
 
-        "setting value with length equal to length should be valid": function() {
+        "value with length equal to length is valid": function() {
             assert(this.model.set({
                 postalCode: 'aa'
             }));
@@ -269,19 +280,19 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "undefined should be invalid": function() {
+        "undefined is invalid": function() {
             refute(this.model.set({
                 name: undefined
             }));
         },
 
-        "setting value with length shorter than minLenght should be invalid": function() {
+        "value with length shorter than minLenght is invalid": function() {
             refute(this.model.set({
                 name: 'a'
             }));
         },
 
-        "setting value with length equal to minLength should be valid": function() {
+        "value with length equal to minLength is valid": function() {
             assert(this.model.set({
                 name: 'aa'
             }));
@@ -297,19 +308,41 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "setting value with length longer than maxLenght should be invalid": function() {
+        "value with length longer than maxLenght is invalid": function() {
             refute(this.model.set({
                 name: 'aaa'
             }));
         },
 
-        "setting value with length equal to maxLength should be valid": function() {
+        "value with length equal to maxLength is valid": function() {
             assert(this.model.set({
                 name: 'aa'
             }));
         }
     },
 
+    "'pattern'": {
+        setUp: function() {
+            this.model.validation = {
+                name: {
+                    pattern: /^test/
+                }
+            };
+        },
+
+        "value not matching pattern is invalid": function() {
+            refute(this.model.set({
+                name: 'aaa'
+            }));
+        },
+
+        "value matching pattern is valid": function() {
+            assert(this.model.set({
+                name: 'test'
+            }));
+        }
+    },
+    
     "'email pattern'": {
         setUp: function() {
             this.model.validation = {
@@ -319,13 +352,13 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "setting invalid email should be invalid": function() {
+        "an invalid email is invalid": function() {
             refute(this.model.set({
                 email: 'aaa'
             }));
         },
 
-        "setting valid email should be valid": function() {
+        "a valid email is valid": function() {
             assert(this.model.set({
                 email: 'a@example.com'
             }));
@@ -341,13 +374,13 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "setting invalid url should be invalid": function() {
+        "an invalid url is invalid": function() {
             refute(this.model.set({
                 url: 'aaa'
             }));
         },
 
-        "setting valid url should be valid": function() {
+        "a valid url is valid": function() {
             assert(this.model.set({
                 url: 'http://www.example.com?something=true&'
             }));
@@ -363,61 +396,39 @@ buster.testCase("Backbone.Validation builtin validator", {
             };
         },
 
-        "setting non numeric value should be invalid": function() {
+        "non numeric value is invalid": function() {
             refute(this.model.set({
                 age: '1a'
             }));
         },
 
-        "setting numeric value with one digit should be valid": function() {
+        "numeric value with one digit is valid": function() {
             assert(this.model.set({
                 age: 1
             }));
         },
         
-        "setting negative numeric value with one digit should be valid": function() {
+        "negative numeric value with one digit is valid": function() {
             assert(this.model.set({
                 age: -1
             }));
         },
         
-        "setting numeric value with several digits should be valid": function() {
+        "numeric value with several digits is valid": function() {
             assert(this.model.set({
                 age: 1234
             }));
         },
         
-        "setting numeric string value should be valid": function() {
+        "numeric string value is valid": function() {
             assert(this.model.set({
                 age: "1234"
             }));
         },
         
-        "setting negative numeric string value should be valid": function() {
+        "negative numeric string value is valid": function() {
             assert(this.model.set({
                 age: "-1234"
-            }));
-        }
-    },
-
-    "'pattern'": {
-        setUp: function() {
-            this.model.validation = {
-                name: {
-                    pattern: /^test/
-                }
-            };
-        },
-
-        "setting value not matching pattern should be invalid": function() {
-            refute(this.model.set({
-                name: 'aaa'
-            }));
-        },
-
-        "setting value matching pattern should be valid": function() {
-            assert(this.model.set({
-                name: 'test'
             }));
         }
     }
