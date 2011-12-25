@@ -20,9 +20,47 @@ buster.testCase("min validator", {
         });
     },
     
-    "undefined is invalid": function() {
+    "undefined is invalid when required is not specified": function() {
         refute(this.model.set({
             age: undefined
+        }));
+    },
+    
+    "undefined is invalid when required:true": function() {
+        this.model.validation.age.required = true;
+        
+        refute(this.model.set({
+            age: undefined
+        }));
+    },
+        
+    "undefined is valid when required:false": function() {
+        this.model.validation.age.required = false;
+        
+        assert(this.model.set({
+            age: undefined
+        }));
+    },
+        
+    "null is invalid when required is not specified": function() {
+        refute(this.model.set({
+            age: null
+        }));
+    },
+    
+    "null is invalid when required:true": function() {
+        this.model.validation.age.required = true;
+        
+        refute(this.model.set({
+            age: null
+        }));
+    },
+        
+    "null is valid when required:false": function() {
+        this.model.validation.age.required = false;
+        
+        assert(this.model.set({
+            age: null
         }));
     },
 
