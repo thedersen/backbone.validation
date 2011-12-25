@@ -35,7 +35,7 @@ buster.testCase("required validator", {
         }));
     },
 
-    "blank string is invalid": function() {
+    "string with just spaces is invalid": function() {
         refute(this.model.set({
             name: '  '
         }));
