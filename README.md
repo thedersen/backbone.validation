@@ -99,7 +99,7 @@ You can also override these per view when binding:
 	
 ## The built-in validators
 
-#### function validator
+#### method validator
 
 	var SomeModel = Backbone.Model.extend({
 	  validation: {
@@ -112,7 +112,7 @@ You can also override these per view when binding:
 	  }
 	});
 	
-#### named function validator
+#### named method validator
 
 	var SomeModel = Backbone.Model.extend({
 	  validation: {
@@ -261,13 +261,13 @@ If you have custom patterns that are used several places in your code, you can e
 
 ### v0.2.0
 
-* Added named function validator
+* Added named method validator
 * Added length validator
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)
-	* Context (this) in the function validators is now the model instead of the global object (Fixes issue # 6)
+	* Context (this) in the method validators is now the model instead of the global object (Fixes issue # 6)
 
 ### v0.1.3
 
