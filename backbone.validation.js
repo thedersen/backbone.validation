@@ -53,7 +53,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             for (var i = 0; i < validators.length; i++) {
                 validator = validators[i];
                 result = validator.fn(value, attr, validator.val);
-                if (result) {
+                if(result === false) {
+                    return '';
+                }
+                else if (result) {
                     error += validator.msg || result;
                 }
             };
@@ -136,11 +139,6 @@ Backbone.Validation.patterns = {
 };
 
 Backbone.Validation.validators = (function(patterns, _) {
-    var numberPattern = patterns.number;
-    var isNumber = function(value){
-        return _.isNumber(value) || (_.isString(value) && value.match(numberPattern));
-    };
-
     var trim = String.prototype.trim ?
     		function(text) {
     			return text == null ?
@@ -155,13 +153,21 @@ Backbone.Validation.validators = (function(patterns, _) {
     				"" :
     				text.toString().replace(trimLeft, "").replace(trimRight, "");
     		};
+    var isNumber = function(value){
+        return _.isNumber(value) || (_.isString(value) && value.match(patterns.number));
+    };
+    var hasValue = function(value) {
+        return !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) && trim(value) === ''));
+    };
     		
     return {
-        required: function(value, attr) {
-            var isEmptyString = _.isString(value) && trim(value) === '';
+        required: function(value, attr, required) {
             var isFalseBoolean = _.isBoolean(value) && value === false;
 
-            if (_.isNull(value) || _.isUndefined(value) || isEmptyString || isFalseBoolean) {
+            if(!required && (!hasValue(value))) {
+                return false; // overrides all other validators
+            }
+            if (required && (!hasValue(value) || isFalseBoolean)) {
                 return attr + ' is required';
             }
         },
@@ -176,7 +182,7 @@ Backbone.Validation.validators = (function(patterns, _) {
             }
         },
         length: function(value, attr, length) {
-          value = trim(value);
+            value = trim(value);
             if (_.isString(value) && value.length !== length) {
                 return attr + ' must have exact ' + length + ' characters';
             }  
