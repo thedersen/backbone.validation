@@ -30,5 +30,55 @@ buster.testCase("pattern validator", {
         assert(this.model.set({
             name: 'test'
         }));
-    }
+    },
+    
+    "when required is not specified": {
+         "undefined is invalid": function() {
+             refute(this.model.set({
+                 name: undefined
+             }));
+         },
+
+         "null is invalid": function() {
+             refute(this.model.set({
+                 name: null
+             }));
+         }
+     },
+
+     "when required:false": {
+         setUp: function() {
+             this.model.validation.name.required = false;
+         },
+
+         "null is valid": function() {
+             assert(this.model.set({
+                 name: null
+             }));
+         },
+
+         "undefined is valid": function() {
+             assert(this.model.set({
+                 name: undefined
+             }));
+         }
+     },
+
+     "when required:true": {
+         setUp: function() {
+             this.model.validation.name.required = true;
+         },
+
+         "undefined is invalid": function() {
+             refute(this.model.set({
+                 name: undefined
+             }));
+         },
+
+         "null is invalid": function() {
+             refute(this.model.set({
+                 name: null
+             }));
+         }
+     }
 });
