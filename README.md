@@ -206,6 +206,16 @@ You can also override these per view when binding:
 	  }
 	});
 	
+#### rangeLength
+
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+	    password: {
+		  rangeLength: [6, 100]
+		}
+	  }
+	});
+		
 #### equalTo
 
 	var SomeModel = Backbone.Model.extend({
@@ -303,6 +313,7 @@ If you have custom patterns that are used several places in your code, you can e
 * Added acceptance validator which is typically used when the user has to accept something (e.g. terms of use)
 * Added equalTo validator
 * Added range validator
+* Added rangeLength validator
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators

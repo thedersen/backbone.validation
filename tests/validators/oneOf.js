@@ -1,10 +1,10 @@
-buster.testCase("range validator", {
+buster.testCase("oneOf validator", {
     setUp: function() {
         var that = this;
         var Model = Backbone.Model.extend({
             validation: {
-                age: {
-                    range: [1, 10]
+                country: {
+                    oneOf: ['Norway', 'Sweeden']
                 }
             }
         });
@@ -20,82 +20,70 @@ buster.testCase("range validator", {
         });
     },
     
-    "number lower than first value is invalid": function() {
-        refute(this.model.set({
-            age: 0
-        }));
-    },
-
-    "number equal to first value is valid": function() {
+    "value is one of the values in the array is valid": function(){
         assert(this.model.set({
-            age: 1
+            country: 'Norway'
         }));
     },
-
-    "number higher than last value is invalid": function() {
+        
+    "value is not one of the values in the arraye is invalid": function(){
         refute(this.model.set({
-            age: 11
-        }));
-    },
-
-    "number equal to last value is valid": function() {
-        assert(this.model.set({
-            age: 10
+            country: 'Denmark'
         }));
     },
     
-    "number in range is valid": function() {
-        assert(this.model.set({
-            age: 5
+    "is case sensitive": function(){
+        refute(this.model.set({
+            country: 'sweeden'
         }));
     },
     
     "when required is not specified": {
          "undefined is invalid": function() {
              refute(this.model.set({
-                 age: undefined
+                 country: undefined
              }));
          },
 
          "null is invalid": function() {
              refute(this.model.set({
-                 age: null
+                 country: null
              }));
          }
      },
 
      "when required:false": {
          setUp: function() {
-             this.model.validation.age.required = false;
+             this.model.validation.country.required = false;
          },
 
          "null is valid": function() {
              assert(this.model.set({
-                 age: null
+                 country: null
              }));
          },
 
          "undefined is valid": function() {
              assert(this.model.set({
-                 age: undefined
+                 country: undefined
              }));
          }
      },
 
      "when required:true": {
          setUp: function() {
-             this.model.validation.age.required = true;
+             this.model.validation.country.required = true;
          },
 
          "undefined is invalid": function() {
              refute(this.model.set({
-                 age: undefined
+                 country: undefined
              }));
          },
 
          "null is invalid": function() {
              refute(this.model.set({
-                 age: null
+                 country: null
              }));
          }
      }

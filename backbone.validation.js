@@ -203,6 +203,12 @@ Backbone.Validation.validators = (function(patterns, _) {
                 return attr + ' must be shorter than or equal to' + maxLength + ' characters';
             }
         },
+        rangeLength: function(value, attr, range) {
+            var length = trim(value).length;
+            if(!hasValue(value) || length < range[0] || length > range[1]) {
+                return 'Length of ' + attr + ' must be within range ' + range.toString();
+            }
+        },
         equalTo: function(value, attr, equalTo, model) {
             if(value !== model.get(equalTo)) {
                 return attr + ' does not equal ' + equalTo;
