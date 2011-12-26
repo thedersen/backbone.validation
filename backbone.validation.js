@@ -183,7 +183,7 @@ Backbone.Validation.validators = (function(patterns, _) {
         },
         length: function(value, attr, length) {
             value = trim(value);
-            if (!_.isString(value) || value.length !== length) {
+            if (!hasValue(value) || value.length !== length) {
                 return attr + ' must have exact ' + length + ' characters';
             }  
         },
@@ -199,7 +199,7 @@ Backbone.Validation.validators = (function(patterns, _) {
         },
         pattern: function(value, attr, pattern) {
             pattern = patterns[pattern] || pattern;
-            if (_.isString(value) && !value.match(pattern)) {
+            if (!hasValue(value) || !value.toString().match(pattern)) {
                 return attr + ' is not a valid ' + pattern;
             }
         }

@@ -20,9 +20,15 @@ buster.testCase("number pattern validator", {
         });
     },
     
-    "non numeric value is invalid": function() {
+    "string with numbers and characters is invalid": function() {
         refute(this.model.set({
             age: '1a'
+        }));
+    },
+        
+    "boolean is invalid": function() {
+        refute(this.model.set({
+            age: true
         }));
     },
 
