@@ -19,12 +19,6 @@ buster.testCase("minLength validator", {
             invalid: this.spy()
         });
     },
-    
-    "undefined is invalid": function() {
-        refute(this.model.set({
-            name: undefined
-        }));
-    },
 
     "string with length shorter than minLenght is invalid": function() {
         refute(this.model.set({
