@@ -183,19 +183,17 @@ Backbone.Validation.validators = (function(patterns, _) {
         },
         length: function(value, attr, length) {
             value = trim(value);
-            if (_.isString(value) && value.length !== length) {
+            if (!_.isString(value) || value.length !== length) {
                 return attr + ' must have exact ' + length + ' characters';
             }  
         },
         minLength: function(value, attr, minLength) {
-            value = trim(value);
-            if (_.isString(value) && value.length < minLength) {
+            if (!hasValue(value) || trim(value).length < minLength) {
                 return attr + ' must be longer than or equal to ' + minLength + ' characters';
             }
         },
         maxLength: function(value, attr, maxLength) {
-            value = trim(value);
-            if (_.isString(value) && value.length > maxLength) {
+            if (!hasValue(value) || trim(value).length > maxLength) {
                 return attr + ' must be shorter than or equal to' + maxLength + ' characters';
             }
         },
