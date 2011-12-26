@@ -131,7 +131,17 @@ You can also override these per view when binding:
 	var SomeModel = Backbone.Model.extend({
 	  validation: {
 	    name: {
-		  required: true
+		  required: true | false
+		}
+	  }
+	});
+	
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+	    name: {
+		  required: function() {
+			return true | false;
+		  }
 		}
 	  }
 	});
@@ -215,7 +225,17 @@ You can also override these per view when binding:
 		}
 	  }
 	});
-		
+	
+#### oneOf
+
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+	    country: {
+		  oneOf: ['Norway', 'Sweeden']
+		}
+	  }
+	});
+	
 #### equalTo
 
 	var SomeModel = Backbone.Model.extend({
@@ -314,7 +334,9 @@ If you have custom patterns that are used several places in your code, you can e
 * Added equalTo validator
 * Added range validator
 * Added rangeLength validator
+* Added oneOf validator
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
+* required validator can be specified as a method returning either `true` or `false`
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)

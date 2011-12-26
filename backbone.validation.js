@@ -159,11 +159,12 @@ Backbone.Validation.validators = (function(patterns, _) {
     };
     		
     return {
-        required: function(value, attr, required) {
-            if(!required && (!hasValue(value))) {
+        required: function(value, attr, required, model) {
+            var isRequired = _.isFunction(required) ? required.call(model) : required;
+            if(!isRequired && (!hasValue(value))) {
                 return false; // overrides all other validators
             }
-            if (required && !hasValue(value)) {
+            if (isRequired && !hasValue(value)) {
                 return attr + ' is required';
             }
         },
@@ -207,6 +208,11 @@ Backbone.Validation.validators = (function(patterns, _) {
             var length = trim(value).length;
             if(!hasValue(value) || length < range[0] || length > range[1]) {
                 return 'Length of ' + attr + ' must be within range ' + range.toString();
+            }
+        },
+        oneOf: function(value, attr, values) {
+            if(!_.include(values, value)){
+                return value + ' must be one of ' + values.toString();
             }
         },
         equalTo: function(value, attr, equalTo, model) {

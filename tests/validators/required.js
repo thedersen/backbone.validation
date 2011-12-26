@@ -8,6 +8,11 @@ buster.testCase("required validator", {
                 },
                 agree: {
                     required: true
+                },
+                dependsOnName: {
+                    required: function() {
+                        return this.get('name') === 'name';
+                    }
                 }
             }
         });
@@ -62,6 +67,18 @@ buster.testCase("required validator", {
     "true boolean is valid": function() {
         assert(this.model.set({
             agree: true
+        }));
+    },
+    
+    "required can be specified as a method returning true or false": function() {
+        assert(this.model.set({
+            dependsOnName: undefined
+        }));
+        
+        this.model.set({name:'name'});
+        
+        refute(this.model.set({
+            dependsOnName: undefined
         }));
     }
 });
