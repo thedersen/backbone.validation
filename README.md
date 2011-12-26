@@ -279,9 +279,9 @@ If you have custom patterns that are used several places in your code, you can e
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)
 	* Context (this) in the method validators is now the model instead of the global object (Fixes issue # 6)
-	* All validators except required is invalid on undefined or empty value. However required:false can be specified to allow nulls
+	* All validators except required and acceptance invalidates null, undefined or empty value. However, required:false can be specified to allow nulls
 * Breaking changes:
-	* required validator no longer invalidates false boolean, use the new acceptance validator instead
+	* Required validator no longer invalidates false boolean, use the new acceptance validator instead
 
 ### v0.1.3
 
@@ -295,12 +295,4 @@ If you have custom patterns that are used several places in your code, you can e
 
 # License
 
-The MIT License
-
-Copyright (c) 2011 Thomas Pedersen
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+http://thedersen.mit-license.org/
