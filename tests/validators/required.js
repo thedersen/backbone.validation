@@ -27,6 +27,14 @@ buster.testCase("required validator", {
             invalid: this.spy()
         });
     },
+    
+    "has default error message": function(done) {
+        this.model.bind('error', function(model, error){
+            assert.equals('name is required', error);
+            done();
+        });
+        this.model.set({name:''});
+    },
 
     "empty string is invalid": function() {
         refute(this.model.set({

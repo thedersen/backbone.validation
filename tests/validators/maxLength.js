@@ -20,6 +20,14 @@ buster.testCase("maxLength validator", {
         });
     },
     
+    "has default error message": function(done) {
+        this.model.bind('error', function(model, error){
+            assert.equals('name must be at most 2 characters', error);
+            done();
+        });
+        this.model.set({name:'aaa'});
+    },
+    
     "string with length longer than maxLenght is invalid": function() {
         refute(this.model.set({
             name: 'aaa'

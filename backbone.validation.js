@@ -52,7 +52,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 validator = validators[i];
                 result = validator.fn(value, attr, validator.val, model);
                 if(result === false) {
-                    return '';
+                    return;
                 }
                 else if (result) {
                     error += validator.msg || result;
@@ -140,14 +140,14 @@ Backbone.Validation.patterns = {
 Backbone.Validation.messages = {
     required: '{0} is required',
     acceptance: '{0} must be accepted',
-    min: '{0} must be grater that or equal to {1}',
+    min: '{0} must be grater than or equal to {1}',
     max: '{0} must be less than or equal to {1}',
     range: '{0} must be between {1} and {2}',
     length: '{0} must be {1} characters',
     minLength: '{0} must be at least {1} characters',
     maxLength: '{0} must be at most {1} characters',
     rangeLength: '{0} must be between {1} and {2} characters',
-    oneOf: '{0} must be one of {1}',
+    oneOf: '{0} must be one of: {1}',
     equalTo: '{0} must be the same as {1}',
     pattern: '{0} must be a valid {1}'
 };
@@ -155,17 +155,13 @@ Backbone.Validation.messages = {
 Backbone.Validation.validators = (function(patterns, messages, _) {
     var trim = String.prototype.trim ?
         		function(text) {
-        			return text == null ?
-        				"" :
-        				String.prototype.trim.call(text);
+        			return text == null ? '' : String.prototype.trim.call(text);
         		} :
         		function(text) {
         		    var trimLeft = /^\s+/,
                         trimRight = /\s+$/;
         
-        			return text == null ?
-        				"" :
-        				text.toString().replace(trimLeft, "").replace(trimRight, "");
+        			return text == null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
         		};
     var format = function() {
         var args = Array.prototype.slice.call(arguments);  
@@ -234,7 +230,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
         },
         oneOf: function(value, attr, values) {
             if(!_.include(values, value)){
-                return format(messages.oneOf, attr, values.toString());
+                return format(messages.oneOf, attr, values.join(', '));
             }
         },
         equalTo: function(value, attr, equalTo, model) {
@@ -243,8 +239,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
             }
         },
         pattern: function(value, attr, pattern) {
-            pattern = patterns[pattern] || pattern;
-            if (!hasValue(value) || !value.toString().match(pattern)) {
+            if (!hasValue(value) || !value.toString().match(patterns[pattern] || pattern)) {
                 return format(messages.pattern, attr, pattern);
             }
         }

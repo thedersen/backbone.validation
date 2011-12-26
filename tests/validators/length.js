@@ -20,6 +20,14 @@ buster.testCase("length validator", {
         });
     },
     
+    "has default error message": function(done) {
+        this.model.bind('error', function(model, error){
+            assert.equals('postalCode must be 2 characters', error);
+            done();
+        });
+        this.model.set({postalCode:''});
+    },
+    
     "string with length shorter than length is invalid": function() {
         refute(this.model.set({
             postalCode: 'a'
