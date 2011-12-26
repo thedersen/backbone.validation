@@ -221,6 +221,8 @@ or specify any regular expression you like:
 		}
 	  }
 	});
+	
+See the [wiki](https://github.com/thedersen/backbone.validation/wiki) for more details about the validators.
 
 ## Extending Backbone.Validation
 

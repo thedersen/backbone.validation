@@ -5,9 +5,7 @@
 //
 // Documentation and full license availabe at:
 // http://github.com/thedersen/backbone.validation
-// ----------------------------
-// Backbone.Validation
-// ----------------------------
+
 Backbone.Validation = (function(Backbone, _, undefined) {
     var getValidatedAttrs = function(model){
         var validatedAttrs = {};
