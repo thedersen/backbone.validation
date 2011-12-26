@@ -53,8 +53,8 @@ buster.testCase("required validator", {
         }));
     },
 
-    "false boolean is invalid": function() {
-        refute(this.model.set({
+    "false boolean is valid": function() {
+        assert(this.model.set({
             agree: false
         }));
     },
