@@ -136,6 +136,16 @@ You can also override these per view when binding:
 	  }
 	});
 
+#### acceptance
+
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+	    name: {
+		  acceptance: true
+		}
+	  }
+	});
+		
 #### min
 
 	var SomeModel = Backbone.Model.extend({
@@ -263,6 +273,7 @@ If you have custom patterns that are used several places in your code, you can e
 
 * Added named method validator
 * Added length validator
+* Added acceptance validator which is typically used when the user has to accept something (e.g. terms of use)
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators

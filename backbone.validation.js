@@ -171,6 +171,11 @@ Backbone.Validation.validators = (function(patterns, _) {
                 return attr + ' is required';
             }
         },
+        acceptance: function(value, attr) {
+            if(!_.isBoolean(value) || value === false){
+                return attr + ' must be accepted';
+            }
+        },
         min: function(value, attr, minValue) {
             if (!isNumber(value) || value < minValue) {
                 return attr + ' must be larger than or equal to ' + minValue;
