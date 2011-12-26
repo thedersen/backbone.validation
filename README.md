@@ -4,7 +4,7 @@ A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) 
 
 ## Getting started
 
-It's easy to get up and running. You only need to have Backbone (including underscore.js) and jQuery in your page before including the Backbone.Validation plugin.
+It's easy to get up and running. You only need to have Backbone (including underscore.js) in your page before including the Backbone.Validation plugin.
 
 ### Configure validation rules on the Model
 
@@ -19,8 +19,7 @@ To configure your validation rules, simply add a validation property with a prop
 		  msg: 'Name is required'
 		},
         age: {
-		  min: 1,
-		  max: 80
+		  range: [1, 80]
 		},
 		email: {
 		  pattern: 'email'	
@@ -67,7 +66,7 @@ There are several places that it can be called from, depending on your circumsta
 
 After performing validation, an `isValid` attribute is set on the model that is (obviously) `true` when all the attributes on the model is valid, otherwise `false`.
 
-The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called after validation of an attribute is performed. 
+The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called (in addition to the `error` event raised by Backbone) after validation of an attribute is performed. 
 
 The default implementation of `invalid` tries to look up an element within the view with an id equal to the name of the attribute that is validated. If it finds one, an `invalid` class is added to the element as well as a `data-error` attribute with the error message. The `valid` method removes these if they exists.
 
@@ -284,12 +283,12 @@ See the [wiki](https://github.com/thedersen/backbone.validation/wiki) for more d
 If you have custom validation logic that are used several places in your code, you can extend the validators with your own custom ones. And if you don't like the default implementation of one of the built-ins, you can override it.
 
 	_.extend(Backbone.Validation.validators, {
-      myValidator: function(value, attr, customValue) {
+      myValidator: function(value, attr, customValue, model) {
         if(value !== customValue){
           return 'error';
         }
       },
-      required: function(value, attr, customValue) {
+      required: function(value, attr, customValue, model) {
         if(!value){
           return 'My version of the required validator';
         }
@@ -328,21 +327,22 @@ If you have custom patterns that are used several places in your code, you can e
 
 ### v0.2.0
 
-* Added named method validator
-* Added length validator
-* Added acceptance validator which is typically used when the user has to accept something (e.g. terms of use)
-* Added equalTo validator
-* Added range validator
-* Added rangeLength validator
-* Added oneOf validator
+* New validators:
+	* named method
+	* length
+	* acceptance (which is typically used when the user has to accept something (e.g. terms of use))
+	* equalTo
+	* range
+	* rangeLength
+	* oneOf
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * required validator can be specified as a method returning either `true` or `false`
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)
 	* Context (this) in the method validators is now the model instead of the global object (Fixes issue # 6)
-	* All validators except required and acceptance invalidates null, undefined or empty value. However, required:false can be specified to allow nulls
-* Breaking changes:
+	* All validators except required and acceptance invalidates null, undefined or empty value. However, required:false can be specified to allow null, undefined or empty value
+* Breaking changes (unfortunate, but necessary):
 	* Required validator no longer invalidates false boolean, use the new acceptance validator instead
 
 ### v0.1.3
