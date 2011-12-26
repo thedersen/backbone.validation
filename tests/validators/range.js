@@ -1,11 +1,10 @@
-buster.testCase("min and max validators combined", {
+buster.testCase("range validator", {
     setUp: function() {
         var that = this;
         var Model = Backbone.Model.extend({
             validation: {
                 age: {
-                    min: 1,
-                    max: 10
+                    range: [1, 10]
                 }
             }
         });
@@ -21,31 +20,31 @@ buster.testCase("min and max validators combined", {
         });
     },
     
-    "number lower than min is invalid": function() {
+    "number lower than first value is invalid": function() {
         refute(this.model.set({
             age: 0
         }));
     },
 
-    "number equal to min is valid": function() {
+    "number equal to first value is valid": function() {
         assert(this.model.set({
             age: 1
         }));
     },
 
-    "number higher than max is invalid": function() {
+    "number higher than last value is invalid": function() {
         refute(this.model.set({
             age: 11
         }));
     },
 
-    "number equal to max is valid": function() {
+    "number equal to last value is valid": function() {
         assert(this.model.set({
             age: 10
         }));
     },
     
-    "number between min and max is valid": function() {
+    "number in range is valid": function() {
         assert(this.model.set({
             age: 5
         }));

@@ -182,6 +182,11 @@ Backbone.Validation.validators = (function(patterns, _) {
                 return attr + ' must be less than or equal to ' + maxValue;
             }
         },
+        range: function(value, attr, range) {
+            if(!isNumber(value) || value < range[0] || value > range[1]) {
+                return attr + ' must be within range ' + range.toString();
+            }
+        },
         length: function(value, attr, length) {
             value = trim(value);
             if (!hasValue(value) || value.length !== length) {
