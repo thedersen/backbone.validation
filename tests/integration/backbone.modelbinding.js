@@ -1,4 +1,4 @@
-buster.testCase('Works with Backbone.Modelbinding', {
+buster.testCase('Integrates with Backbone.Modelbinding', {
     setUp: function() {
         var that = this;
         this.valid = this.spy();
@@ -43,32 +43,32 @@ buster.testCase('Works with Backbone.Modelbinding', {
         this.view.remove();
     },
 
-    "button should be disabled by default": function() {
+    "by default button should be disabled when data binding to isValid attribute": function() {
         assert.equals(this.submit.attr('disabled'), 'disabled');
     },
 
-    "input should not have invalid class by default": function() {
+    "by default input should not have invalid class": function() {
         refute(this.input.hasClass('invalid'));
     },
 
-    "invalid input": {
+    "when entering invalid input": {
         setUp: function() {
             this.input.val('');
             this.input.trigger('change');
         },
 
-        "should call invalid": function() {
+        "invalid callback is called": function() {
             assert.called(this.invalid);
         }
     },
 
-    "valid input": {
+    "when entering valid input": {
         setUp: function() {
             this.input.val('hello');
             this.input.trigger('change');
         },
 
-        "should call valid": function() {
+        "valid callback should be called": function() {
             assert.called(this.valid);
         }
     }
