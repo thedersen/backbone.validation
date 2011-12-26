@@ -162,12 +162,10 @@ Backbone.Validation.validators = (function(patterns, _) {
     		
     return {
         required: function(value, attr, required) {
-            var isFalseBoolean = _.isBoolean(value) && value === false;
-
             if(!required && (!hasValue(value))) {
                 return false; // overrides all other validators
             }
-            if (required && (!hasValue(value) || isFalseBoolean)) {
+            if (required && !hasValue(value)) {
                 return attr + ' is required';
             }
         },
