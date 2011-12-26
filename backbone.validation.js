@@ -50,7 +50,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         } else {
             for (var i = 0; i < validators.length; i++) {
                 validator = validators[i];
-                result = validator.fn(value, attr, validator.val);
+                result = validator.fn(value, attr, validator.val, model);
                 if(result === false) {
                     return '';
                 }
@@ -196,6 +196,11 @@ Backbone.Validation.validators = (function(patterns, _) {
         maxLength: function(value, attr, maxLength) {
             if (!hasValue(value) || trim(value).length > maxLength) {
                 return attr + ' must be shorter than or equal to' + maxLength + ' characters';
+            }
+        },
+        equalTo: function(value, attr, equalTo, model) {
+            if(value !== model.get(equalTo)) {
+                return attr + ' does not equal ' + equalTo;
             }
         },
         pattern: function(value, attr, pattern) {
