@@ -229,14 +229,14 @@ or specify any regular expression you like:
 If you have custom validation logic that are used several places in your code, you can extend the validators with your own custom ones. And if you don't like the default implementation of one of the built-ins, you can override it.
 
 	_.extend(Backbone.Validation.validators, {
-      myValidator: function(value, attr, msg, customValue) {
+      myValidator: function(value, attr, customValue) {
         if(value !== customValue){
-          return msg || 'error';
+          return 'error';
         }
       },
-      required: function(value, attr, msg, customValue) {
+      required: function(value, attr, customValue) {
         if(!value){
-          return msg || 'My version of the required validator';
+          return 'My version of the required validator';
         }
       }, 
    	});
@@ -248,6 +248,8 @@ If you have custom validation logic that are used several places in your code, y
         }
       }
    	});
+
+The validator should return an error message when the value is invalid, and nothing (undefined) if the value is valid. If the validator returns `false`, this will result in that all other validators specified for the attribute is bypassed, and the attribute is considered valid.
 
 ### Adding custom patterns
 
