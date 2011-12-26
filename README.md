@@ -322,6 +322,13 @@ If you have custom patterns that are used several places in your code, you can e
       }
 	});
 
+### Overriding the default error messages
+
+If you don't like the default error messages there are two ways of customizing them. You can either specify the `msg` attribute when configuring your validation, or you can override the default ones globally.
+
+	_.extend(Backbone.Validation.messages, {
+		required: 'This field is required'
+	});
 
 # Release notes
 
@@ -337,6 +344,7 @@ If you have custom patterns that are used several places in your code, you can e
 	* oneOf
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * required validator can be specified as a method returning either `true` or `false`
+* Can override the default error messages globally
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)

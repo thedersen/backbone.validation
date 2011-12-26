@@ -136,7 +136,22 @@ Backbone.Validation.patterns = {
     url: /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
 };
 
-Backbone.Validation.validators = (function(patterns, _) {
+Backbone.Validation.messages = {
+    required: '{0} is required',
+    acceptance: '{0} must be accepted',
+    min: '{0} must be grater that or equal to {1}',
+    max: '{0} must be less than or equal to {1}',
+    range: '{0} must be between {1} and {2}',
+    length: '{0} must be {1} characters',
+    minLength: '{0} must be at least {1} characters',
+    maxLength: '{0} must be at most {1} characters',
+    rangeLength: '{0} must be between {1} and {2} characters',
+    oneOf: '{0} must be one of {1}',
+    equalTo: '{0} must be the same as {1}',
+    pattern: '{0} must be a valid {1}'
+};
+
+Backbone.Validation.validators = (function(patterns, messages, _) {
     var trim = String.prototype.trim ?
         		function(text) {
         			return text == null ?
@@ -151,6 +166,13 @@ Backbone.Validation.validators = (function(patterns, _) {
         				"" :
         				text.toString().replace(trimLeft, "").replace(trimRight, "");
         		};
+    var format = function() {
+        var args = Array.prototype.slice.call(arguments);  
+        var text = args.shift();
+        return text.replace(/{(\d+)}/g, function(match, number) { 
+            return typeof args[number] != 'undefined' ? args[number] : match;
+        });
+    };
     var isNumber = function(value){
         return _.isNumber(value) || (_.isString(value) && value.match(patterns.number));
     };
@@ -165,65 +187,65 @@ Backbone.Validation.validators = (function(patterns, _) {
                 return false; // overrides all other validators
             }
             if (isRequired && !hasValue(value)) {
-                return attr + ' is required';
+                return format(messages.required, attr);
             }
         },
         acceptance: function(value, attr) {
             if(!_.isBoolean(value) || value === false){
-                return attr + ' must be accepted';
+                return format(messages.acceptance, attr);
             }
         },
         min: function(value, attr, minValue) {
             if (!isNumber(value) || value < minValue) {
-                return attr + ' must be larger than or equal to ' + minValue;
+                return format(messages.min, attr, minValue);
             }
         },
         max: function(value, attr, maxValue) {
             if (!isNumber(value) || value > maxValue) {
-                return attr + ' must be less than or equal to ' + maxValue;
+                return format(messages.max, attr, maxValue);
             }
         },
         range: function(value, attr, range) {
             if(!isNumber(value) || value < range[0] || value > range[1]) {
-                return attr + ' must be within range ' + range.toString();
+                return format(messages.range, attr, range[0], range[1]);
             }
         },
         length: function(value, attr, length) {
             if (!hasValue(value) || trim(value).length !== length) {
-                return attr + ' must have exact ' + length + ' characters';
+                return format(messages.length, attr, length);
             }  
         },
         minLength: function(value, attr, minLength) {
             if (!hasValue(value) || trim(value).length < minLength) {
-                return attr + ' must be longer than or equal to ' + minLength + ' characters';
+                return format(messages.minLength, attr, minLength);
             }
         },
         maxLength: function(value, attr, maxLength) {
             if (!hasValue(value) || trim(value).length > maxLength) {
-                return attr + ' must be shorter than or equal to' + maxLength + ' characters';
+                return format(messages.maxLength, attr, maxLength);
             }
         },
         rangeLength: function(value, attr, range) {
             var length = trim(value).length;
             if(!hasValue(value) || length < range[0] || length > range[1]) {
-                return 'Length of ' + attr + ' must be within range ' + range.toString();
+                return format(messages.rangeLength, attr, range[0], range[1]);
             }
         },
         oneOf: function(value, attr, values) {
             if(!_.include(values, value)){
-                return value + ' must be one of ' + values.toString();
+                return format(messages.oneOf, attr, values.toString());
             }
         },
         equalTo: function(value, attr, equalTo, model) {
             if(value !== model.get(equalTo)) {
-                return attr + ' does not equal ' + equalTo;
+                return format(messages.equalTo, attr, equalTo);
             }
         },
         pattern: function(value, attr, pattern) {
             pattern = patterns[pattern] || pattern;
             if (!hasValue(value) || !value.toString().match(pattern)) {
-                return attr + ' is not a valid ' + pattern;
+                return format(messages.pattern, attr, pattern);
             }
         }
     };
-} (Backbone.Validation.patterns, _));
+} (Backbone.Validation.patterns, Backbone.Validation.messages, _));
