@@ -32,6 +32,12 @@ buster.testCase("minLength validator", {
         }));
     },
     
+    "string with length greater than minLength is valid": function() {
+        assert(this.model.set({
+            name: 'aaaa'
+        }));
+    },
+    
     "when required is not specified": {
         "undefined is invalid": function() {
             refute(this.model.set({

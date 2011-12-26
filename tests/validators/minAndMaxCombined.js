@@ -21,27 +21,33 @@ buster.testCase("min and max validators combined", {
         });
     },
     
-    "value lower than min is invalid": function() {
+    "number lower than min is invalid": function() {
         refute(this.model.set({
             age: 0
         }));
     },
 
-    "value equal to min is valid": function() {
+    "number equal to min is valid": function() {
         assert(this.model.set({
             age: 1
         }));
     },
 
-    "value higher than max is invalid": function() {
+    "number higher than max is invalid": function() {
         refute(this.model.set({
             age: 11
         }));
     },
 
-    "value equal to max is valid": function() {
+    "number equal to max is valid": function() {
         assert(this.model.set({
             age: 10
+        }));
+    },
+    
+    "number between min and max is valid": function() {
+        assert(this.model.set({
+            age: 5
         }));
     }
 });
