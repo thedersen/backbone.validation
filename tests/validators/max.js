@@ -37,8 +37,14 @@ buster.testCase("max validator", {
             age: 10
         }));
     },
+    
+    "number lower than max is valid": function() {
+        assert(this.model.set({
+            age: 5
+        }));
+    },
 
-    "numeric string value equal to max is valid": function() {
+    "numeric string values are treated as numbers": function() {
         assert(this.model.set({
             age: '10'
         }));
