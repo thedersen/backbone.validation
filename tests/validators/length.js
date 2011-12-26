@@ -20,12 +20,6 @@ buster.testCase("length validator", {
         });
     },
     
-    "undefined is invalid": function() {
-        refute(this.model.set({
-            postalCode: undefined
-        }));
-    },
-
     "string with length shorter than length is invalid": function() {
         refute(this.model.set({
             postalCode: 'a'
@@ -42,5 +36,55 @@ buster.testCase("length validator", {
         assert(this.model.set({
             postalCode: 'aa'
         }));
+    },
+    
+    "when required is not specified": {
+        "undefined is invalid": function() {
+            refute(this.model.set({
+                postalCode: undefined
+            }));
+        },
+        
+        "null is invalid": function() {
+            refute(this.model.set({
+                postalCode: null
+            }));
+        }
+    },
+    
+    "when required:false": {
+        setUp: function() {
+            this.model.validation.postalCode.required = false;
+        },
+
+        "null is valid": function() {
+            assert(this.model.set({
+                postalCode: null
+            }));
+        },
+        
+        "undefined is valid": function() {
+            assert(this.model.set({
+                postalCode: undefined
+            }));
+        }
+    },
+    
+    "when required:true": {
+        setUp: function() {
+            this.model.validation.postalCode.required = true;
+        },
+
+        "undefined is invalid": function() {
+            refute(this.model.set({
+                postalCode: undefined
+            }));
+        },
+
+        "null is invalid": function() {
+            refute(this.model.set({
+                postalCode: null
+            }));
+        }
     }
 });
