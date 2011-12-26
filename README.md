@@ -268,6 +268,7 @@ If you have custom patterns that are used several places in your code, you can e
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)
 	* Context (this) in the method validators is now the model instead of the global object (Fixes issue # 6)
+	* All validators except required is invalid on undefined or empty value. However required:false can be specified to allow nulls
 
 ### v0.1.3
 
