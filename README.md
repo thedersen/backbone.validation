@@ -345,6 +345,8 @@ If you don't like the default error messages there are two ways of customizing t
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * required validator can be specified as a method returning either `true` or `false`
 * Can override the default error messages globally
+* Improved email pattern for better matching
+* Number pattern matches decimals and numbers with 1000-separator (e.g. 123.000,45)
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)

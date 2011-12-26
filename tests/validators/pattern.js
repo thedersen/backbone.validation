@@ -5,6 +5,9 @@ buster.testCase("pattern validator", {
             validation: {
                 name: {
                     pattern: /^test/
+                },
+                email: {
+                    pattern: 'email'
                 }
             }
         });
@@ -80,5 +83,15 @@ buster.testCase("pattern validator", {
                  name: null
              }));
          }
+     },
+     
+     "can use one of the built-in patterns by specifying the name of it": function(){
+         refute(this.model.set({
+             email: 'aaa'
+             }));
+             
+         assert(this.model.set({
+             email: 'a@example.com'
+         }));
      }
 });
