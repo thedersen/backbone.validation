@@ -138,19 +138,19 @@ Backbone.Validation.patterns = {
 
 Backbone.Validation.validators = (function(patterns, _) {
     var trim = String.prototype.trim ?
-    		function(text) {
-    			return text == null ?
-    				"" :
-    				String.prototype.trim.call(text);
-    		} :
-    		function(text) {
-    		    var trimLeft = /^\s+/,
-                    trimRight = /\s+$/;
-                    
-    			return text == null ?
-    				"" :
-    				text.toString().replace(trimLeft, "").replace(trimRight, "");
-    		};
+        		function(text) {
+        			return text == null ?
+        				"" :
+        				String.prototype.trim.call(text);
+        		} :
+        		function(text) {
+        		    var trimLeft = /^\s+/,
+                        trimRight = /\s+$/;
+        
+        			return text == null ?
+        				"" :
+        				text.toString().replace(trimLeft, "").replace(trimRight, "");
+        		};
     var isNumber = function(value){
         return _.isNumber(value) || (_.isString(value) && value.match(patterns.number));
     };
@@ -189,8 +189,7 @@ Backbone.Validation.validators = (function(patterns, _) {
             }
         },
         length: function(value, attr, length) {
-            value = trim(value);
-            if (!hasValue(value) || value.length !== length) {
+            if (!hasValue(value) || trim(value).length !== length) {
                 return attr + ' must have exact ' + length + ' characters';
             }  
         },
