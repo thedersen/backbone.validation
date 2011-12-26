@@ -263,6 +263,7 @@ where the built-in patterns are:
 * number
 * email
 * url
+* digits
 
 or specify any regular expression you like:
 
@@ -347,6 +348,7 @@ If you don't like the default error messages there are two ways of customizing t
 * Can override the default error messages globally
 * Improved email pattern for better matching
 * Number pattern matches decimals and numbers with 1000-separator (e.g. 123.000,45)
+* Added new pattern 'digits'
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4)

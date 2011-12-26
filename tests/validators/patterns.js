@@ -68,5 +68,16 @@ buster.testCase("Backbone.Validation patterns", {
         this.invalid('123abc');
         this.invalid('123.000,00');
         this.invalid('123.0.0,00');
+    },
+    
+    "digits pattern matches single or multiple digits": function() {
+        this.pattern = Backbone.Validation.patterns.digits;
+        
+        this.valid('1');
+        this.valid('123');
+
+        this.invalid('a');
+        this.invalid('a123');
+        this.invalid('123a');
     }
 });
