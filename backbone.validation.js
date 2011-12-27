@@ -7,7 +7,7 @@
 // http://github.com/thedersen/backbone.validation
 
 Backbone.Validation = (function(Backbone, _, undefined) {
-    var defaultSelector = '#';
+    var defaultSelector = 'id';
     var getValidatedAttrs = function(model){
         var validatedAttrs = {};
         for (var attr in model.validation) {
@@ -63,20 +63,21 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }
     };
     
-    var getSelector = function(attr) {
-        return defaultSelector + attr;
+    var getSelector = function(selector) {
+        return selector === 'class' ? '.' : '#';
     };
-
+    
     return {
         version: '0.2.0',
 
         setDefaultSelector: function(selector){
-            defaultSelector = selector === 'class' ? '.' : '#';
+            defaultSelector = selector;
         },
         
         bind: function(view, options) {
             options = options || {};
             var model = view.model,
+                selector = getSelector(options.selector || defaultSelector),
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid;
 
@@ -95,9 +96,9 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
                     error = validateAttr(model, changedAttr, attrs[changedAttr]);
                     if (error) {
-                        invalidFn(view, changedAttr, error, getSelector(changedAttr));
+                        invalidFn(view, changedAttr, error, selector + changedAttr);
                     } else {
-                        validFn(view, changedAttr, getSelector(changedAttr));
+                        validFn(view, changedAttr, selector + changedAttr);
                     }
                 }
 

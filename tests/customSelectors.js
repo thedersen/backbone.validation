@@ -24,18 +24,25 @@ buster.testCase("Overriding default id selector with class", {
 
         this.view.render();
         this.name = $(this.view.$(".name"));
-        
-        Backbone.Validation.setDefaultSelector('class');
-        Backbone.Validation.bind(this.view);
     },
     
-    tearDown: function() {
+    "globally": function() {
+        Backbone.Validation.setDefaultSelector('class');
+        Backbone.Validation.bind(this.view);
+        
+        this.model.set({name:''});
+
+        assert(this.name.hasClass('invalid'));
+        
         Backbone.Validation.setDefaultSelector('id');
     },
     
-    "looks up element by class": function() {
+    "per view when binding": function() {
+        Backbone.Validation.bind(this.view, {
+            selector: 'class'
+        });
         this.model.set({name:''});
-        
+
         assert(this.name.hasClass('invalid'));
     }
 });
