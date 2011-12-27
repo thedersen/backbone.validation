@@ -8,7 +8,7 @@ config['Default'] = {
 		'lib/backbone.js', 
 		'lib/backbone.modelbinding.js', 
 		'tests/support/default.js',
-		'backbone.validation.js'
+		'backbone.validation.min.js'
 	],
     tests: [
 		'tests/**/*.js'

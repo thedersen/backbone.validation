@@ -161,7 +161,7 @@ If you have set the global selector to `class`, you can of course set the select
 
 	var SomeModel = Backbone.Model.extend({
 	  validation: {
-	    name: {
+	    termsOfUse: {
 		  acceptance: true
 		}
 	  }
@@ -293,7 +293,7 @@ See the [wiki](https://github.com/thedersen/backbone.validation/wiki) for more d
 
 ### Adding custom validators
 
-If you have custom validation logic that are used several places in your code, you can extend the validators with your own custom ones. And if you don't like the default implementation of one of the built-ins, you can override it.
+If you have custom validation logic that are used several places in your code, you can extend the validators with your own. And if you don't like the default implementation of one of the built-ins, you can override it.
 
 	_.extend(Backbone.Validation.validators, {
       myValidator: function(value, attr, customValue, model) {
@@ -320,7 +320,7 @@ The validator should return an error message when the value is invalid, and noth
 
 ### Adding custom patterns
 
-If you have custom patterns that are used several places in your code, you can extend the patterns with your own custom ones. And if you don't like the default implementation of one of the built-ins, you can override it.
+If you have custom patterns that are used several places in your code, you can extend the patterns with your own. And if you don't like the default implementation of one of the built-ins, you can override it.
 
 	_.extend(Backbone.Validation.patterns, {
 	  myPattern: /my-pattern/,
@@ -342,6 +342,12 @@ If you don't like the default error messages there are two ways of customizing t
 	_.extend(Backbone.Validation.messages, {
 		required: 'This field is required'
 	});
+	
+The message can contain placeholders for arguments that will be replaced:
+
+* `{0}` will be replaced with the name of the attribute being validated
+* `{1}` will be replaced with the allowed value configured in the validation (or the first one in a range validator)
+* `{2}` will be replaced with the second value in a range validator
 
 # Release notes
 
