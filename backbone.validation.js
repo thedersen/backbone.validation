@@ -7,6 +7,7 @@
 // http://github.com/thedersen/backbone.validation
 
 Backbone.Validation = (function(Backbone, _, undefined) {
+    var defaultSelector = '#';
     var getValidatedAttrs = function(model){
         var validatedAttrs = {};
         for (var attr in model.validation) {
@@ -61,10 +62,18 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             return error;
         }
     };
+    
+    var getSelector = function(attr) {
+        return defaultSelector + attr;
+    };
 
     return {
         version: '0.2.0',
 
+        setDefaultSelector: function(selector){
+            defaultSelector = selector === 'class' ? '.' : '#';
+        },
+        
         bind: function(view, options) {
             options = options || {};
             var model = view.model,
@@ -86,9 +95,9 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
                     error = validateAttr(model, changedAttr, attrs[changedAttr]);
                     if (error) {
-                        invalidFn(view, changedAttr, error);
+                        invalidFn(view, changedAttr, error, getSelector(changedAttr));
                     } else {
-                        validFn(view, changedAttr);
+                        validFn(view, changedAttr, getSelector(changedAttr));
                     }
                 }
 
@@ -119,14 +128,14 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 } (Backbone, _));
 
 Backbone.Validation.callbacks = {
-    valid: function(view, attr) {
-        view.$('#' + attr).removeClass('invalid');
-        view.$('#' + attr).removeAttr('data-error');
+    valid: function(view, attr, selector) {
+        view.$(selector).removeClass('invalid');
+        view.$(selector).removeAttr('data-error');
     },
 
-    invalid: function(view, attr, error) {
-        view.$('#' + attr).addClass('invalid');
-        view.$('#' + attr).attr('data-error', error);
+    invalid: function(view, attr, error, selector) {
+        view.$(selector).addClass('invalid');
+        view.$(selector).attr('data-error', error);
     }
 };
 
