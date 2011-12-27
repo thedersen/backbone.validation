@@ -4,7 +4,7 @@ A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) 
 
 ## Getting started
 
-It's easy to get up and running. You only need to have Backbone (including underscore.js) in your page before including the Backbone.Validation plugin.
+It's easy to get up and running. You only need to have Backbone (including underscore.js) in your page before including the Backbone.Validation plugin. If you are using the default implementation of the callbacks, you also need to include jQuery.
 
 ### Configure validation rules on the Model
 
@@ -73,10 +73,10 @@ The default implementation of `invalid` tries to look up an element within the v
 The default implementation of these can of course be overridden:
 
 	_.extend(Backbone.Validation.callbacks, {
-      valid: function(view, attr) {
+      valid: function(view, attr, selector) {
 	    // do something
 	  },
-      invalid: function(view, attr, error) {
+      invalid: function(view, attr, error, selector) {
 		// do something
 	  }
     });
@@ -96,6 +96,20 @@ You can also override these per view when binding:
 	  }
 	});
 	
+If you need to look up elements by using `class` name instead if `id`, there is two ways to configure this.
+
+You can configure it globally by calling:
+
+	Backbone.Validation.setDefaultSelector('class');
+	
+Or, you can configure it per view when binding:
+
+	Backbone.Validation.bind(this.view, {
+        selector: 'class'
+    });
+
+If you have set the global selector to `class`, you can of course set the selector to `id` on specific views.
+	
 ## The built-in validators
 
 #### method validator
@@ -104,7 +118,6 @@ You can also override these per view when binding:
 	  validation: {
 	    name: function(value) {
           if(value !== 'something') {
-			// return an error message if the value is invalid; otherwise, return undefined
             return 'Name is invalid';
           }
 		}
@@ -119,7 +132,6 @@ You can also override these per view when binding:
 	  },
 	  validateName: function(value) {
 		if(value !== 'something') {
-		  // return an error message if the value is invalid; otherwise, return undefined
           return 'Name is invalid';
         }
 	  }
@@ -304,7 +316,7 @@ If you have custom validation logic that are used several places in your code, y
       }
    	});
 
-The validator should return an error message when the value is invalid, and nothing (undefined) if the value is valid. If the validator returns `false`, this will result in that all other validators specified for the attribute is bypassed, and the attribute is considered valid.
+The validator should return an error message when the value is invalid, and nothing (`undefined`) if the value is valid. If the validator returns `false`, this will result in that all other validators specified for the attribute is bypassed, and the attribute is considered valid.
 
 ### Adding custom patterns
 
@@ -346,12 +358,12 @@ If you don't like the default error messages there are two ways of customizing t
 * Added possibility to validate entire model by explicitly calling `model.validate()` without any parameters. (Note: `Backbone.Validation.bind(..)` must still be called)
 * required validator can be specified as a method returning either `true` or `false`
 * Can override the default error messages globally
+* Can override the id selector (#) used in the callbacks either globally or per view when binding
 * Improved email pattern for better matching
-* Number pattern matches decimals and numbers with 1000-separator (e.g. 123.000,45)
 * Added new pattern 'digits'
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
-	* Number pattern matches negative numbers (Fixes issue #4)
+	* Number pattern matches negative numbers (Fixes issue #4), decimals and numbers with 1000-separator (e.g. 123.000,45)
 	* Context (this) in the method validators is now the model instead of the global object (Fixes issue # 6)
 	* All validators except required and acceptance invalidates null, undefined or empty value. However, required:false can be specified to allow null, undefined or empty value
 * Breaking changes (unfortunate, but necessary):
