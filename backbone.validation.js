@@ -47,7 +47,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             result;
 
         if (_.isFunction(validators)) {
-            return validators.call(model, value);
+            return validators.call(model, value, attr);
         } else {
             for (var i = 0; i < validators.length; i++) {
                 validator = validators[i];
