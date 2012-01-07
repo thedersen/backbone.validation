@@ -5,9 +5,10 @@ buster.testCase("named method validator", {
             validation: {
                 name: 'validateName'
             },
-            validateName: function(val){
+            validateName: function(val, attr){
                 that.ctx = this;
-                if(name !== 'backbone') {
+                that.attr = attr;
+                if(val !== 'backbone') {
                     return 'Error';
                 }
             }
@@ -29,11 +30,16 @@ buster.testCase("named method validator", {
     },
             
     "is valid when method returns undefined": function() {
-        refute(this.model.set({name: 'backbone'}));
+        assert(this.model.set({name: 'backbone'}));
     },
     
     "context is the model": function() {
         this.model.set({name: ''});
         assert.same(this.ctx, this.model);
+    },
+    
+    "second argument is the name of the attribute being validated": function() {
+        this.model.set({name: ''});
+        assert.equals('name', this.attr);
     }
 });
