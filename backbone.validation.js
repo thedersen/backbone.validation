@@ -80,7 +80,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 selector = getSelector(options.selector || defaultSelector),
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
-                isValid = false;
+                isValid = _.isUndefined(model.validation);
 
             model.validate = function(attrs) {
                 if(!attrs){
