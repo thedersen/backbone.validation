@@ -133,7 +133,7 @@ The model triggers two events after validation is performed
 	  validation: {
 	    name: 'validateName'
 	  },
-	  validateName: function(value) {
+	  validateName: function(value, attr) {
 		if(value !== 'something') {
           return 'Name is invalid';
         }
