@@ -356,11 +356,12 @@ The message can contain placeholders for arguments that will be replaced:
 
 ### v0.3.0
 
-* Triggers events when validation is performed:
+* Triggers events when validation is performed (thanks to [GarethElms](https://github.com/GarethElms)):
 	* 'validated' with `true` or `false` as argument
 	* 'validated:valid' when model is valid
 	* 'validated:invalid' when model is invalid
-* Named method validator get the name of the attribute being validate as the second argument (Thanks to @goreckm)
+* Named method validator get the name of the attribute being validate as the second argument (thanks to [goreckm](https://github.com/goreckm))
+* `error` argument passed to the error event raised by Backbone contains an array of errors when validating multiple attributed in one go, otherwise a string
 * Breaking changes (unfortunate, but necessary):
 	* isValid attribute (`model.get('isValid')`) is replaced with a method `model.isValid()`
 	* Default selector is 'name' instead of 'id'
