@@ -2,7 +2,7 @@ buster.testCase("Backbone.Validation", {
     setUp: function() {
         var View = Backbone.View.extend({
             render: function() {
-                var html = $('<input type="text" id="name" /><input type="text" id="age" />');
+                var html = $('<input type="text" name="name" /><input type="text" name="age" />');
                 this.$(this.el).append(html);
             }
         });
@@ -28,8 +28,8 @@ buster.testCase("Backbone.Validation", {
         });
 
         this.view.render();
-        this.age = $(this.view.$("#age"));
-        this.name = $(this.view.$("#name"));
+        this.age = $(this.view.$('[name~=age]'));
+        this.name = $(this.view.$('[name~=name]'));
     },
 	
 	tearDown: function() {

@@ -64,7 +64,7 @@ There are several places that it can be called from, depending on your circumsta
 
 The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called (in addition to the `error` event raised by Backbone) after validation of an attribute is performed. 
 
-The default implementation of `invalid` tries to look up an element within the view with an id equal to the name of the attribute that is validated. If it finds one, an `invalid` class is added to the element as well as a `data-error` attribute with the error message. The `valid` method removes these if they exists.
+The default implementation of `invalid` tries to look up an element within the view with an name attribute equal to the name of the attribute that is validated. If it finds one, an `invalid` class is added to the element as well as a `data-error` attribute with the error message. The `valid` method removes these if they exists.
 
 The default implementation of these can of course be overridden:
 
@@ -92,7 +92,7 @@ You can also override these per view when binding:
 	  }
 	});
 	
-If you need to look up elements by using `class` name instead if `id`, there is two ways to configure this.
+If you need to look up elements by using for instance class name or id instead of name, there are two ways to configure this.
 
 You can configure it globally by calling:
 
@@ -104,7 +104,7 @@ Or, you can configure it per view when binding:
         selector: 'class'
     });
 
-If you have set the global selector to `class`, you can of course set the selector to `id` on specific views.
+If you have set the global selector to class, you can of course set the selector to name or id on specific views.
 
 ## Events
 
@@ -362,6 +362,7 @@ The message can contain placeholders for arguments that will be replaced:
 	* 'validated:invalid' when model is invalid
 * Breaking changes (unfortunate, but necessary):
 	* isValid attribute (`model.get('isValid')`) is replaced with a method `model.isValid()`
+	* Default selector is 'name' instead of 'id'
 
 ### v0.2.0
 

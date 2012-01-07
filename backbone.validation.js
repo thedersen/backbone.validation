@@ -7,7 +7,7 @@
 // http://github.com/thedersen/backbone.validation
 
 Backbone.Validation = (function(Backbone, _, undefined) {
-    var defaultSelector = 'id';
+    var defaultSelector = 'name';
     var getValidatedAttrs = function(model){
         var validatedAttrs = {};
         for (var attr in model.validation) {
