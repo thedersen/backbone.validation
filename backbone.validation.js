@@ -83,11 +83,13 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                     return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
                 }
                 
-                var error;
+                var result = [];
                 isValid = true;
 
                 for (var changedAttr in attrs) {
-                    if (error = validateAttr(model, changedAttr, attrs[changedAttr])) {
+                    var error = validateAttr(model, changedAttr, attrs[changedAttr]);
+                    if (error) {
+                        result.push(error);
                         isValid = false;
                         invalidFn(view, changedAttr, error, selector);
                     } else {
@@ -107,7 +109,12 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 model.trigger('validated', isValid);
                 model.trigger('validated:' + (isValid ? 'valid' : 'invalid'));
 
-                return error;
+                if (result.length === 1) {
+                    return result[0];
+                }
+                if (result.length > 1) {
+                    return result;
+                }
             };
             
             model.isValid = function() {
