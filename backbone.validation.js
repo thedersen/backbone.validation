@@ -87,17 +87,15 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 isValid = true;
 
                 for (var changedAttr in attrs) {
-                    error = validateAttr(model, changedAttr, attrs[changedAttr]);
-                    if (error) {
+                    if (error = validateAttr(model, changedAttr, attrs[changedAttr])) {
+                        isValid = false;
                         invalidFn(view, changedAttr, error, selector);
                     } else {
                         validFn(view, changedAttr, selector);
                     }
                 }
 
-                if (error) {
-                    isValid = false;
-                } else {
+                if (isValid) {
                     for (var validatedAttr in model.validation) {
                         if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validatedAttr, model.get(validatedAttr))) {
                             isValid = false;

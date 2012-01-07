@@ -238,7 +238,7 @@ buster.testCase("Backbone.Validation", {
     	        }
 	        },
 
-	        "one invalid and one valid value": {
+	        "first value invalid and second value valid": {
 	            setUp: function() {
 	                this.model.set({
 	                    age: 1,
@@ -261,6 +261,36 @@ buster.testCase("Backbone.Validation", {
 
 	            "element should have invalid class": function() {
 	                assert(this.name.hasClass('invalid'));
+	            },
+	            
+	            "model should be invalid": function() {
+    	            refute(this.model.isValid());
+    	        }
+	        },
+	        
+	        "first value valid and second value invalid": {
+	            setUp: function() {
+	                this.model.set({
+	                    age: 0,
+	                    name: 'name'
+	                });
+	            },
+	            
+                "validated event is raised with false": function() {
+                    assert.calledWith(this.validatedTriggered, false);
+                },
+                
+                "validated:invalid event is raised": function() {
+                    assert.called(this.invalidTriggered);
+                    refute.called(this.validTriggered);
+                },
+                
+	            "element should not have invalid class": function() {
+	                refute(this.name.hasClass('invalid'));
+	            },
+
+	            "element should have invalid class": function() {
+	                assert(this.age.hasClass('invalid'));
 	            },
 	            
 	            "model should be invalid": function() {
@@ -376,5 +406,48 @@ buster.testCase("Backbone.Validation", {
 	    "isValid is true": function() {
 	        assert(this.view.model.isValid());
 	    }
+	},
+	
+	"when bound to model with three validators on one attribute": {
+	    setUp: function() {
+	        this.Model = Backbone.Model.extend({
+	            validation: {
+	                postalCode: {
+	                    minLength: 2,
+	                    pattern: 'digits',
+	                    maxLength: 4
+	                }
+	            }
+	        });
+	        
+	        this.model = new this.Model();
+	        this.view.model = this.model;
+	        
+	        Backbone.Validation.bind(this.view);
+	    },
+        
+        "and violating the first validator the model is invalid": function (){
+            this.model.set({postalCode: '1'});
+            
+            refute(this.model.isValid());
+        },
+               
+        "and violating the second validator the model is invalid": function (){
+            this.model.set({postalCode: 'ab'});
+            
+            refute(this.model.isValid());
+        },        
+        
+       "and violating the last validator the model is invalid": function (){
+           this.model.set({postalCode: '12345'});
+
+           refute(this.model.isValid());
+       },
+       
+        "and conforming to all validators the model is valid": function (){
+            this.model.set({postalCode: '123'});
+
+            assert(this.model.isValid());
+        }
 	}
 });
