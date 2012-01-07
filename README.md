@@ -36,12 +36,10 @@ See the **built-in validators** section in this readme for a list of the validat
 
 ### Validation binding
 
-The validation binding code is executed with a call to `Backbone.Validation.bind(view)`. The [validate](http://documentcloud.github.com/backbone/#Model-validate) method on the view's model is then overridden to perform the validation.
+The validation binding code is executed with a call to `Backbone.Validation.bind(view)`. The [validate](http://documentcloud.github.com/backbone/#Model-validate) method on the view's model is then overridden to perform the validation. In addition, the model is extended with an `isValid()` method.
 
 There are several places that it can be called from, depending on your circumstances.
 
-
-	
 	// Binding when rendering
 	var SomeView = Backbone.View.extend({
 	  render: function(){
@@ -63,8 +61,6 @@ There are several places that it can be called from, depending on your circumsta
 	Backbone.Validation.bind(someView);
 	
 ## A couple of conventions
-
-After performing validation, an `isValid` attribute is set on the model that is (obviously) `true` when all the attributes on the model is valid, otherwise `false`.
 
 The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called (in addition to the `error` event raised by Backbone) after validation of an attribute is performed. 
 
@@ -109,7 +105,14 @@ Or, you can configure it per view when binding:
     });
 
 If you have set the global selector to `class`, you can of course set the selector to `id` on specific views.
-	
+
+## Events
+
+The model triggers two events after validation is performed
+
+* 'validated' with `true` as argument when model is valid or 'validated' with `false` as argument when model is invalid
+* 'validated:valid' when model is valid or 'validated:invalid' when model is invalid
+
 ## The built-in validators
 
 #### method validator
@@ -350,6 +353,15 @@ The message can contain placeholders for arguments that will be replaced:
 * `{2}` will be replaced with the second value in a range validator
 
 # Release notes
+
+### v0.3.0
+
+* Triggers events when validation is performed:
+	* 'validated' with `true` or `false` as argument
+	* 'validated:valid' when model is valid
+	* 'validated:invalid' when model is invalid
+* Breaking changes (unfortunate, but necessary):
+	* isValid attribute (`model.get('isValid')`) is replaced with a method `model.isValid()`
 
 ### v0.2.0
 
