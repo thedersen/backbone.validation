@@ -6,7 +6,7 @@ buster.testCase('Integrates with Backbone.Modelbinding', {
 
         var View = Backbone.View.extend({
             render: function() {
-                var html = $('<input type="text" id="name" /><input type="submit" id="submit" data-bind="enabled isValid" />');
+                var html = $('<input type="text" id="name" /><input type="submit" id="submit" data-bind="enabled event:validated" />');
                 this.$(this.el).append(html);
 
                 Backbone.ModelBinding.bind(this);
@@ -59,6 +59,10 @@ buster.testCase('Integrates with Backbone.Modelbinding', {
 
         "invalid callback is called": function() {
             assert.called(this.invalid);
+        },
+        
+        "button is disabled": function() {
+            assert.defined(this.submit.attr('disabled'));
         }
     },
 
@@ -70,6 +74,10 @@ buster.testCase('Integrates with Backbone.Modelbinding', {
 
         "valid callback should be called": function() {
             assert.called(this.valid);
+        },
+        
+        "button is enabled": function() {
+            refute.defined(this.submit.attr('disabled'));
         }
     }
 });

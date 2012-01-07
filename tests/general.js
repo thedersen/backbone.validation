@@ -86,7 +86,15 @@ buster.testCase("Backbone.Validation", {
 	},
 
 	"when bound to model with two validated attributes": {
-		setUp: function() {            
+		setUp: function() {
+		    this.invalidTriggered = this.spy();
+		    this.validTriggered = this.spy();
+		    this.validatedTriggered = this.spy();
+            
+            this.model.bind('validated:invalid', this.invalidTriggered);
+            this.model.bind('validated:valid', this.validTriggered);
+            this.model.bind('validated', this.validatedTriggered);
+            
 	        Backbone.Validation.bind(this.view);
 		},
 		
@@ -104,6 +112,15 @@ buster.testCase("Backbone.Validation", {
     	                age: 1
     	            });
     	        },
+
+                "validated event is raised with false": function() {
+                    assert.calledWith(this.validatedTriggered, false);
+                },
+                
+                "validated:invalid event is raised": function() {
+                    assert.called(this.invalidTriggered);
+                    refute.called(this.validTriggered);
+                },
 
     	        "element should not have invalid class": function() {
     	            refute(this.age.hasClass('invalid'));
@@ -134,7 +151,16 @@ buster.testCase("Backbone.Validation", {
     	                age: 0
     	            });
     	        },
-
+                
+                "validated event is raised with false": function() {
+                    assert.calledWith(this.validatedTriggered, false);
+                },
+                
+                "validated:invalid event is raised": function() {
+                    assert.called(this.invalidTriggered);
+                    refute.called(this.validTriggered);
+                },
+                
     	        "element should have invalid class": function() {
     	            assert(this.age.hasClass('invalid'));
     	        },
@@ -166,6 +192,15 @@ buster.testCase("Backbone.Validation", {
 	                });
 	            },
 
+                "validated event is raised with true": function() {
+                    assert.calledWith(this.validatedTriggered, true);
+                },
+                
+                "validated:valid event is raised": function() {
+                    refute.called(this.invalidTriggered);
+                    assert.called(this.validTriggered);
+                },
+                
 	            "elements should not have invalid class": function() {
 	                refute(this.age.hasClass('invalid'));
 	                refute(this.name.hasClass('invalid'));
@@ -183,7 +218,16 @@ buster.testCase("Backbone.Validation", {
 	                    name: ''
 	                });
 	            },
-
+                
+                "validated event is raised with false": function() {
+                    assert.calledWith(this.validatedTriggered, false);
+                },
+                
+                "validated:invalid event is raised": function() {
+                    assert.called(this.invalidTriggered);
+                    refute.called(this.validTriggered);
+                },
+                
 	            "elements should have invalid class": function() {
 	                assert(this.age.hasClass('invalid'));
 	                assert(this.name.hasClass('invalid'));
@@ -201,7 +245,16 @@ buster.testCase("Backbone.Validation", {
 	                    name: ''
 	                });
 	            },
-
+	            
+                "validated event is raised with false": function() {
+                    assert.calledWith(this.validatedTriggered, false);
+                },
+                
+                "validated:invalid event is raised": function() {
+                    assert.called(this.invalidTriggered);
+                    refute.called(this.validTriggered);
+                },
+                
 	            "element should not have invalid class": function() {
 	                refute(this.age.hasClass('invalid'));
 	            },

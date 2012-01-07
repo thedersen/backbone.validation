@@ -103,9 +103,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 }
 
                 if (error) {
-                    model.set({
-                        isValid: false
-                    });
+                    isValid = false;
                 } else {
                     for (var validatedAttr in model.validation) {
                         if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validatedAttr, model.get(validatedAttr))) {
@@ -113,10 +111,11 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                             break;
                         }
                     }
-                    model.set({
-                        isValid: isValid
-                    });
-                }
+                }    
+
+                model.trigger('validated', isValid);
+                model.trigger('validated:' + (isValid ? 'valid' : 'invalid'));
+                model.set({isValid: isValid});
 
                 return error;
             };
