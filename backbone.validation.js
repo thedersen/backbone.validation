@@ -63,10 +63,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }
     };
     
-    var getSelector = function(selector) {
-        return selector === 'class' ? '.' : '#';
-    };
-    
     return {
         version: '0.2.0',
 
@@ -77,11 +73,11 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         bind: function(view, options) {
             options = options || {};
             var model = view.model,
-                selector = getSelector(options.selector || defaultSelector),
+                selector = options.selector || defaultSelector,
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
                 isValid = _.isUndefined(model.validation);
-
+            
             model.validate = function(attrs) {
                 if(!attrs){
                     return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
@@ -93,9 +89,9 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 for (var changedAttr in attrs) {
                     error = validateAttr(model, changedAttr, attrs[changedAttr]);
                     if (error) {
-                        invalidFn(view, changedAttr, error, selector + changedAttr);
+                        invalidFn(view, changedAttr, error, selector);
                     } else {
-                        validFn(view, changedAttr, selector + changedAttr);
+                        validFn(view, changedAttr, selector);
                     }
                 }
 
@@ -129,13 +125,15 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
 Backbone.Validation.callbacks = {
     valid: function(view, attr, selector) {
-        view.$(selector).removeClass('invalid');
-        view.$(selector).removeAttr('data-error');
+        view.$('[' + selector + '~=' + attr + ']')
+            .removeClass('invalid')
+            .removeAttr('data-error');
     },
 
     invalid: function(view, attr, error, selector) {
-        view.$(selector).addClass('invalid');
-        view.$(selector).attr('data-error', error);
+        view.$('[' + selector + '~=' + attr + ']')
+            .addClass('invalid')
+            .attr('data-error', error);
     }
 };
 
