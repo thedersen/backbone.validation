@@ -141,7 +141,7 @@ buster.testCase("Backbone.Validation", {
     	        },
     	        
                 "model should be invalid": function() {
-    	            refute(this.model.get('isValid'));
+    	            refute(this.model.isValid());
     	        }
     	    },
     	   
@@ -180,7 +180,7 @@ buster.testCase("Backbone.Validation", {
     	        },
     	        
                 "model should be invalid": function() {
-    	            refute(this.model.get('isValid'));
+    	            refute(this.model.isValid());
     	        }
     	    },
     	    
@@ -207,7 +207,7 @@ buster.testCase("Backbone.Validation", {
                 },
 
                 "model should be valid": function() {
-    	            assert(this.model.get('isValid'));
+    	            assert(this.model.isValid());
     	        }
 	        },
 
@@ -234,7 +234,7 @@ buster.testCase("Backbone.Validation", {
 	            },
 	            	            
 	            "model should be invalid": function() {
-    	            refute(this.model.get('isValid'));
+    	            refute(this.model.isValid());
     	        }
 	        },
 
@@ -264,32 +264,32 @@ buster.testCase("Backbone.Validation", {
 	            },
 	            
 	            "model should be invalid": function() {
-    	            refute(this.model.get('isValid'));
+    	            refute(this.model.isValid());
     	        }
 	        },
 	        
 	        "one value at a time correctly marks the model as either valid or invalid": function() {
-	            refute.defined(this.model.get('isValid'));
+	            refute(this.model.isValid());
 
 	            this.model.set({
 	                age: 0
 	            });
-	            refute(this.model.get('isValid'));
+	            refute(this.model.isValid());
 
 	            this.model.set({
 	                age: 1
 	            });
-	            refute(this.model.get('isValid'));
+	            refute(this.model.isValid());
 
 	            this.model.set({
 	                name: 'hello'
 	            });
-	            assert(this.model.get('isValid'));
+	            assert(this.model.isValid());
 
 	            this.model.set({
 	                age: 0
 	            });
-	            refute(this.model.get('isValid'));
+	            refute(this.model.isValid());
 	        }
 	    },
 	    
