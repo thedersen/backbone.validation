@@ -110,17 +110,17 @@ If you have set the global selector to class, you can of course set the selector
 
 The model triggers two events, 'validated' and 'validated:valid' or 'validated:invalid', after validation is performed.
 
-	mode.bind('validated', function(isValid, model, attrs) {
+	model.bind('validated', function(isValid, model, attrs) {
 		// isValid is true or false
 		// model is the model
-		// attrs is an array with the name(s) of the attribute(s) with error (or undefined when model is valid)
+		// attrs is an array with the name(s) of the attribute(s) with error
 	});
 	
-	mode.bind('validated:valid', function(model) {
+	model.bind('validated:valid', function(model) {
 		// model is the model
 	});
 	
-	mode.bind('validated:invalid', function(model, attrs) {
+	model.bind('validated:invalid', function(model, attrs) {
 		// model is the model
 		// attrs is an array with the name(s) of the attribute(s) with error
 	});
