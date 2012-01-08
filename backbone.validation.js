@@ -73,6 +73,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         bind: function(view, options) {
             options = options || {};
             var model = view.model,
+                delayTrigger,
                 selector = options.selector || defaultSelector,
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
@@ -104,11 +105,13 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                             break;
                         }
                     }
-                }    
-
-                model.trigger('validated', isValid);
-                model.trigger('validated:' + (isValid ? 'valid' : 'invalid'));
-
+                }
+                
+                _.defer(function() {
+                   model.trigger('validated', isValid);
+                   model.trigger('validated:' + (isValid ? 'valid' : 'invalid'));                
+                });
+                
                 if (result.length === 1) {
                     return result[0];
                 }

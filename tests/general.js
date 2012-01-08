@@ -87,16 +87,6 @@ buster.testCase("Backbone.Validation", {
 
 	"when bound to model with two validated attributes": {
 		setUp: function() {
-		    this.invalidTriggered = this.spy();
-		    this.validTriggered = this.spy();
-		    this.validatedTriggered = this.spy();
-            this.errorTriggered = this.spy();
-            
-            this.model.bind('validated:invalid', this.invalidTriggered);
-            this.model.bind('validated:valid', this.validTriggered);
-            this.model.bind('validated', this.validatedTriggered);            
-            this.model.bind('error', this.errorTriggered);
-	        
 	        Backbone.Validation.bind(this.view);
 		},
 		
@@ -114,19 +104,6 @@ buster.testCase("Backbone.Validation", {
     	                age: 1
     	            });
     	        },
-
-                "validated event is raised with false": function() {
-                    assert.calledWith(this.validatedTriggered, false);
-                },
-                
-                "validated:invalid event is raised": function() {
-                    assert.called(this.invalidTriggered);
-                    refute.called(this.validTriggered);
-                },
-                
-                "error event is not triggered": function() {
-                    refute.called(this.errorTriggered);
-                },
 
     	        "element should not have invalid class": function() {
     	            refute(this.age.hasClass('invalid'));
@@ -158,20 +135,6 @@ buster.testCase("Backbone.Validation", {
     	            });
     	        },
                 
-                "validated event is raised with false": function() {
-                    assert.calledWith(this.validatedTriggered, false);
-                },
-                
-                "validated:invalid event is raised": function() {
-                    assert.called(this.invalidTriggered);
-                    refute.called(this.validTriggered);
-                },
-                
-                "error event is triggered with error as a string": function() {
-                    assert.called(this.errorTriggered);
-                    assert.typeOf(this.errorTriggered.getCall(0).args[1], 'string');
-                },
-                
     	        "element should have invalid class": function() {
     	            assert(this.age.hasClass('invalid'));
     	        },
@@ -202,19 +165,6 @@ buster.testCase("Backbone.Validation", {
 	                    name: 'hello'
 	                });
 	            },
-
-                "validated event is raised with true": function() {
-                    assert.calledWith(this.validatedTriggered, true);
-                },
-                
-                "validated:valid event is raised": function() {
-                    refute.called(this.invalidTriggered);
-                    assert.called(this.validTriggered);
-                },
-                
-                "error event is not triggered": function() {
-                    refute.called(this.errorTriggered);
-                },
                 
 	            "elements should not have invalid class": function() {
 	                refute(this.age.hasClass('invalid'));
@@ -234,19 +184,6 @@ buster.testCase("Backbone.Validation", {
 	                });
 	            },
                 
-                "validated event is raised with false": function() {
-                    assert.calledWith(this.validatedTriggered, false);
-                },
-                
-                "validated:invalid event is raised": function() {
-                    assert.called(this.invalidTriggered);
-                    refute.called(this.validTriggered);
-                },
-                
-                "error event is triggered with error as an array": function() {
-                    assert.called(this.errorTriggered);
-                    assert.typeOf(this.errorTriggered.getCall(0).args[1], 'object');
-                },
                 
 	            "elements should have invalid class": function() {
 	                assert(this.age.hasClass('invalid'));
@@ -269,20 +206,6 @@ buster.testCase("Backbone.Validation", {
 	            "model is not updated": function() {
 	                refute(this.result);
 	            },
-	            
-                "validated event is raised with false": function() {
-                    assert.calledWith(this.validatedTriggered, false);
-                },
-                
-                "validated:invalid event is raised": function() {
-                    assert.called(this.invalidTriggered);
-                    refute.called(this.validTriggered);
-                },
-                
-                "error event is triggered with error as a string": function() {
-                    assert.called(this.errorTriggered);
-                    assert.typeOf(this.errorTriggered.getCall(0).args[1], 'string');
-                },
                 
 	            "element should not have invalid class": function() {
 	                refute(this.age.hasClass('invalid'));
@@ -308,20 +231,6 @@ buster.testCase("Backbone.Validation", {
 	            "model is not updated": function() {
 	                refute(this.result);
 	            },
-	            
-                "validated event is raised with false": function() {
-                    assert.calledWith(this.validatedTriggered, false);
-                },
-                
-                "validated:invalid event is raised": function() {
-                    assert.called(this.invalidTriggered);
-                    refute.called(this.validTriggered);
-                },
-                
-                "error event is triggered with error as a string": function() {
-                    assert.called(this.errorTriggered);
-                    assert.typeOf(this.errorTriggered.getCall(0).args[1], 'string');
-                },
                 
 	            "element should not have invalid class": function() {
 	                refute(this.name.hasClass('invalid'));
@@ -376,10 +285,6 @@ buster.testCase("Backbone.Validation", {
 	        
             "element should have data attribute with the custom error message": function() {
 	            assert.equals('Custom error', this.age.data('error'));
-	        },
-	        
-	        "error event is triggered with the custom error message": function() {
-	            assert.calledWith(this.errorTriggered, this.model, 'Custom error');
 	        }
 	    },
 	    
