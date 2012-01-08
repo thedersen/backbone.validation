@@ -108,11 +108,23 @@ If you have set the global selector to class, you can of course set the selector
 
 ## Events
 
-The model triggers two events after validation is performed
+The model triggers two events, 'validated' and 'validated:valid' or 'validated:invalid', after validation is performed.
 
-* 'validated' with `true` as argument when model is valid or 'validated' with `false` as argument when model is invalid
-* 'validated:valid' when model is valid or 'validated:invalid' when model is invalid
-
+	mode.bind('validated', function(isValid, model, attrs) {
+		// isValid is true or false
+		// model is the model
+		// attrs is an array with the name(s) of the attribute(s) with error (or undefined when model is valid)
+	});
+	
+	mode.bind('validated:valid', function(model) {
+		// model is the model
+	});
+	
+	mode.bind('validated:invalid', function(model, attrs) {
+		// model is the model
+		// attrs is an array with the name(s) of the attribute(s) with error
+	});
+	
 ## The built-in validators
 
 #### method validator
@@ -353,6 +365,11 @@ The message can contain placeholders for arguments that will be replaced:
 * `{2}` will be replaced with the second value in a range validator
 
 # Release notes
+
+### v0.3.1
+
+* Fixed issue with validated events being triggered before model was updated
+* Added model and an array of invalid attribute names as arguments to the events
 
 ### v0.3.0
 
