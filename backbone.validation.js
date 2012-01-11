@@ -20,16 +20,14 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
     var getValidators = function(model, attr) {
 
-        var validationElements = model.validation, validators = [], validationElement, validation;
+        var validationElements = model.validation[attr], validators = [], validationElement, validation;
 
         if( ! _.isArray(validationElements)) {
             validationElements = [validationElements];
         }
 
         for (var i = 0, l = validationElements.length; i < l; i++) {
-            validationElement = validationElements[i];
-
-            validation = validationElement[attr];
+            validation = validationElements[i];
 
             if (_.isFunction(validation)) {
                 validators.push( validation);
