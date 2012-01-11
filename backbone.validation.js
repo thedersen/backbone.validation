@@ -17,28 +17,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }
         return validatedAttrs;      
     };
-    
-    /*var getValidators = function(model, attr) {
-        var validation = model.validation[attr],
-            validators = [];
-
-        if (_.isFunction(validation)) {
-            return validation;
-        } else if(_.isString(validation)) {
-            return model[validation];
-        } else {
-            for (var validator in validation) {
-                if (validator !== 'msg' && validation.hasOwnProperty(validator)) {
-                    validators.push({
-                        fn: Backbone.Validation.validators[validator],
-                        val: validation[validator],
-                        msg: validation.msg
-                    });
-                }
-            }
-            return validators;
-        }
-    }; */
 
     var getValidators = function(model, attr) {
 
