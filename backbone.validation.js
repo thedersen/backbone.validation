@@ -18,7 +18,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         return validatedAttrs;      
     };
     
-    var getValidators = function(model, attr) {
+    /*var getValidators = function(model, attr) {
         var validation = model.validation[attr],
             validators = [];
 
@@ -38,29 +38,66 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             }
             return validators;
         }
+    }; */
+
+    var getValidators = function(model, attr) {
+
+        var validationElements = model.validation, validators = [], validationElement, validation;
+
+        if( ! _.isArray(validationElements)) {
+            validationElements = [validationElements];
+        }
+
+        for (var i = 0, l = validationElements.length; i < l; i++) {
+            validationElement = validationElements[i];
+
+            validation = validationElement[attr];
+
+            if (_.isFunction(validation)) {
+                validators.push( validation);
+            } else if(_.isString(validation)) {
+                validators.push( model[validation]);
+            } else {
+                for (var validator in validation) {
+                    if (validator !== 'msg' && validation.hasOwnProperty(validator)) {
+                        validators.push({
+                            fn: Backbone.Validation.validators[validator],
+                            val: validation[validator],
+                            msg: validation.msg
+                        });
+                    }
+                }
+            }
+        }
+
+        return validators;
     };
 
     var validateAttr = function(model, attr, value) {
-        var validators = getValidators(model, attr),
+        var validatorsArray = getValidators(model, attr),
             error = '',
+            errors = [],
             validator, 
             result;
 
-        if (_.isFunction(validators)) {
-            return validators.call(model, value, attr);
-        } else {
-            for (var i = 0; i < validators.length; i++) {
-                validator = validators[i];
+        for( var index=0, count=validatorsArray.length; index<count; index++)
+        {
+            validator = validatorsArray[index];
+
+            if (_.isFunction(validator)) {
+                result = validator.call(model, value, attr);
+                if (result) errors.push(result);
+            } else {
                 result = validator.fn(value, attr, validator.val, model);
-                if(result === false) {
-                    return;
+                if (result) {
+                    errors.push( validator.msg || result);
                 }
-                else if (result) {
-                    error += validator.msg || result;
-                }
-            };
-            return error;
+            }
         }
+
+        if (errors.length == 0) return false;
+
+        return errors;
     };
     
     return {
@@ -88,12 +125,20 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 isValid = true;
 
                 for (var changedAttr in attrs) {
-                    var error = validateAttr(model, changedAttr, attrs[changedAttr]);
-                    if (error) {
-                        result.push(error);
-                        invalidAttrs.push(changedAttr);
-                        isValid = false;
-                        invalidFn(view, changedAttr, error, selector);
+                    var errors = validateAttr(model, changedAttr, attrs[changedAttr]);
+                    if (errors) {
+                        for( var index=0, count=errors.length; index<count; index++)
+                        {
+                            result.push(errors[index]);
+                            invalidAttrs.push(changedAttr);
+                            isValid = false;
+
+                            if( errors.length == 1) {
+                                invalidFn(view, changedAttr, errors[0], selector);
+                            } else {
+                                invalidFn(view, changedAttr, errors, selector);
+                            }
+                        }
                     } else {
                         validFn(view, changedAttr, selector);
                     }
