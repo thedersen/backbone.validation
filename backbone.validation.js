@@ -239,8 +239,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
             }
         },
         rangeLength: function(value, attr, range) {
-            var length = trim(value).length;
-            if(!hasValue(value) || length < range[0] || length > range[1]) {
+            if(!hasValue(value) || trim(value).length < range[0] || trim(value).length > range[1]) {
                 return format(messages.rangeLength, attr, range[0], range[1]);
             }
         },
