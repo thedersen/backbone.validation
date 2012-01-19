@@ -15,7 +15,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 validatedAttrs[attr] = undefined;
             }
         }
-        return validatedAttrs;      
+        return validatedAttrs;
     };
     
     var getValidators = function(model, attr) {
@@ -43,7 +43,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     var validateAttr = function(model, attr, value) {
         var validators = getValidators(model, attr),
             error = '',
-            validator, 
+            validator,
             result;
 
         if (_.isFunction(validators)) {
@@ -58,7 +58,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 else if (result) {
                     error += validator.msg || result;
                 }
-            };
+            }
             return error;
         }
     };
@@ -170,19 +170,19 @@ Backbone.Validation.messages = {
 
 Backbone.Validation.validators = (function(patterns, messages, _) {
     var trim = String.prototype.trim ?
-        		function(text) {
-        			return text == null ? '' : String.prototype.trim.call(text);
-        		} :
-        		function(text) {
-        		    var trimLeft = /^\s+/,
+                function(text) {
+                    return text === null ? '' : String.prototype.trim.call(text);
+                } :
+                function(text) {
+                    var trimLeft = /^\s+/,
                         trimRight = /\s+$/;
         
-        			return text == null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
-        		};
+                    return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
+                };
     var format = function() {
-        var args = Array.prototype.slice.call(arguments);  
+        var args = Array.prototype.slice.call(arguments);
         var text = args.shift();
-        return text.replace(/{(\d+)}/g, function(match, number) { 
+        return text.replace(/\{(\d+)\}/g, function(match, number) {
             return typeof args[number] != 'undefined' ? args[number] : match;
         });
     };
@@ -192,7 +192,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
     var hasValue = function(value) {
         return !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) && trim(value) === ''));
     };
-    		
+            
     return {
         required: function(value, attr, required, model) {
             var isRequired = _.isFunction(required) ? required.call(model) : required;
@@ -226,7 +226,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
         length: function(value, attr, length) {
             if (!hasValue(value) || trim(value).length !== length) {
                 return format(messages.length, attr, length);
-            }  
+            }
         },
         minLength: function(value, attr, minLength) {
             if (!hasValue(value) || trim(value).length < minLength) {
