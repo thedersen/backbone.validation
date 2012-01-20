@@ -274,24 +274,6 @@ buster.testCase("Backbone.Validation", {
             }
         },
         
-        "and custom error message is specified": {
-            setUp: function() {
-                var that = this;
-                this.model.validation = {
-                    age: {
-                        min: 1,
-                        msg: 'Custom error'
-                    }
-                };
-                
-                this.model.set({age: 0});
-            },
-            
-            "element should have data attribute with the custom error message": function() {
-                assert.equals('Custom error', this.age.data('error'));
-            }
-        },
-        
         "and validate is explicitly called with no parameters": {
             setUp: function() {
                 this.invalid = this.spy();

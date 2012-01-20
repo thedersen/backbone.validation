@@ -19,10 +19,12 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     };
 
     var getValidators = function(model, attr) {
+        var validationElements = model.validation[attr],
+            validators = [],
+            validationElement,
+            validation;
 
-        var validationElements = model.validation[attr], validators = [], validationElement, validation;
-
-        if( ! _.isArray(validationElements)) {
+        if(!_.isArray(validationElements)) {
             validationElements = [validationElements];
         }
 
@@ -30,9 +32,9 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             validation = validationElements[i];
 
             if (_.isFunction(validation)) {
-                validators.push( validation);
+                return validation;
             } else if(_.isString(validation)) {
-                validators.push( model[validation]);
+                return model[validation];
             } else {
                 for (var validator in validation) {
                     if (validator !== 'msg' && validation.hasOwnProperty(validator)) {
@@ -49,33 +51,58 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         return validators;
     };
 
-    var validateAttr = function(model, attr, value) {
-        var validatorsArray = getValidators(model, attr),
+    // var validateAttr = function(model, attr, value) {
+    //     var validatorsArray = getValidators(model, attr),
+    //         error = '',
+    //         errors = [],
+    //         validator,
+    //         result;
+
+    //     for(var index=0, count=validatorsArray.length; index<count; index++)
+    //     {
+    //         validator = validatorsArray[index];
+
+    //         if (_.isFunction(validator)) {
+    //             result = validator.call(model, value, attr);
+    //             if (result) errors.push(result);
+    //         } else {
+    //             result = validator.fn(value, attr, validator.val, model);
+    //             if(result === false){
+    //                 return;
+    //             }
+    //             if (result) {
+    //                 errors.push(validator.msg || result);
+    //             }
+    //         }
+    //     }
+
+    //     if (errors.length > 0) {
+    //         return errors;
+    //     }
+    // };
+     var validateAttr = function(model, attr, value) {
+        var validators = getValidators(model, attr),
             error = '',
-            errors = [],
             validator,
             result;
 
-        for( var index=0, count=validatorsArray.length; index<count; index++)
-        {
-            validator = validatorsArray[index];
-
-            if (_.isFunction(validator)) {
-                result = validator.call(model, value, attr);
-                if (result) errors.push(result);
-            } else {
+        if (_.isFunction(validators)) {
+            return validators.call(model, value, attr);
+        } else {
+            for (var i = 0; i < validators.length; i++) {
+                validator = validators[i];
                 result = validator.fn(value, attr, validator.val, model);
-                if (result) {
-                    errors.push( validator.msg || result);
+                if(result === false) {
+                    return;
+                }
+                else if (result && !error) {
+                    error = validator.msg || result;
                 }
             }
+            return error;
         }
-
-        if (errors.length === 0) return false;
-
-        return errors;
     };
-    
+       
     return {
         version: '0.4.0',
 
@@ -100,21 +127,32 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 var result = [], invalidAttrs = [];
                 isValid = true;
 
-                for (var changedAttr in attrs) {
-                    var errors = validateAttr(model, changedAttr, attrs[changedAttr]);
-                    if (errors) {
-                        for( var index=0, count=errors.length; index<count; index++)
-                        {
-                            result.push(errors[index]);
-                            invalidAttrs.push(changedAttr);
-                            isValid = false;
+                // for (var changedAttr in attrs) {
+                //     var errors = validateAttr(model, changedAttr, attrs[changedAttr]);
+                //     if (errors) {
+                //         for( var index=0, count=errors.length; index<count; index++)
+                //         {
+                //             result.push(errors[index]);
+                //             invalidAttrs.push(changedAttr);
+                //             isValid = false;
 
-                            if( errors.length == 1) {
-                                invalidFn(view, changedAttr, errors[0], selector);
-                            } else {
-                                invalidFn(view, changedAttr, errors, selector);
-                            }
-                        }
+                //             if( errors.length == 1) {
+                //                 invalidFn(view, changedAttr, errors[0], selector);
+                //             } else {
+                //                 invalidFn(view, changedAttr, errors, selector);
+                //             }
+                //         }
+                //     } else {
+                //         validFn(view, changedAttr, selector);
+                //     }
+                // }
+                for (var changedAttr in attrs) {
+                    var error = validateAttr(model, changedAttr, attrs[changedAttr]);
+                    if (error) {
+                        result.push(error);
+                        invalidAttrs.push(changedAttr);
+                        isValid = false;
+                        invalidFn(view, changedAttr, error, selector);
                     } else {
                         validFn(view, changedAttr, selector);
                     }
