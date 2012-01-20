@@ -77,7 +77,7 @@ buster.testCase("Backbone.Validation", {
     "when unbinding":{
         setUp: function(){
             Backbone.Validation.bind(this.view);
-            Backbone.Validation.unbind(this.view);  
+            Backbone.Validation.unbind(this.view);
         },
         
         "the model's validate function is undefined": function() {
@@ -94,6 +94,10 @@ buster.testCase("Backbone.Validation", {
             assert(this.model.set({
                 someProperty: true
             }));
+        },
+
+        "isValid returns undefined when validation has not occured": function() {
+            refute.defined(this.model.isValid());
         },
         
         "and setting": {

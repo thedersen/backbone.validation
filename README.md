@@ -366,6 +366,10 @@ The message can contain placeholders for arguments that will be replaced:
 
 # Release notes
 
+### v0.4.0
+
+* isValid returns undefined when no validatation has occured
+
 ### v0.3.1
 
 * Fixed issue with validated events being triggered before model was updated
