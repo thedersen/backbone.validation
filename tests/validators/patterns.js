@@ -11,21 +11,21 @@ buster.testCase("Backbone.Validation patterns", {
     },
     
     "email pattern matches all valid email addresses": function() {
-    	this.pattern = Backbone.Validation.patterns.email;
-    	
-    	this.valid('name@example.com');
-    	this.valid('name@example.com');
-    	this.valid('name+@example.co');
-    	this.valid('n@e.co');
-    	this.valid('first.last@backbone.example.com');
-    	
-    	this.invalid('name');
-    	this.invalid('name@');
-    	this.invalid('name@example');
-    	this.invalid('name.@example.c');
-    	this.invalid('name,@example.c');
-    	this.invalid('name;@example.c');
-    	this.invalid('name@example.com.');
+        this.pattern = Backbone.Validation.patterns.email;
+        
+        this.valid('name@example.com');
+        this.valid('name@example.com');
+        this.valid('name+@example.co');
+        this.valid('n@e.co');
+        this.valid('first.last@backbone.example.com');
+        
+        this.invalid('name');
+        this.invalid('name@');
+        this.invalid('name@example');
+        this.invalid('name.@example.c');
+        this.invalid('name,@example.c');
+        this.invalid('name;@example.c');
+        this.invalid('name@example.com.');
     },
 
     "url pattern matches all valid urls": function() {

@@ -3,26 +3,26 @@ var config = exports;
 config['Default'] = {
     environment: 'browser',
     sources: [
-		'lib/jquery-1.6.2.js', 
-		'lib/underscore.js', 
-		'lib/backbone.js', 
-		'lib/backbone.modelbinding.js', 
-		'tests/support/default.js',
-		'backbone.validation.js'
-	],
+        'lib/jquery-1.6.2.js',
+        'lib/underscore.js',
+        'lib/backbone.js',
+        'lib/backbone.modelbinding.js',
+        'tests/support/default.js',
+        'backbone.validation.js'
+    ],
     tests: [
-		'tests/**/*.js'
-	]
+        'tests/**/*.js'
+    ]
 };
 
 // config['NoConflict'] = {
 //     environment: 'browser',
 //     sources: [
-//      'lib/jquery-1.6.2.js', 
-//      'lib/underscore.js', 
-//      'lib/backbone.js', 
-//      'lib/backbone.modelbinding.js', 
-//      'tests/support/noConflict.js', 
+//      'lib/jquery-1.6.2.js',
+//      'lib/underscore.js',
+//      'lib/backbone.js',
+//      'lib/backbone.modelbinding.js',
+//      'tests/support/noConflict.js',
 //      'backbone.validation.js'
 //  ],
 //     tests: [

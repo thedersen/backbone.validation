@@ -62,7 +62,7 @@ buster.testCase("Backbone.Validation events", {
                 age: 1,
                 name: 'name'
             });
-        }        
+        }
     },
 
     "when one invalid value is set": {
@@ -95,7 +95,7 @@ buster.testCase("Backbone.Validation events", {
             }, this);
 
             this.model.set({age:0});
-        }       
+        }
     },
     
     "when two invalid values is set": {
@@ -136,6 +136,6 @@ buster.testCase("Backbone.Validation events", {
                 age: 0,
                 name: ''
             });
-        }            
+        }
     }
 });

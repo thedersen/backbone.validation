@@ -30,8 +30,8 @@ buster.testCase('Extending Backbone.Validation with custom pattern', {
 
 buster.testCase('Overriding builtin pattern in Backbone.Validation', {
     setUp: function() {
-		this.builtinEmail = Backbone.Validation.patterns.email;
-		
+        this.builtinEmail = Backbone.Validation.patterns.email;
+        
         _.extend(Backbone.Validation.patterns, {
             email: /^test/
         });
@@ -50,9 +50,9 @@ buster.testCase('Overriding builtin pattern in Backbone.Validation', {
         }));
     },
 
-	tearDown: function(){
-		Backbone.Validation.patterns.email = this.builtinEmail;
-	},
+    tearDown: function(){
+        Backbone.Validation.patterns.email = this.builtinEmail;
+    },
 
     "should execute the custom pattern validator": function() {
         assert(this.model.set({
