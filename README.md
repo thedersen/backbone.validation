@@ -367,7 +367,7 @@ The message can contain placeholders for arguments that will be replaced:
 * `{2}` will be replaced with the second value in a range validator
 
 
-You can a message per attribute:
+You can specify a message per attribute:
 	
 	MyModel = Backbone.Model.extend({
     	validation: {
