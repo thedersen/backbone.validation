@@ -8,99 +8,54 @@
 
 Backbone.Validation = (function(Backbone, _, undefined) {
     var defaultSelector = 'name';
+
     var getValidatedAttrs = function(model){
-        var validatedAttrs = {};
-        for (var attr in model.validation) {
-            if(model.validation.hasOwnProperty(attr)){
-                validatedAttrs[attr] = undefined;
-            }
-        }
-        return validatedAttrs;
+        return _.reduce(_.keys(model.validation), function(memo, key){
+            memo[key] = undefined;
+            return memo;
+        }, {});
     };
 
     var getValidators = function(model, attr) {
-        var validationElements = model.validation[attr],
-            validators = [],
-            validationElement,
-            validation;
+        var validation = model.validation[attr] || {};
 
-        if(!_.isArray(validationElements)) {
-            validationElements = [validationElements];
+        if (_.isFunction(validation)) {
+            return validation;
+        } else if(_.isString(validation)) {
+            return model[validation];
+        } else if(!_.isArray(validation)) {
+            validation = [validation];
         }
 
-        for (var i = 0, l = validationElements.length; i < l; i++) {
-            validation = validationElements[i];
-
-            if (_.isFunction(validation)) {
-                return validation;
-            } else if(_.isString(validation)) {
-                return model[validation];
-            } else {
-                for (var validator in validation) {
-                    if (validator !== 'msg' && validation.hasOwnProperty(validator)) {
-                        validators.push({
-                            fn: Backbone.Validation.validators[validator],
-                            val: validation[validator],
-                            msg: validation.msg
-                        });
-                    }
-                }
-            }
-        }
-
-        return validators;
+        return _.reduce(validation, function(memo, validation){
+            _.each(_.without(_.keys(validation), 'msg'), function(validator){
+                memo.push({
+                    fn: Backbone.Validation.validators[validator],
+                    val: validation[validator],
+                    msg: validation.msg
+                });
+            });
+            return memo;
+        }, []);
     };
 
-    // var validateAttr = function(model, attr, value) {
-    //     var validatorsArray = getValidators(model, attr),
-    //         error = '',
-    //         errors = [],
-    //         validator,
-    //         result;
-
-    //     for(var index=0, count=validatorsArray.length; index<count; index++)
-    //     {
-    //         validator = validatorsArray[index];
-
-    //         if (_.isFunction(validator)) {
-    //             result = validator.call(model, value, attr);
-    //             if (result) errors.push(result);
-    //         } else {
-    //             result = validator.fn(value, attr, validator.val, model);
-    //             if(result === false){
-    //                 return;
-    //             }
-    //             if (result) {
-    //                 errors.push(validator.msg || result);
-    //             }
-    //         }
-    //     }
-
-    //     if (errors.length > 0) {
-    //         return errors;
-    //     }
-    // };
-     var validateAttr = function(model, attr, value) {
-        var validators = getValidators(model, attr),
-            error = '',
-            validator,
-            result;
+    var validateAttr = function(model, attr, value) {
+        var validators = getValidators(model, attr);
 
         if (_.isFunction(validators)) {
             return validators.call(model, value, attr);
-        } else {
-            for (var i = 0; i < validators.length; i++) {
-                validator = validators[i];
-                result = validator.fn(value, attr, validator.val, model);
-                if(result === false) {
-                    return;
-                }
-                else if (result && !error) {
-                    error = validator.msg || result;
-                }
-            }
-            return error;
         }
+
+        return _.reduce(validators, function(memo, validator){
+            var result = validator.fn(value, attr, validator.val, model);
+            if(result === false || memo === false) {
+                return false;
+            }
+            if (result && !memo) {
+                return validator.msg || result;
+            }
+            return memo;
+        }, '');
     };
        
     return {
@@ -113,7 +68,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         bind: function(view, options) {
             options = options || {};
             var model = view.model,
-                delayTrigger,
                 selector = options.selector || defaultSelector,
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
@@ -127,25 +81,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 var result = [], invalidAttrs = [];
                 isValid = true;
 
-                // for (var changedAttr in attrs) {
-                //     var errors = validateAttr(model, changedAttr, attrs[changedAttr]);
-                //     if (errors) {
-                //         for( var index=0, count=errors.length; index<count; index++)
-                //         {
-                //             result.push(errors[index]);
-                //             invalidAttrs.push(changedAttr);
-                //             isValid = false;
-
-                //             if( errors.length == 1) {
-                //                 invalidFn(view, changedAttr, errors[0], selector);
-                //             } else {
-                //                 invalidFn(view, changedAttr, errors, selector);
-                //             }
-                //         }
-                //     } else {
-                //         validFn(view, changedAttr, selector);
-                //     }
-                // }
                 for (var changedAttr in attrs) {
                     var error = validateAttr(model, changedAttr, attrs[changedAttr]);
                     if (error) {
@@ -255,7 +190,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
     return {
         required: function(value, attr, required, model) {
             var isRequired = _.isFunction(required) ? required.call(model) : required;
-            if(!isRequired && (!hasValue(value))) {
+            if(!isRequired && !hasValue(value)) {
                 return false; // overrides all other validators
             }
             if (isRequired && !hasValue(value)) {
