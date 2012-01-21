@@ -139,11 +139,36 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 	  }
 	});
 	
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+	    name: {
+		  fn: function(value) {
+	       	if(value !== 'something') {
+	       	  return 'Name is invalid';
+	      	}
+	      }
+		}
+	  }
+	});
+
 #### named method validator
 
 	var SomeModel = Backbone.Model.extend({
 	  validation: {
 	    name: 'validateName'
+	  },
+	  validateName: function(value, attr) {
+		if(value !== 'something') {
+          return 'Name is invalid';
+        }
+	  }
+	});
+
+	var SomeModel = Backbone.Model.extend({
+	  validation: {
+		name: {
+		  fn: 'validateName'
+		}
 	  },
 	  validateName: function(value, attr) {
 		if(value !== 'something') {
@@ -399,6 +424,7 @@ You can specify a message per validator:
 
 * `isValid` returns `undefined` when no validatation has occured and the model has validation 
 * When specifying multiple validators for one attribute, all can have it's own error message (thanks to [GarethElms](https://github.com/GarethElms))
+* method validator and named method validator can be combined with other built-in validators
 
 ### v0.3.1
 

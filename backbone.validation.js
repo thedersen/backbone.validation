@@ -188,6 +188,12 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
     };
             
     return {
+        fn: function(value, attr, fn, model) {
+            if(_.isString(fn)){
+                fn = model[fn];
+            }
+            return fn.call(model, value, attr);
+        },
         required: function(value, attr, required, model) {
             var isRequired = _.isFunction(required) ? required.call(model) : required;
             if(!isRequired && !hasValue(value)) {
