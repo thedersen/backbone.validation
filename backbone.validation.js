@@ -8,6 +8,9 @@
 
 Backbone.Validation = (function(Backbone, _, undefined) {
     var defaultSelector = 'name';
+    var defaultOptions = {
+        forceUpdate: false
+    };
 
     var getValidatedAttrs = function(model){
         return _.reduce(_.keys(model.validation), function(memo, key){
@@ -64,14 +67,19 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         setDefaultSelector: function(selector){
             defaultSelector = selector;
         },
+
+        configure: function(options) {
+            _.extend(defaultOptions, options);
+        },
         
         bind: function(view, options) {
             options = options || {};
             var model = view.model,
+                forceUpdate = options.forceUpdate || defaultOptions.forceUpdate,
                 selector = options.selector || defaultSelector,
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
-                isValid = _.isUndefined(model.validation) ? true: undefined;
+                isValid = _.isUndefined(model.validation) ? true : undefined;
             
             model.validate = function(attrs) {
                 if(!attrs){
@@ -106,6 +114,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                    model.trigger('validated', isValid, model, invalidAttrs);
                    model.trigger('validated:' + (isValid ? 'valid' : 'invalid'), model, invalidAttrs);
                 });
+
+                if(forceUpdate) {
+                    return;
+                }
                 
                 if (result.length === 1) {
                     return result[0];

@@ -106,6 +106,24 @@ Or, you can configure it per view when binding:
 
 If you have set the global selector to class, you can of course set the selector to name or id on specific views.
 
+## Force update the model
+
+Sometimes it can be useful to update the model with invalid values. Especially when using automatic modelbinding and late validation (e.g. when submitting the form).
+
+You can turn this on globally by calling:
+
+	Backbone.Validation.configure({
+		forceUpdate: true
+	});
+	
+Or, you can turn it on per view when binding:
+
+	Backbone.Validation.bind(this.view, {
+        forceUpdate: true
+    });
+
+When switching this on, the error event is no longer triggered.
+
 ## Events
 
 The model triggers two events, 'validated' and 'validated:valid' or 'validated:invalid', after validation is performed.
@@ -427,6 +445,7 @@ You can specify a message per validator:
 * When specifying multiple validators for one attribute, all can have it's own error message (thanks to [GarethElms](https://github.com/GarethElms))
 * method validator and named method validator can be combined with other built-in validators
 * acceptance validator accepts 'true' as valid (Fixes issue #12)
+* Can configure per view or globally to force update the model with invalid values. This can be very useful when using automatic modelbinding and late validation (e.g. when submitting the form).
 
 ### v0.3.1
 
