@@ -426,6 +426,7 @@ You can specify a message per validator:
 * Passing `true` to `isValid` forces an validation
 * When specifying multiple validators for one attribute, all can have it's own error message (thanks to [GarethElms](https://github.com/GarethElms))
 * method validator and named method validator can be combined with other built-in validators
+* acceptance validator accepts 'true' as valid (Fixes issue #12)
 
 ### v0.3.1
 
@@ -463,7 +464,7 @@ You can specify a message per validator:
 * Possible breaking changes:
 	* Removed the unused msg parameter when adding custom validators
 	* Number pattern matches negative numbers (Fixes issue #4), decimals and numbers with 1000-separator (e.g. 123.000,45)
-	* Context (this) in the method validators is now the model instead of the global object (Fixes issue # 6)
+	* Context (this) in the method validators is now the model instead of the global object (Fixes issue #6)
 	* All validators except required and acceptance invalidates null, undefined or empty value. However, required:false can be specified to allow null, undefined or empty value
 * Breaking changes (unfortunate, but necessary):
 	* Required validator no longer invalidates false boolean, use the new acceptance validator instead

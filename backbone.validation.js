@@ -207,7 +207,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
             }
         },
         acceptance: function(value, attr) {
-            if(!_.isBoolean(value) || value === false){
+            if(value !== 'true' && (!_.isBoolean(value) || value === false)) {
                 return format(messages.acceptance, attr);
             }
         },

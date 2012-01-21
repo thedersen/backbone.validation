@@ -33,6 +33,12 @@ buster.testCase("acceptance validator", {
             agree: 'non-boolean'
         }));
     },
+
+    "string with true is evaluated as valid": function() {
+        assert(this.model.set({
+            agree: 'true'
+        }));
+    },
     
     "false boolean is invalid": function() {
         refute(this.model.set({
