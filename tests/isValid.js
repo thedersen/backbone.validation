@@ -17,8 +17,8 @@ buster.testCase("isValid", {
 				validation: {
 					name: {
 						required: true
-					}		
-				}				
+					}
+				}
 			});
 			this.model = new Model();
 			Backbone.Validation.bind(new Backbone.View({model: this.model}));
@@ -37,11 +37,11 @@ buster.testCase("isValid", {
 		"returns false when model is invalid": function() {
 			this.model.set({name: ''});
 
-			refute(this.model.isValid());			
+			refute(this.model.isValid());
 		},
 
 		"can force validation by passing true": function() {
-			assert(this.model.isValid(true) === false);	
+			assert(this.model.isValid(true) === false);
 		}
 	}
 });
