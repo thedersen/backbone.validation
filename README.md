@@ -96,7 +96,9 @@ If you need to look up elements by using for instance a class name or id instead
 
 You can configure it globally by calling:
 
-	Backbone.Validation.setDefaultSelector('class');
+	Backbone.Validation.configure({
+		selector: 'class'
+	});
 	
 Or, you can configure it per view when binding:
 
@@ -446,6 +448,8 @@ You can specify a message per validator:
 * method validator and named method validator can be combined with other built-in validators
 * acceptance validator accepts 'true' as valid (Fixes issue #12)
 * Can configure per view or globally to force update the model with invalid values. This can be very useful when using automatic modelbinding and late validation (e.g. when submitting the form).
+* Breaking changes (unfortunate, but necessary):
+	* `setDefaultSelector` is removed, and you need to call `configure({selector: 'class'})` instead
 
 ### v0.3.1
 

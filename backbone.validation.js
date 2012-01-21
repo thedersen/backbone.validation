@@ -7,9 +7,9 @@
 // http://github.com/thedersen/backbone.validation
 
 Backbone.Validation = (function(Backbone, _, undefined) {
-    var defaultSelector = 'name';
     var defaultOptions = {
-        forceUpdate: false
+        forceUpdate: false,
+        selector: 'name'
     };
 
     var getValidatedAttrs = function(model){
@@ -64,10 +64,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     return {
         version: '0.4.0',
 
-        setDefaultSelector: function(selector){
-            defaultSelector = selector;
-        },
-
         configure: function(options) {
             _.extend(defaultOptions, options);
         },
@@ -76,7 +72,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             options = options || {};
             var model = view.model,
                 forceUpdate = options.forceUpdate || defaultOptions.forceUpdate,
-                selector = options.selector || defaultSelector,
+                selector = options.selector || defaultOptions.selector,
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
                 isValid = _.isUndefined(model.validation) ? true : undefined;
