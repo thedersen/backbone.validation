@@ -95,10 +95,6 @@ buster.testCase("Backbone.Validation", {
                 someProperty: true
             }));
         },
-
-        "isValid returns undefined when validation has not occured": function() {
-            refute.defined(this.model.isValid());
-        },
         
         "and setting": {
     
@@ -318,18 +314,6 @@ buster.testCase("Backbone.Validation", {
                 assert.calledWith(this.valid, this.view, 'age');
                 assert.calledWith(this.valid, this.view, 'name');
             }
-        }
-    },
-    
-    "when bound to model without validation": {
-        setUp: function() {
-            this.view.model = new Backbone.Model();
-            
-            Backbone.Validation.bind(this.view);
-        },
-        
-        "isValid is true": function() {
-            assert(this.view.model.isValid());
         }
     },
     

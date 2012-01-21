@@ -423,6 +423,7 @@ You can specify a message per validator:
 ### v0.4.0
 
 * `isValid` returns `undefined` when no validatation has occured and the model has validation 
+* Passing `true` to `isValid` forces an validation
 * When specifying multiple validators for one attribute, all can have it's own error message (thanks to [GarethElms](https://github.com/GarethElms))
 * method validator and named method validator can be combined with other built-in validators
 

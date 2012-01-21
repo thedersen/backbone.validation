@@ -115,7 +115,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 }
             };
             
-            model.isValid = function() {
+            model.isValid = function(forceValidation) {
+                if(forceValidation) {
+                    this.validate();
+                }
                 return isValid;
             };
         },
