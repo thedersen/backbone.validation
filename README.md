@@ -447,7 +447,8 @@ You can specify a message per validator:
 * When specifying multiple validators for one attribute, all can have it's own error message (thanks to [GarethElms](https://github.com/GarethElms))
 * method validator and named method validator can be combined with other built-in validators
 * acceptance validator accepts 'true' as valid (Fixes issue #12)
-* Can configure per view or globally to force update the model with invalid values. This can be very useful when using automatic modelbinding and late validation (e.g. when submitting the form).
+* Can configure per view or globally to force update the model with invalid values. This can be very useful when using automatic modelbinding and late validation (e.g. when submitting the form)
+* email pattern is case insensitive
 * Breaking changes (unfortunate, but necessary):
 	* `setDefaultSelector` is removed, and you need to call `configure({selector: 'class'})` instead
 

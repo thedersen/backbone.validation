@@ -28,6 +28,13 @@ buster.testCase("Backbone.Validation patterns", {
         this.invalid('name@example.com.');
     },
 
+    "email pattern is case insensitive": function() {
+        this.pattern = Backbone.Validation.patterns.email;
+
+        this.valid('NaMe@example.COM');
+        this.valid('NAME@EXAMPLE.COM');
+    },
+
     "url pattern matches all valid urls": function() {
         this.pattern = Backbone.Validation.patterns.url;
         
@@ -47,6 +54,13 @@ buster.testCase("Backbone.Validation patterns", {
         this.invalid('http://thedersen;com');
         this.invalid('http://.thedersen.com');
         this.invalid('http://127.0.0.1.');
+    },
+
+    "url pattern is case insensitive": function() {
+        this.pattern = Backbone.Validation.patterns.url;
+        
+        this.valid('http://Thedersen.com');
+        this.valid('HTTP://THEDERSEN.COM');
     },
     
     "number pattern matches all numbers, including decimal numbers": function() {
