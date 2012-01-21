@@ -82,6 +82,10 @@ buster.testCase("Backbone.Validation", {
         
         "the model's validate function is undefined": function() {
             refute.defined(this.model.validate);
+        },
+        
+        "the model's isValid function is undefined": function() {
+            refute.defined(this.model.isValid);
         }
     },
 

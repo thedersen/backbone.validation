@@ -124,7 +124,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         },
 
         unbind: function(view) {
-            view.model.validate = undefined;
+            delete view.model.validate;
+            delete view.model.isValid;
         }
     };
 } (Backbone, _));
