@@ -62,7 +62,7 @@ There are several places that it can be called from, depending on your circumsta
 	
 ## A couple of conventions
 
-The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called (in addition to the `error` event raised by Backbone) after validation of an attribute is performed. 
+The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called after validation of an attribute is performed. 
 
 The default implementation of `invalid` tries to look up an element within the view with an name attribute equal to the name of the attribute that is validated. If it finds one, an `invalid` class is added to the element as well as a `data-error` attribute with the error message. The `valid` method removes these if they exists.
 
@@ -92,7 +92,7 @@ You can also override these per view when binding:
 	  }
 	});
 	
-If you need to look up elements by using for instance class name or id instead of name, there are two ways to configure this.
+If you need to look up elements by using for instance a class name or id instead of name, there are two ways to configure this.
 
 You can configure it globally by calling:
 
@@ -352,7 +352,9 @@ If you have custom patterns that are used several places in your code, you can e
 
 ### Overriding the default error messages
 
-If you don't like the default error messages there are two ways of customizing them. You can either specify the `msg` attribute when configuring your validation, or you can override the default ones globally.
+If you don't like the default error messages there are several ways of customizing them.
+
+You can override the default ones globally:
 
 	_.extend(Backbone.Validation.messages, {
 		required: 'This field is required'
@@ -364,11 +366,39 @@ The message can contain placeholders for arguments that will be replaced:
 * `{1}` will be replaced with the allowed value configured in the validation (or the first one in a range validator)
 * `{2}` will be replaced with the second value in a range validator
 
+
+You can a message per attribute:
+	
+	MyModel = Backbone.Model.extend({
+    	validation: {
+        	email: {
+            	required: true,
+            	pattern: "email",
+            	msg: "Please enter a valid email"
+            }
+        }
+	});
+
+You can specify a message per validator:
+
+	MyModel = Backbone.Model.extend({
+    	validation: {
+        	email: [{
+            	required: true,
+            	msg: "Please enter an email address"
+        	},{
+            	pattern: "email",
+            	msg: "Please enter a valid email"
+        	}]
+        }
+	});
+
 # Release notes
 
 ### v0.4.0
 
-* isValid returns undefined when no validatation has occured
+* `isValid` returns `undefined` when no validatation has occured and the model has validation 
+* When specifying multiple validators for one attribute, all can have it's own error message (thanks to [GarethElms](https://github.com/GarethElms))
 
 ### v0.3.1
 
