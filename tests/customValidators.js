@@ -78,3 +78,43 @@ buster.testCase('Overriding built-in validator in Backbone.Validation', {
         }));
     }
 });
+
+buster.testCase("Chaining built-in validators with custom", {
+    setUp: function() {
+        _.extend(Backbone.Validation.validators, {
+            custom2: function(value, attr, customValue, model) {
+                if (value !== customValue) {
+                        return 'error';
+                }
+            },
+            custom: function(value, attr, customValue, model) {
+                return this.required(value, attr, true, model) || this.custom2(value, attr, customValue, model);
+            }
+        });
+
+        var Model = Backbone.Model.extend({
+            validation: {
+                name: {
+                    custom: 'custom'
+                }
+            }
+        });
+
+        this.model = new Model();
+        Backbone.Validation.bind(new Backbone.View({
+            model: this.model
+        }));
+    },
+
+    "violating first validator in chain return first error message": function() {
+        assert.equals(this.model.validate({name:''}), 'name is required');
+    },
+
+    "violating second validator in chain return second error message": function() {
+        assert.equals(this.model.validate({name:'a'}), 'error');
+    },
+
+    "violating none of the validators returns undefined": function() {
+        refute.defined(this.model.validate({name:'custom'}));
+    }
+});
