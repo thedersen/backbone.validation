@@ -133,8 +133,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         },
 
         unbind: function(view) {
-            delete view.model.validate;
-            delete view.model.isValid;
+            if(view.model) {
+                delete view.model.validate;
+                delete view.model.isValid;
+            }
         }
     };
 } (Backbone, _));

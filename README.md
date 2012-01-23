@@ -443,6 +443,7 @@ You can specify a message per validator:
 ### v0.4.1
 
 * Context (this) in custom validators is the `Backbone.Validation.validators` object
+* Calling `unbind` on a view without model no longer throws (Fixes #17)
 
 ### v0.4.0
 
