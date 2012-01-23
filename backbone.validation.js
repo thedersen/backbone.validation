@@ -61,6 +61,76 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, '');
     };
 
+    var bindModel = function(view, model, options) {
+        options = options || {};
+        var forceUpdate = options.forceUpdate || defaultOptions.forceUpdate,
+            selector = options.selector || defaultOptions.selector,
+            validFn = options.valid || Backbone.Validation.callbacks.valid,
+            invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
+            isValid = _.isUndefined(model.validation) ? true : undefined;
+
+        model.validate = function(attrs) {
+            if(!attrs){
+                return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
+            }
+
+            var result = [],
+                invalidAttrs = [];
+                isValid = true;
+
+            for (var changedAttr in attrs) {
+                var error = validateAttr(model, changedAttr, attrs[changedAttr]);
+                if (error) {
+                    result.push(error);
+                    invalidAttrs.push(changedAttr);
+                    isValid = false;
+                    invalidFn(view, changedAttr, error, selector);
+                } else {
+                    validFn(view, changedAttr, selector);
+                }
+            }
+
+            if (isValid) {
+                for (var validatedAttr in model.validation) {
+                    if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validatedAttr, model.get(validatedAttr))) {
+                        isValid = false;
+                        break;
+                    }
+                }
+            }
+
+            _.defer(function() {
+                model.trigger('validated', isValid, model, invalidAttrs);
+                model.trigger('validated:' + (isValid ? 'valid' : 'invalid'), model, invalidAttrs);
+            });
+
+            if(forceUpdate) {
+                return;
+            }
+
+            if (result.length === 1) {
+                return result[0];
+            }
+            if (result.length > 1) {
+                return result;
+            }
+        };
+
+        model.isValid = function(forceValidation) {
+            if(forceValidation) {
+                this.validate();
+            }
+            return isValid;
+        };
+    };
+
+    var unbindModel = function(model) {
+        if(model) {
+            delete model.validate;
+            delete model.isValid;
+        }
+    };
+
     return {
         version: '0.4.1',
 
@@ -69,74 +139,11 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         },
 
         bind: function(view, options) {
-            options = options || {};
-            var model = view.model,
-                forceUpdate = options.forceUpdate || defaultOptions.forceUpdate,
-                selector = options.selector || defaultOptions.selector,
-                validFn = options.valid || Backbone.Validation.callbacks.valid,
-                invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
-                isValid = _.isUndefined(model.validation) ? true : undefined;
-
-            model.validate = function(attrs) {
-                if(!attrs){
-                    return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
-                }
-
-                var result = [],
-                    invalidAttrs = [];
-                    isValid = true;
-
-                for (var changedAttr in attrs) {
-                    var error = validateAttr(model, changedAttr, attrs[changedAttr]);
-                    if (error) {
-                        result.push(error);
-                        invalidAttrs.push(changedAttr);
-                        isValid = false;
-                        invalidFn(view, changedAttr, error, selector);
-                    } else {
-                        validFn(view, changedAttr, selector);
-                    }
-                }
-
-                if (isValid) {
-                    for (var validatedAttr in model.validation) {
-                        if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validatedAttr, model.get(validatedAttr))) {
-                            isValid = false;
-                            break;
-                        }
-                    }
-                }
-
-                _.defer(function() {
-                    model.trigger('validated', isValid, model, invalidAttrs);
-                    model.trigger('validated:' + (isValid ? 'valid' : 'invalid'), model, invalidAttrs);
-                });
-
-                if(forceUpdate) {
-                    return;
-                }
-
-                if (result.length === 1) {
-                    return result[0];
-                }
-                if (result.length > 1) {
-                    return result;
-                }
-            };
-
-            model.isValid = function(forceValidation) {
-                if(forceValidation) {
-                    this.validate();
-                }
-                return isValid;
-            };
+            bindModel(view, view.model, options);
         },
 
         unbind: function(view) {
-            if(view.model) {
-                delete view.model.validate;
-                delete view.model.isValid;
-            }
+            unbindModel(view.model);
         }
     };
 } (Backbone, _));
