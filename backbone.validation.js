@@ -1,9 +1,9 @@
-// Backbone.Validation v0.4.0
+// Backbone.Validation v0.4.1
 //
 // Copyright (C)2011 Thomas Pedersen
 // Distributed under MIT License
 //
-// Documentation and full license availabe at:
+// Documentation and full license available at:
 // http://github.com/thedersen/backbone.validation
 
 Backbone.Validation = (function(Backbone, _, undefined) {
@@ -60,14 +60,14 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             return memo;
         }, '');
     };
-       
+
     return {
-        version: '0.4.0',
+        version: '0.4.1',
 
         configure: function(options) {
             _.extend(defaultOptions, options);
         },
-        
+
         bind: function(view, options) {
             options = options || {};
             var model = view.model,
@@ -76,12 +76,12 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 validFn = options.valid || Backbone.Validation.callbacks.valid,
                 invalidFn = options.invalid || Backbone.Validation.callbacks.invalid,
                 isValid = _.isUndefined(model.validation) ? true : undefined;
-            
+
             model.validate = function(attrs) {
                 if(!attrs){
                     return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
                 }
-                
+
                 var result = [],
                     invalidAttrs = [];
                     isValid = true;
@@ -106,7 +106,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                         }
                     }
                 }
-                
+
                 _.defer(function() {
                     model.trigger('validated', isValid, model, invalidAttrs);
                     model.trigger('validated:' + (isValid ? 'valid' : 'invalid'), model, invalidAttrs);
@@ -115,7 +115,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 if(forceUpdate) {
                     return;
                 }
-                
+
                 if (result.length === 1) {
                     return result[0];
                 }
@@ -123,7 +123,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                     return result;
                 }
             };
-            
+
             model.isValid = function(forceValidation) {
                 if(forceValidation) {
                     this.validate();
@@ -183,7 +183,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
                 function(text) {
                     var trimLeft = /^\s+/,
                         trimRight = /\s+$/;
-        
+
                     return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
                 };
     var format = function() {
@@ -199,7 +199,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
     var hasValue = function(value) {
         return !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) && trim(value) === ''));
     };
-            
+
     return {
         fn: function(value, attr, fn, model) {
             if(_.isString(fn)){
