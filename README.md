@@ -22,11 +22,11 @@ To configure your validation rules, simply add a validation property with a prop
 		  range: [1, 80]
 		},
 		email: {
-		  pattern: 'email'	
+		  pattern: 'email'
 		},
 		someAttribute: function(value) {
 		  if(value !== 'somevalue') {
-		    return 'Error';	
+		    return 'Error';
 		  }
 		}
       }
@@ -59,10 +59,10 @@ There are several places that it can be called from, depending on your circumsta
 	});
 	var someView = new SomeView();
 	Backbone.Validation.bind(someView);
-	
+
 ## A couple of conventions
 
-The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called after validation of an attribute is performed. 
+The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called after validation of an attribute is performed.
 
 The default implementation of `invalid` tries to look up an element within the view with an name attribute equal to the name of the attribute that is validated. If it finds one, an `invalid` class is added to the element as well as a `data-error` attribute with the error message. The `valid` method removes these if they exists.
 
@@ -91,7 +91,7 @@ You can also override these per view when binding:
 		});
 	  }
 	});
-	
+
 If you need to look up elements by using for instance a class name or id instead of name, there are two ways to configure this.
 
 You can configure it globally by calling:
@@ -99,7 +99,7 @@ You can configure it globally by calling:
 	Backbone.Validation.configure({
 		selector: 'class'
 	});
-	
+
 Or, you can configure it per view when binding:
 
 	Backbone.Validation.bind(this.view, {
@@ -117,7 +117,7 @@ You can turn this on globally by calling:
 	Backbone.Validation.configure({
 		forceUpdate: true
 	});
-	
+
 Or, you can turn it on per view when binding:
 
 	Backbone.Validation.bind(this.view, {
@@ -135,16 +135,16 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		// model is the model
 		// attrs is an array with the name(s) of the attribute(s) with error
 	});
-	
+
 	model.bind('validated:valid', function(model) {
 		// model is the model
 	});
-	
+
 	model.bind('validated:invalid', function(model, attrs) {
 		// model is the model
 		// attrs is an array with the name(s) of the attribute(s) with error
 	});
-	
+
 ## The built-in validators
 
 #### method validator
@@ -158,7 +158,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 	var SomeModel = Backbone.Model.extend({
 	  validation: {
 	    name: {
@@ -206,7 +206,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 	var SomeModel = Backbone.Model.extend({
 	  validation: {
 	    name: {
@@ -226,7 +226,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-		
+
 #### min
 
 	var SomeModel = Backbone.Model.extend({
@@ -236,7 +236,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 #### max
 
 	var SomeModel = Backbone.Model.extend({
@@ -246,7 +246,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 #### range
 
 	var SomeModel = Backbone.Model.extend({
@@ -266,7 +266,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-			
+
 #### minLength
 
 	var SomeModel = Backbone.Model.extend({
@@ -276,7 +276,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 #### maxLength
 
 	var SomeModel = Backbone.Model.extend({
@@ -286,7 +286,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 #### rangeLength
 
 	var SomeModel = Backbone.Model.extend({
@@ -296,7 +296,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 #### oneOf
 
 	var SomeModel = Backbone.Model.extend({
@@ -306,7 +306,7 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		}
 	  }
 	});
-	
+
 #### equalTo
 
 	var SomeModel = Backbone.Model.extend({
@@ -346,7 +346,7 @@ or specify any regular expression you like:
 		}
 	  }
 	});
-	
+
 See the [wiki](https://github.com/thedersen/backbone.validation/wiki) for more details about the validators.
 
 ## Extending Backbone.Validation
@@ -365,9 +365,9 @@ If you have custom validation logic that are used several places in your code, y
         if(!value){
           return 'My version of the required validator';
         }
-      }, 
+      },
    	});
-   
+
    	var Model = Backbone.Model.extend({
       validation: {
         age: {
@@ -404,7 +404,7 @@ You can override the default ones globally:
 	_.extend(Backbone.Validation.messages, {
 		required: 'This field is required'
 	});
-	
+
 The message can contain placeholders for arguments that will be replaced:
 
 * `{0}` will be replaced with the name of the attribute being validated
@@ -413,7 +413,7 @@ The message can contain placeholders for arguments that will be replaced:
 
 
 You can specify a message per attribute:
-	
+
 	MyModel = Backbone.Model.extend({
     	validation: {
         	email: {
@@ -440,9 +440,13 @@ You can specify a message per validator:
 
 # Release notes
 
+### v0.4.1
+
+* Context (this) in custom validators is the `Backbone.Validation.validators` object
+
 ### v0.4.0
 
-* `isValid` returns `undefined` when no validatation has occured and the model has validation 
+* `isValid` returns `undefined` when no validatation has occured and the model has validation
 * Passing `true` to `isValid` forces an validation
 * When specifying multiple validators for one attribute, all can have it's own error message (thanks to [GarethElms](https://github.com/GarethElms))
 * method validator and named method validator can be combined with other built-in validators

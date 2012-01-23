@@ -1,7 +1,9 @@
 buster.testCase('Extending Backbone.Validation with custom validator', {
     setUp: function() {
+        var that = this;
         _.extend(Backbone.Validation.validators, {
             custom: function(value, attr, customValue) {
+                that.context = this;
                 if (value !== customValue) {
                     return 'error';
                 }
@@ -29,13 +31,18 @@ buster.testCase('Extending Backbone.Validation with custom validator', {
         refute(this.model.set({
             age: 2
         }));
+    },
+
+    "context is the validators object": function() {
+        this.model.set({age:1});
+        assert.same(Backbone.Validation.validators, this.context);
     }
 });
 
-buster.testCase('Overriding builtin validator in Backbone.Validation', {
+buster.testCase('Overriding built-in validator in Backbone.Validation', {
     setUp: function() {
         this.builtinMin = Backbone.Validation.validators.min;
-        
+
         _.extend(Backbone.Validation.validators, {
             min: function(value, attr, customValue) {
                 if (value !== customValue) {
@@ -61,7 +68,7 @@ buster.testCase('Overriding builtin validator in Backbone.Validation', {
     tearDown: function(){
         Backbone.Validation.validators.min = this.builtinMin;
     },
-    
+
     "should execute the overridden validator": function() {
         assert(this.model.set({
             age: 1

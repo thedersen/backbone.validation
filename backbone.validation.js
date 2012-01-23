@@ -50,7 +50,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }
 
         return _.reduce(validators, function(memo, validator){
-            var result = validator.fn(value, attr, validator.val, model);
+            var result = validator.fn.call(Backbone.Validation.validators, value, attr, validator.val, model);
             if(result === false || memo === false) {
                 return false;
             }
