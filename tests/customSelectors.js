@@ -3,7 +3,11 @@ buster.testCase("Overriding default id selector with class", {
         var View = Backbone.View.extend({
             render: function() {
                 var html = $('<input type="text" class="name" />');
-                this.$(this.el).append(html);
+                if(!this.$el) { // Backbone 0.5.3
+                    this.$(this.el).append(html);
+                } else { // Backbone 0.9.0
+                    this.$el.append(html);
+                }
             }
         });
 
@@ -25,22 +29,22 @@ buster.testCase("Overriding default id selector with class", {
         this.view.render();
         this.name = $(this.view.$(".name"));
     },
-    
+
     "globally": function() {
         Backbone.Validation.configure({
             selector: 'class'
         });
         Backbone.Validation.bind(this.view);
-        
+
         this.model.set({name:''});
 
         assert(this.name.hasClass('invalid'));
-        
+
         Backbone.Validation.configure({
             selector: 'name'
         });
     },
-    
+
     "per view when binding": function() {
         Backbone.Validation.bind(this.view, {
             selector: 'class'

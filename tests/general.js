@@ -3,7 +3,11 @@ buster.testCase("Backbone.Validation", {
         var View = Backbone.View.extend({
             render: function() {
                 var html = $('<input type="text" name="name" /><input type="text" name="age" />');
-                this.$(this.el).append(html);
+                if(!this.$el) { // Backbone 0.5.3
+                    this.$(this.el).append(html);
+                } else { // Backbone 0.9.0
+                    this.$el.append(html);
+                }
             }
         });
 
