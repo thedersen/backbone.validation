@@ -20,7 +20,7 @@ buster.testCase("validation (recursive) validator - with required parent object"
 
         Backbone.Validation.bind(this.view);
     },
-    
+   
     "string is invalid for an object": function(done) {
         this.model.bind('error', function(model, error){
             assert.equals('image must be an object', error);
@@ -62,6 +62,15 @@ buster.testCase("validation (recursive) validator - with required parent object"
           src: null
         }
       }));
+    },
+    
+    "should be able to set an empty object": function() {
+      assert(this.model.set({
+          image: {
+            src: 'foo.png'
+          }
+      }));
+      assert(this.model.set({}));
     }
     
     /*

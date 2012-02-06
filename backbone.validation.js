@@ -67,8 +67,12 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     }
     
     function validateAll(model, validation, attrs) {
+        if (attrs === undefined) {
+          return false;
+        }
         var isValid = true;
         for (var validatedAttr in validation) {
+            console.log('validating ' + validatedAttr, validation, attrs);
             if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validation, validatedAttr, model.get(validatedAttr))) {
                 isValid = false;
                 break;
@@ -111,10 +115,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             }
         }
 
-        if (attrs === undefined) {
-            isValid = false;
-        }
-      
         if (isValid) {
             isValid = validateAll(model, validation, attrs);
         }
