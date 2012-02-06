@@ -9,7 +9,6 @@ config['Default'] = {
         'backbone.validation.js'
     ],
     tests: [
-        //'tests/**/*.js'
-      'tests/validators/validation.js'
+        'tests/**/*.js'
     ]
 };
