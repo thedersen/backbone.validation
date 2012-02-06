@@ -28,7 +28,8 @@ buster.testCase("required temp test", {
 });
 */
 
-buster.testCase("validation (object) validator (required)", {
+
+buster.testCase("validation (recursive) validator - required tests", {
     setUp: function() {
         var that = this;
         var Model = Backbone.Model.extend({
@@ -55,11 +56,6 @@ buster.testCase("validation (object) validator (required)", {
         });
     },
     
-		"model is invalid because no attributes have been set": function() {
-		  var force = true;
-			refute(this.model.isValid(force));
-		},
-    
     "string is invalid for an object": function(done) {
         this.model.bind('error', function(model, error){
             assert.equals('image must be an object', error);
@@ -67,27 +63,24 @@ buster.testCase("validation (object) validator (required)", {
         });
         this.model.set({image:'abc'});
     },
+    
+		"model is invalid because no attributes have been set": function() {
+		  var force = true;
+			refute(this.model.isValid(force));
+		},
 
     "undefined is invalid for an object": function() {
       refute(this.model.set({
         image: undefined
       }));
     },
-
+    
     "empty object is invalid": function() {
-      
-      this.model.bind('validated', function(isValid, model, invalidAttrs) {
-        console.log('validated called', isValid);
-        console.log('validated called', model);
-        console.log('validated called', invalidAttrs);
-      });
-      
       this.model.set({
         image: {}
       });
       var force = true;
       refute(this.model.isValid(force));
-      
     },
 
     "object with required attribute is valid": function() {
@@ -105,10 +98,10 @@ buster.testCase("validation (object) validator (required)", {
         }
       }));
     }
+    
 });
 
-/*
-buster.testCase("validation (object) validator (not required)", {
+buster.testCase("validation (recursive) validator - not required tests", {
     setUp: function() {
         var that = this;
         var Model = Backbone.Model.extend({
@@ -147,4 +140,3 @@ buster.testCase("validation (object) validator (not required)", {
       }));
     }
 });
-*/

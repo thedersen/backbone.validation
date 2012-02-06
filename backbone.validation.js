@@ -19,36 +19,36 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, {});
     };
 
-    var getValidators = function(model, modelValidator, attr) {
-        var validation = modelValidator[attr] || {};
+    var getValidators = function(model, validation, attr) {
+        var attrValidation = validation[attr] || {};
 
-        if (_.isFunction(validation)) {
-            return validation;
-        } else if(_.isString(validation)) {
-            return model[validation];
-        } else if(!_.isArray(validation)) {
-            validation = [validation];
+        if (_.isFunction(attrValidation)) {
+            return attrValidation;
+        } else if(_.isString(attrValidation)) {
+            return model[attrValidation];
+        } else if(!_.isArray(attrValidation)) {
+            attrValidation = [attrValidation];
         }
 
-        console.log('validation for ' + attr, validation);
+        console.log('validation for ' + attr, attrValidation);
 
-        return _.reduce(validation, function(memo, validation){
-            _.each(_.without(_.keys(validation), 'msg', 'validation'), function(validator){
+        return _.reduce(attrValidation, function(memo, attrValidation){
+            _.each(_.without(_.keys(attrValidation), 'msg'), function(validator){
                 memo.push({
                     fn: Backbone.Validation.validators[validator],
-                    val: validation[validator],
-                    msg: validation.msg
+                    val: attrValidation[validator],
+                    msg: attrValidation.msg
                 });
             });
             return memo;
         }, []);
     };
 
-    var validateAttr = function(model, modelValidator, attr, value) {
+    var validateAttr = function(model, validation, attr, value) {
       
-        console.log('validating attribute using validator', modelValidator);
+        console.log('validating attribute using these validation rules', validation);
       
-        var validators = getValidators(model, modelValidator, attr);
+        var validators = getValidators(model, validation, attr);
         
         console.log(validators.length + ' validators found for ' + attr, validators);
 
@@ -68,52 +68,58 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, '');
     };
     
-    function hasChildValidator(model, modelValidator, attr) {
-      return modelValidator instanceof Object && modelValidator[attr] instanceof Object && modelValidator[attr].validation instanceof Object;
+    function hasChildValidaton(model, validation, attr) {
+      return validation instanceof Object && validation[attr] instanceof Object && validation[attr].validation instanceof Object;
     }
     
     var validateObjectCounter = 0;
     
-    function validateObject(view, model, modelValidator, attrs, options) {
+    function validateObject(view, model, validation, attrs, options) {
       
-      console.log('validateObject called', validateObjectCounter++);
+      console.log('validateChanges called', validateObjectCounter++);
       
       var result,
           errorMessages = [],
           invalidAttrs = [];
           isValid = true;
 
+      // loop through changed attributes and find out if it is valid or not.
       for (var changedAttr in attrs) {
         
-          console.log('check if object ' + changedAttr + ' has a validation attribute', hasChildValidator(model, modelValidator, changedAttr));
-        
-          if (hasChildValidator(model, modelValidator, changedAttr)) {
-          
-            result = validateObject(view, model, modelValidator[changedAttr].validation, attrs[changedAttr], options);
-            
-            errorMessages = result.errorMessages;
-            invalidAttrs = result.invalidAttrs;
-            isValid = result.isValid;
-            
+          var error = validateAttr(model, validation, changedAttr, attrs[changedAttr]);
+          if (error) {
+              console.log('validation failed for ' + changedAttr, error);
+              errorMessages.push(error);
+              invalidAttrs.push(changedAttr);
+              isValid = false;
+              options.invalidFn(view, changedAttr, error, options.selector);
           } else {
+              options.validFn(view, changedAttr, options.selector);
+          }
+        
+          console.log('object ' + changedAttr + ' has a validation attribute?', hasChildValidaton(model, validation, changedAttr));
+        
+          if (isValid && hasChildValidaton(model, validation, changedAttr)) {
+          
+            result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options);
             
-            var error = validateAttr(model, modelValidator, changedAttr, attrs[changedAttr]);
-            if (error) {
-                console.log('validation failed for ' + changedAttr, attrs[changedAttr]);
-                errorMessages.push(error);
-                invalidAttrs.push(changedAttr);
-                isValid = false;
-                options.invalidFn(view, changedAttr, error, options.selector);
-            } else {
-                options.validFn(view, changedAttr, options.selector);
-            }
+            errorMessages.push.apply(errorMessages, result.errorMessages);
+            invalidAttrs.push.apply(invalidAttrs, result.invalidAttrs);
+            isValid = result.isValid;
           }
       }
 
+      // It's possible for attrs to be undefined, when validation exists, but the child object doesn't.
+      if (attrs === undefined) {
+        isValid = false;
+      }
+      
       if (isValid) {
-          for (var validatedAttr in modelValidator) {
+          
+          // loop through all validation rules and test
+          for (var validatedAttr in validation) {
               console.log('checking each ' + validatedAttr  + ' in ', attrs);
-              if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, modelValidator, validatedAttr, model.get(validatedAttr))) {
+              if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validation, validatedAttr, model.get(validatedAttr))) {
                   isValid = false;
                   break;
               }
