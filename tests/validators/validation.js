@@ -1,37 +1,5 @@
-/*
-buster.testCase("required temp test", {
+buster.testCase("validation (recursive) validator - with required parent object", {
     setUp: function() {
-        var that = this;
-        var Model = Backbone.Model.extend({
-            validation: {
-              name: {
-                
-              }
-            }
-        });
-        
-        this.model = new Model();
-        this.view = new Backbone.View({
-            model: this.model
-        });
-
-        Backbone.Validation.bind(this.view, {
-            valid: this.spy(),
-            invalid: this.spy()
-        });
-    },
-    
-		"model is valid because name is not required": function() {
-		  var force = true;
-			assert(this.model.isValid(force));
-		}  
-});
-*/
-
-
-buster.testCase("validation (recursive) validator - required tests", {
-    setUp: function() {
-        var that = this;
         var Model = Backbone.Model.extend({
             validation: {
                 image: {
@@ -44,16 +12,13 @@ buster.testCase("validation (recursive) validator - required tests", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
         });
 
-        Backbone.Validation.bind(this.view, {
-            valid: this.spy(),
-            invalid: this.spy()
-        });
+        Backbone.Validation.bind(this.view);
     },
     
     "string is invalid for an object": function(done) {
@@ -97,13 +62,30 @@ buster.testCase("validation (recursive) validator - required tests", {
           src: null
         }
       }));
+    },
+    
+    "check attribute name is correct for null attribute": function(done) {
+  
+        this.model.bind('validated', function(valid, model, attr){
+            refute(valid);
+            assert.same(this.model, model);
+            assert.equals(['image.src'], attr);
+            done();
+        }, this);
+  
+        this.model.set({
+          image: {
+            src: null
+          } 
+        });
+        var force = true;
+        refute(this.model.isValid(force));
     }
     
 });
 
-buster.testCase("validation (recursive) validator - not required tests", {
+buster.testCase("validation (recursive) validator - without required parent", {
     setUp: function() {
-        var that = this;
         var Model = Backbone.Model.extend({
             validation: {
                 image: {
@@ -121,22 +103,42 @@ buster.testCase("validation (recursive) validator - not required tests", {
         this.view = new Backbone.View({
             model: this.model
         });
-
-        Backbone.Validation.bind(this.view, {
-            valid: this.spy(),
-            invalid: this.spy()
-        });
+        Backbone.Validation.bind(this.view);
     },
     
-    "undefined is valid for an object": function(done) {
-      refute(this.model.set({
-        image: undefined
-      }));
+    "undefined is invalid when a child attribute is required": function(done) {
+        assert(this.model.set({
+          image: undefined
+        }));
+        // but the whole model isn't valid since image.src is required
+        var force = true;
+        refute(this.model.isValid(force));
     },
-
-    "empty object is invalid": function(done) {
-      refute(this.model.set({
-        image: {}
-      }));
+    
+    "empty object is invalid when a child attribute is required": function(done) {
+        assert(this.model.set({
+          image: {}
+        }));
+        // but the whole model isn't valid since image.src is required
+        var force = true;
+        refute(this.model.isValid(force));
+    },
+    
+    "validated event returns an empty array of invalid attributes when model is invalid": function(done) {
+        this.model.bind('validated', function(valid, model, attr){
+            refute(valid);
+            assert.same(this.model, model);
+            // strictly speaking, this is correct since the image object by itself is valid
+            // but is this what we really want?
+            assert.equals([], attr);
+            done();
+        }, this);
+  
+        this.model.set({
+          image: {}
+        });
+        var force = true;
+        refute(this.model.isValid(force));
     }
+    
 });

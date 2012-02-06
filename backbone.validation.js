@@ -69,68 +69,89 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     };
     
     function hasChildValidaton(model, validation, attr) {
-      return validation instanceof Object && validation[attr] instanceof Object && validation[attr].validation instanceof Object;
+        return validation instanceof Object && validation[attr] instanceof Object && validation[attr].validation instanceof Object;
     }
     
     var validateObjectCounter = 0;
     
-    function validateObject(view, model, validation, attrs, options) {
+    function validateAll(model, validation, attrs) {
       
-      console.log('validateChanges called', validateObjectCounter++);
+        var isValid = true;
+        
+        // loop through all validation rules and test
+        for (var validatedAttr in validation) {
+            console.log('checking each ' + validatedAttr  + ' in ', attrs);
+            if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validation, validatedAttr, model.get(validatedAttr))) {
+                isValid = false;
+                break;
+            }
+            if (hasChildValidaton(model, validation, validatedAttr)) {
+                console.log('validateAll, attr has child validation');
+                isValid = validateAll(model, validation[validatedAttr].validation, attrs[validatedAttr]);
+            }
+        }
+        
+        console.log('validateAll returning', isValid);
+        
+        return isValid;
+    }
+    
+    
+    function validateObject(view, model, validation, attrs, options, attrPath) {
       
-      var result,
-          errorMessages = [],
-          invalidAttrs = [];
-          isValid = true;
+        attrPath = attrPath || "";
+      
+        console.log('validateObject called', validateObjectCounter++);
+      
+        var result,
+            errorMessages = [],
+            invalidAttrs = [];
+            isValid = true;
 
-      // loop through changed attributes and find out if it is valid or not.
-      for (var changedAttr in attrs) {
+        // loop through changed attributes and find out if it is valid or not.
+        for (var changedAttr in attrs) {
         
-          var error = validateAttr(model, validation, changedAttr, attrs[changedAttr]);
-          if (error) {
-              console.log('validation failed for ' + changedAttr, error);
-              errorMessages.push(error);
-              invalidAttrs.push(changedAttr);
-              isValid = false;
-              options.invalidFn(view, changedAttr, error, options.selector);
-          } else {
-              options.validFn(view, changedAttr, options.selector);
-          }
+            var error = validateAttr(model, validation, changedAttr, attrs[changedAttr]);
+            if (error) {
+                console.log('validation failed for ' + changedAttr, error);
+                errorMessages.push(error);
+                invalidAttrs.push(attrPath + changedAttr);
+                isValid = false;
+                options.invalidFn(view, changedAttr, error, options.selector);
+            } else {
+                options.validFn(view, changedAttr, options.selector);
+            }
         
-          console.log('object ' + changedAttr + ' has a validation attribute?', hasChildValidaton(model, validation, changedAttr));
+            console.log('object ' + changedAttr + ' has a validation attribute?', hasChildValidaton(model, validation, changedAttr));
         
-          if (isValid && hasChildValidaton(model, validation, changedAttr)) {
+            if (isValid && hasChildValidaton(model, validation, changedAttr)) {
           
-            result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options);
+              result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + ".");
             
-            errorMessages.push.apply(errorMessages, result.errorMessages);
-            invalidAttrs.push.apply(invalidAttrs, result.invalidAttrs);
-            isValid = result.isValid;
-          }
-      }
+              console.log('result.invalidAttrs', result.invalidAttrs);
+            
+              errorMessages.push.apply(errorMessages, result.errorMessages);
+              invalidAttrs.push.apply(invalidAttrs, result.invalidAttrs);
+              isValid = result.isValid;
+            }
+        }
 
-      // It's possible for attrs to be undefined, when validation exists, but the child object doesn't.
-      if (attrs === undefined) {
-        isValid = false;
-      }
+        // It's possible for attrs to be undefined, when validation exists, but the child object doesn't.
+        if (attrs === undefined) {
+          isValid = false;
+        }
       
-      if (isValid) {
-          
-          // loop through all validation rules and test
-          for (var validatedAttr in validation) {
-              console.log('checking each ' + validatedAttr  + ' in ', attrs);
-              if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validation, validatedAttr, model.get(validatedAttr))) {
-                  isValid = false;
-                  break;
-              }
-          }
-      }
+        if (isValid) {          
+          isValid = validateAll(model, validation, attrs);
+        }
       
-      return {
-        errorMessages: errorMessages,
-        invalidAttrs: invalidAttrs,
-        isValid: isValid
-      };
+        console.log('returning invalidAttrs', invalidAttrs);
+      
+        return {
+          errorMessages: errorMessages,
+          invalidAttrs: invalidAttrs,
+          isValid: isValid
+        };
     }
     
     return {
