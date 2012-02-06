@@ -72,7 +72,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }
         var isValid = true;
         for (var validatedAttr in validation) {
-            console.log('validating ' + validatedAttr, validation, attrs);
             if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validation, validatedAttr, model.get(validatedAttr))) {
                 isValid = false;
                 break;
