@@ -30,8 +30,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             attrValidation = [attrValidation];
         }
 
-        console.log('validation for ' + attr, attrValidation);
-
         return _.reduce(attrValidation, function(memo, attrValidation){
             _.each(_.without(_.keys(attrValidation), 'msg'), function(validator){
                 memo.push({
@@ -46,12 +44,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
     var validateAttr = function(model, validation, attr, value) {
       
-        console.log('validating attribute using these validation rules', validation);
-      
         var validators = getValidators(model, validation, attr);
         
-        console.log(validators.length + ' validators found for ' + attr, validators);
-
         if (_.isFunction(validators)) {
             return validators.call(model, value, attr);
         }
@@ -72,48 +66,33 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         return validation instanceof Object && validation[attr] instanceof Object && validation[attr].validation instanceof Object;
     }
     
-    var validateObjectCounter = 0;
-    
     function validateAll(model, validation, attrs) {
-      
         var isValid = true;
-        
-        // loop through all validation rules and test
         for (var validatedAttr in validation) {
-            console.log('checking each ' + validatedAttr  + ' in ', attrs);
             if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validation, validatedAttr, model.get(validatedAttr))) {
                 isValid = false;
                 break;
             }
             if (hasChildValidaton(model, validation, validatedAttr)) {
-                console.log('validateAll, attr has child validation');
                 isValid = validateAll(model, validation[validatedAttr].validation, attrs[validatedAttr]);
             }
         }
-        
-        console.log('validateAll returning', isValid);
-        
         return isValid;
     }
-    
     
     function validateObject(view, model, validation, attrs, options, attrPath) {
       
         attrPath = attrPath || "";
-      
-        console.log('validateObject called', validateObjectCounter++);
       
         var result,
             errorMessages = [],
             invalidAttrs = [];
             isValid = true;
 
-        // loop through changed attributes and find out if it is valid or not.
         for (var changedAttr in attrs) {
         
             var error = validateAttr(model, validation, changedAttr, attrs[changedAttr]);
             if (error) {
-                console.log('validation failed for ' + changedAttr, error);
                 errorMessages.push(error);
                 invalidAttrs.push(attrPath + changedAttr);
                 isValid = false;
@@ -121,14 +100,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             } else {
                 options.validFn(view, changedAttr, options.selector);
             }
-        
-            console.log('object ' + changedAttr + ' has a validation attribute?', hasChildValidaton(model, validation, changedAttr));
-        
+
             if (isValid && hasChildValidaton(model, validation, changedAttr)) {
           
               result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + ".");
-            
-              console.log('result.invalidAttrs', result.invalidAttrs);
             
               errorMessages.push.apply(errorMessages, result.errorMessages);
               invalidAttrs.push.apply(invalidAttrs, result.invalidAttrs);
@@ -136,21 +111,18 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             }
         }
 
-        // It's possible for attrs to be undefined, when validation exists, but the child object doesn't.
         if (attrs === undefined) {
-          isValid = false;
+            isValid = false;
         }
       
-        if (isValid) {          
-          isValid = validateAll(model, validation, attrs);
+        if (isValid) {
+            isValid = validateAll(model, validation, attrs);
         }
-      
-        console.log('returning invalidAttrs', invalidAttrs);
-      
+
         return {
-          errorMessages: errorMessages,
-          invalidAttrs: invalidAttrs,
-          isValid: isValid
+            errorMessages: errorMessages,
+            invalidAttrs: invalidAttrs,
+            isValid: isValid
         };
     }
     
@@ -190,8 +162,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                     return;
                 }
                 
-                console.log('validate final result: ', result.errorMessages);
-                
                 if (result.errorMessages.length === 1) {
                     return result.errorMessages[0];
                 }
@@ -204,7 +174,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 if(forceValidation) {
                     this.validate();
                 }
-                console.log('isValid final result: ', isValid);
                 return isValid;
             };
         },
