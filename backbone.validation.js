@@ -101,13 +101,13 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 options.validFn(view, changedAttr, options.selector);
             }
 
-            if (isValid && hasChildValidaton(model, validation, changedAttr)) {
+            if (hasChildValidaton(model, validation, changedAttr)) {
           
               result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + ".");
             
               errorMessages.push.apply(errorMessages, result.errorMessages);
               invalidAttrs.push.apply(invalidAttrs, result.invalidAttrs);
-              isValid = result.isValid;
+              isValid = isValid && result.isValid;
             }
         }
 
