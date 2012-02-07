@@ -73,8 +73,7 @@ buster.testCase("validation (recursive) validator - with required parent object"
         assert(this.model.set({}));
     },
 
-    //strange async issues are happening when this test is run
-    "//check attribute name is correct for null attribute": function(done) {
+    "check attribute name is correct for null attribute": function(done) {
         this.model.bind('validated', function(valid, model, attr){
             refute(valid);
             assert.same(this.model, model);
@@ -127,8 +126,7 @@ buster.testCase("validation (recursive) validator - without required parent", {
         refute(this.model.isValid(true));
     },
 
-    // strange async issues are happening when this test is run
-    "//validated event returns an empty array of invalid attributes when model is invalid": function(done) {
+    "validated event returns an empty array of invalid attributes when model is invalid": function(done) {
         this.model.bind('validated', function(valid, model, attr){
             refute(valid);
             assert.same(this.model, model);

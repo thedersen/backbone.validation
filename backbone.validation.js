@@ -83,7 +83,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     };
 
     var validateObject = function(view, model, validation, attrs, options, attrPath) {
-        attrPath = attrPath || "";
+        attrPath = attrPath || '';
         var result, error, changedAttr,
             errorMessages = [],
             invalidAttrs = [];
@@ -102,10 +102,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
             if (hasChildValidaton(model, validation, changedAttr)) {
 
-              result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + ".");
+              result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + '.');
 
-              errorMessages.push.apply(errorMessages, result.errorMessages);
-              invalidAttrs.push.apply(invalidAttrs, result.invalidAttrs);
+              Array.prototype.push.apply(errorMessages, result.errorMessages);
+              Array.prototype.push.apply(invalidAttrs, result.invalidAttrs);
               isValid = isValid && result.isValid;
             }
         }
@@ -147,7 +147,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             var isValid = _.isUndefined(model.validation) ? true : undefined;
 
             model.validate = function(attrs) {
-
                 if(!attrs){
                     return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
                 }
@@ -156,8 +155,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 isValid = result.isValid;
 
                 _.defer(function() {
-                    model.trigger('validated', result.isValid, model, result.invalidAttrs);
-                    model.trigger('validated:' + (result.isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
+                    model.trigger('validated', isValid, model, result.invalidAttrs);
+                    model.trigger('validated:' + (isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
                 });
 
                 if(options.forceUpdate) {
