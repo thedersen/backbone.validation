@@ -3,12 +3,12 @@ buster.testCase("validation (recursive) validator - with required parent object"
         var Model = Backbone.Model.extend({
             validation: {
                 image: {
-                  required: true,
-                  validation: {
-                    src: {
-                      required: true
+                    required: true,
+                    validation: {
+                        src: {
+                            required: true
+                        }
                     }
-                  }
                 }
             }
         });
@@ -20,7 +20,7 @@ buster.testCase("validation (recursive) validator - with required parent object"
 
         Backbone.Validation.bind(this.view);
     },
-   
+
     "string is invalid for an object": function(done) {
         this.model.bind('error', function(model, error){
             assert.equals('image must be an object', error);
@@ -28,73 +28,66 @@ buster.testCase("validation (recursive) validator - with required parent object"
         });
         this.model.set({image:'abc'});
     },
-    
-		"model is invalid because no attributes have been set": function() {
-		  var force = true;
-			refute(this.model.isValid(force));
-		},
+
+    "model is invalid because no attributes have been set": function() {
+        refute(this.model.isValid(true));
+    },
 
     "undefined is invalid for an object": function() {
-      refute(this.model.set({
-        image: undefined
-      }));
+        refute(this.model.set({
+            image: undefined
+        }));
     },
-    
+
     "empty object is invalid": function() {
-      this.model.set({
-        image: {}
-      });
-      var force = true;
-      refute(this.model.isValid(force));
+        this.model.set({
+            image: {}
+        });
+
+        refute(this.model.isValid(true));
     },
 
     "object with required attribute is valid": function() {
-      assert(this.model.set({
-          image: {
-            src: 'foo.png'
-          }
-      }));
+        assert(this.model.set({
+            image: {
+                src: 'foo.png'
+            }
+        }));
     },
-    
+
     "null required child attribute is invalid": function() {
-      refute(this.model.set({
-        image: {
-          src: null
-        }
-      }));
+        refute(this.model.set({
+            image: {
+                src: null
+            }
+        }));
     },
-    
+
     "should be able to set an empty object": function() {
-      assert(this.model.set({
-          image: {
-            src: 'foo.png'
-          }
-      }));
-      assert(this.model.set({}));
-    }
-    
-    /*
-    strange async issues are happening when this test is run
-    
-    ,
-    "check attribute name is correct for null attribute": function(done) {
-  
+        assert(this.model.set({
+            image: {
+                src: 'foo.png'
+            }
+        }));
+
+        assert(this.model.set({}));
+    },
+
+    //strange async issues are happening when this test is run
+    "//check attribute name is correct for null attribute": function(done) {
         this.model.bind('validated', function(valid, model, attr){
             refute(valid);
             assert.same(this.model, model);
             assert.equals(['image.src'], attr);
             done();
         }, this);
-  
+
         this.model.set({
-          image: {
-            src: null
-          } 
+            image: {
+                src: null
+            }
         });
-        var force = true;
-        this.model.isValid(force);
-    }*/
-    
+    }
 });
 
 buster.testCase("validation (recursive) validator - without required parent", {
@@ -102,45 +95,40 @@ buster.testCase("validation (recursive) validator - without required parent", {
         var Model = Backbone.Model.extend({
             validation: {
                 image: {
-                  required: false,
-                  validation: {
-                    src: {
-                      required: true
+                    required: false,
+                    validation: {
+                        src: {
+                            required: true
+                        }
                     }
-                  }
                 }
             }
         });
-        
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
         });
         Backbone.Validation.bind(this.view);
     },
-    
+
     "undefined is invalid when a child attribute is required": function() {
         assert(this.model.set({
-          image: undefined
+            image: undefined
         }));
-        // but the whole model isn't valid since image.src is required
-        var force = true;
-        refute(this.model.isValid(force));
+
+        refute(this.model.isValid(true));
     },
-    
+
     "empty object is invalid when a child attribute is required": function() {
         assert(this.model.set({
-          image: {}
+            image: {}
         }));
-        // but the whole model isn't valid since image.src is required
-        var force = true;
-        refute(this.model.isValid(force));
-    }
-    
-    /*
-    strange async issues are happening when this test is run
-    
-    "validated event returns an empty array of invalid attributes when model is invalid": function(done) {
+
+        refute(this.model.isValid(true));
+    },
+
+    // strange async issues are happening when this test is run
+    "//validated event returns an empty array of invalid attributes when model is invalid": function(done) {
         this.model.bind('validated', function(valid, model, attr){
             refute(valid);
             assert.same(this.model, model);
@@ -149,12 +137,11 @@ buster.testCase("validation (recursive) validator - without required parent", {
             assert.equals([], attr);
             done();
         }, this);
-  
+
         this.model.set({
           image: {}
         });
-        var force = true;
-        refute(this.model.isValid(force));
-    }*/
-    
+
+        refute(this.model.isValid(true));
+    }
 });
