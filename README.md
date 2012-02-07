@@ -1,4 +1,4 @@
-# Backbone.Validation
+# Backbone.Validation v0.4.0
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
 
@@ -13,12 +13,12 @@ To configure your validation rules, simply add a validation property with a prop
 #### Example
 
 	var SomeModel = Backbone.Model.extend({
-      validation: {
+	  validation: {
 	    name: {
 		  required: true,
 		  msg: 'Name is required'
 		},
-        age: {
+	    age: {
 		  range: [1, 80]
 		},
 		email: {
@@ -29,8 +29,8 @@ To configure your validation rules, simply add a validation property with a prop
 		    return 'Error';
 		  }
 		}
-      }
-    });
+	  }
+});
 
 See the **built-in validators** section in this readme for a list of the validators and patterns that you can use.
 
@@ -60,7 +60,38 @@ There are several places that it can be called from, depending on your circumsta
 	var someView = new SomeView();
 	Backbone.Validation.bind(someView);
 
-## A couple of conventions
+### Specifying error messages
+
+You can specify a message per attribute:
+
+	MyModel = Backbone.Model.extend({
+    	validation: {
+        	email: {
+            	required: true,
+            	pattern: "email",
+            	msg: "Please enter a valid email"
+            }
+        }
+	});
+
+Or, you can specify a message per validator:
+
+	MyModel = Backbone.Model.extend({
+    	validation: {
+        	email: [{
+            	required: true,
+            	msg: "Please enter an email address"
+        	},{
+            	pattern: "email",
+            	msg: "Please enter a valid email"
+        	}]
+        }
+	});
+
+
+## Configuration
+
+## Callbacks
 
 The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called after validation of an attribute is performed.
 
@@ -92,7 +123,9 @@ You can also override these per view when binding:
 	  }
 	});
 
-If you need to look up elements by using for instance a class name or id instead of name, there are two ways to configure this.
+## Selector
+
+If you need to look up elements in the view by using for instance a class name or id instead of name, there are two ways to configure this.
 
 You can configure it globally by calling:
 
@@ -108,7 +141,7 @@ Or, you can configure it per view when binding:
 
 If you have set the global selector to class, you can of course set the selector to name or id on specific views.
 
-## Force update the model
+## Force update
 
 Sometimes it can be useful to update the model with invalid values. Especially when using automatic modelbinding and late validation (e.g. when submitting the form).
 
@@ -124,11 +157,13 @@ Or, you can turn it on per view when binding:
         forceUpdate: true
     });
 
-When switching this on, the error event is no longer triggered.
+Note that when switching this on, the error event is no longer triggered.
 
 ## Events
 
 The model triggers two events, 'validated' and 'validated:valid' or 'validated:invalid', after validation is performed.
+
+### validated
 
 	model.bind('validated', function(isValid, model, attrs) {
 		// isValid is true or false
@@ -136,16 +171,20 @@ The model triggers two events, 'validated' and 'validated:valid' or 'validated:i
 		// attrs is an array with the name(s) of the attribute(s) with error
 	});
 
+### validated:valid
+
 	model.bind('validated:valid', function(model) {
 		// model is the model
 	});
+
+### validated:invalid
 
 	model.bind('validated:invalid', function(model, attrs) {
 		// model is the model
 		// attrs is an array with the name(s) of the attribute(s) with error
 	});
 
-## The built-in validators
+## Built-in validators
 
 ### method validator
 
@@ -402,7 +441,8 @@ If you don't like the default error messages there are several ways of customizi
 You can override the default ones globally:
 
 	_.extend(Backbone.Validation.messages, {
-		required: 'This field is required'
+		required: 'This field is required',
+		min: '{0}' should be at least {1} characters
 	});
 
 The message can contain placeholders for arguments that will be replaced:
@@ -411,36 +451,9 @@ The message can contain placeholders for arguments that will be replaced:
 * `{1}` will be replaced with the allowed value configured in the validation (or the first one in a range validator)
 * `{2}` will be replaced with the second value in a range validator
 
-
-You can specify a message per attribute:
-
-	MyModel = Backbone.Model.extend({
-    	validation: {
-        	email: {
-            	required: true,
-            	pattern: "email",
-            	msg: "Please enter a valid email"
-            }
-        }
-	});
-
-You can specify a message per validator:
-
-	MyModel = Backbone.Model.extend({
-    	validation: {
-        	email: [{
-            	required: true,
-            	msg: "Please enter an email address"
-        	},{
-            	pattern: "email",
-            	msg: "Please enter a valid email"
-        	}]
-        }
-	});
-
 ## Release notes
 
-### v0.4.0
+#### v0.4.0
 
 * `isValid` returns `undefined` when no validatation has occured and the model has validation
 * Passing `true` to `isValid` forces an validation
@@ -452,12 +465,12 @@ You can specify a message per validator:
 * Breaking changes (unfortunate, but necessary):
 	* `setDefaultSelector` is removed, and you need to call `configure({selector: 'class'})` instead
 
-### v0.3.1
+#### v0.3.1
 
 * Fixed issue with validated events being triggered before model was updated
 * Added model and an array of invalid attribute names as arguments to the events
 
-### v0.3.0
+#### v0.3.0
 
 * Triggers events when validation is performed (thanks to [GarethElms](https://github.com/GarethElms)):
 	* 'validated' with `true` or `false` as argument
@@ -469,7 +482,7 @@ You can specify a message per validator:
 	* isValid attribute (`model.get('isValid')`) is replaced with a method `model.isValid()`
 	* Default selector is 'name' instead of 'id'
 
-### v0.2.0
+#### v0.2.0
 
 * New validators:
 	* named method
@@ -493,13 +506,13 @@ You can specify a message per validator:
 * Breaking changes (unfortunate, but necessary):
 	* Required validator no longer invalidates false boolean, use the new acceptance validator instead
 
-### v0.1.3
+#### v0.1.3
 
 * Fixed issue where min and max validators treated strings with leading digits as numbers
 * Fixed issue with undefined Backbone reference when running Backbone in no conflict mode
 * Fixed issue with numeric string with more than one number not being recognized as a number
 
-### v0.1.2
+#### v0.1.2
 
 * Initial release
 
