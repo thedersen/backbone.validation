@@ -1,0 +1,21 @@
+{
+  "author": "Thomas Pedersen (http://thedersen.com/)",
+  "name": "backbone.validation",
+  "version": "0.4.0",
+  "homepage": "https://github.com/thedersen/backbone.validation",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thedersen/backbone.validation.git"
+  },
+  "scripts": {
+    "test": "buster test"
+  },
+  "engines": {
+    "node": ">=0.6.3"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "buster": "0.3.0",
+    "uglify-js": "1.2.5"
+  }
+}
