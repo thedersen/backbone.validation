@@ -62,7 +62,7 @@ There are several places that it can be called from, depending on your circumsta
 
 ### Specifying error messages
 
-You can specify a message per attribute:
+You can specify an error message per attribute:
 
 	MyModel = Backbone.Model.extend({
     	validation: {
@@ -74,7 +74,7 @@ You can specify a message per attribute:
         }
 	});
 
-Or, you can specify a message per validator:
+Or, you can specify an error message per validator:
 
 	MyModel = Backbone.Model.extend({
     	validation: {
@@ -91,7 +91,7 @@ Or, you can specify a message per validator:
 
 ## Configuration
 
-## Callbacks
+### Callbacks
 
 The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`. These are called after validation of an attribute is performed.
 
@@ -123,7 +123,7 @@ You can also override these per view when binding:
 	  }
 	});
 
-## Selector
+### Selector
 
 If you need to look up elements in the view by using for instance a class name or id instead of name, there are two ways to configure this.
 
@@ -141,7 +141,7 @@ Or, you can configure it per view when binding:
 
 If you have set the global selector to class, you can of course set the selector to name or id on specific views.
 
-## Force update
+### Force update
 
 Sometimes it can be useful to update the model with invalid values. Especially when using automatic modelbinding and late validation (e.g. when submitting the form).
 
@@ -161,27 +161,30 @@ Note that when switching this on, the error event is no longer triggered.
 
 ## Events
 
-The model triggers two events, 'validated' and 'validated:valid' or 'validated:invalid', after validation is performed.
+After validation is performed, the model will trigger some events with the result of the validation.
 
 ### validated
 
+The `validated` event is triggered after validation is performed, either it was successful or not. `isValid` is `true` or `false` depending on the result of the validation.
+
 	model.bind('validated', function(isValid, model, attrs) {
-		// isValid is true or false
-		// model is the model
-		// attrs is an array with the name(s) of the attribute(s) with error
+		// do something
 	});
 
 ### validated:valid
 
+The `validated:valid` event is triggered after a successful validation is performed.
+
 	model.bind('validated:valid', function(model) {
-		// model is the model
+		// do something
 	});
 
 ### validated:invalid
 
+The `validated:invalid` event is triggered after an unsuccessful validation is performed.
+
 	model.bind('validated:invalid', function(model, attrs) {
-		// model is the model
-		// attrs is an array with the name(s) of the attribute(s) with error
+		// do something
 	});
 
 ## Built-in validators
