@@ -49,6 +49,10 @@ buster.testCase("Backbone.Validation", {
             assert.defined(this.model.validate);
         },
 
+        "the model's isValid function is overridden": function() {
+            refute.same(this.model.isValid, Backbone.Model.prototype.isValid);
+        },
+
         "and passing custom callbacks with the options": {
             setUp: function(){
                 this.valid = this.spy();
@@ -88,8 +92,8 @@ buster.testCase("Backbone.Validation", {
             refute.defined(this.model.validate);
         },
 
-        "the model's isValid function is undefined": function() {
-            refute.defined(this.model.isValid);
+        "the model's isValid function is restored": function() {
+            assert.same(this.model.isValid, Backbone.Model.prototype.isValid);
         }
     },
 
