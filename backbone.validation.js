@@ -166,6 +166,14 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }
     };
 
+    var collectonAdd = function(model) {
+        bindModel(this.view, model, this.options);
+    };
+
+    var collectionRemove = function(model) {
+        unbindModel(model);
+    };
+
     return {
         version: '0.5.0',
 
@@ -175,12 +183,34 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
         bind: function(view, options) {
             var model = view.model,
+                collection = view.collection,
                 opt = _.extend({}, defaultOptions, Backbone.Validation.callbacks, options);
-            bindModel(view, model, opt);
+
+            if(model) {
+                bindModel(view, model, opt);
+            }
+            if(collection) {
+                collection.each(function(model){
+                    bindModel(view, model, opt);
+                });
+                collection.bind('add', collectonAdd, {view: view, options: opt});
+                collection.bind('remove', collectionRemove);
+            }
         },
 
         unbind: function(view) {
-            unbindModel(view.model);
+            var model = view.model,
+                collection = view.collection;
+            if(model) {
+                unbindModel(view.model);
+            }
+            if(collection) {
+                collection.each(function(model){
+                    unbindModel(model);
+                });
+                collection.unbind('add', collectonAdd);
+                collection.unbind('remove', collectionRemove);
+            }
         }
     };
 } (Backbone, _));
