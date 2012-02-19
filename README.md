@@ -115,6 +115,14 @@ MyModel = Backbone.Model.extend({
 });
 ```
 
+### What gets validated?
+If you are using Backbone v0.5.3, only attributes that are being set are validated.
+If you are using Backbone v0.9.1, all attributes in a model will be validated. However, if for instance `name` never has been set (either explicitly or with a default value) that attribute will not be validated before it gets set.
+
+This is very useful when validating forms as they are populated, since you don't want to alert the user about errors in input not yet entered.
+
+If you need to validate entire model (both attributes that has been set or not) you can call `validate()` or `isValid(true)` on the model.
+
 ## Configuration
 
 ### Callbacks
