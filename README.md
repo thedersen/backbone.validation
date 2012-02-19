@@ -12,13 +12,14 @@ To configure your validation rules, simply add a validation property with a prop
 
 #### Example
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      name: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    name: {
       required: true,
       msg: 'Name is required'
     },
-      age: {
+    age: {
       range: [1, 80]
     },
     email: {
@@ -29,8 +30,9 @@ To configure your validation rules, simply add a validation property with a prop
         return 'Error';
       }
     }
-    }
+  }
 });
+```
 
 See the **built-in validators** section in this readme for a list of the validators and patterns that you can use.
 
@@ -38,19 +40,20 @@ See the **built-in validators** section in this readme for a list of the validat
 
 #### Example
 
-  var SomeModel = Backbone.Model.extend({
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    image: {
+      required: true,
       validation: {
-          image: {
-              required: true,
-              validation: {
-                  src: {
-                      required: true
-                  }
-              }
-          }
+        src: {
+          required: true
+        }
       }
-  });
-
+    }
+  }
+});
+```
 
 ### Validation binding
 
@@ -58,54 +61,59 @@ The validation binding code is executed with a call to `Backbone.Validation.bind
 
 There are several places that it can be called from, depending on your circumstances.
 
-  // Binding when rendering
-  var SomeView = Backbone.View.extend({
-    render: function(){
-      Backbone.Validation.bind(this);
-    }
-  });
+```js
+// Binding when rendering
+var SomeView = Backbone.View.extend({
+  render: function(){
+    Backbone.Validation.bind(this);
+  }
+});
 
-  // Binding when initializing
-  var SomeView = Backbone.View.extend({
-    initialize: function(){
-      Backbone.Validation.bind(this);
-    }
-  });
+// Binding when initializing
+var SomeView = Backbone.View.extend({
+  initialize: function(){
+    Backbone.Validation.bind(this);
+  }
+});
 
-  // Binding from outside a view
-  var SomeView = Backbone.View.extend({
-  });
-  var someView = new SomeView();
-  Backbone.Validation.bind(someView);
+// Binding from outside a view
+var SomeView = Backbone.View.extend({
+});
+var someView = new SomeView();
+Backbone.Validation.bind(someView);
+```
 
 ### Specifying error messages
 
 You can specify an error message per attribute:
 
-  MyModel = Backbone.Model.extend({
-      validation: {
-          email: {
-              required: true,
-              pattern: "email",
-              msg: "Please enter a valid email"
-            }
-        }
-  });
+```js
+MyModel = Backbone.Model.extend({
+  validation: {
+    email: {
+      required: true,
+      pattern: 'email',
+      msg: 'Please enter a valid email'
+    }
+  }
+});
+```
 
 Or, you can specify an error message per validator:
 
-  MyModel = Backbone.Model.extend({
-      validation: {
-          email: [{
-              required: true,
-              msg: "Please enter an email address"
-          },{
-              pattern: "email",
-              msg: "Please enter a valid email"
-          }]
-        }
-  });
-
+```js
+MyModel = Backbone.Model.extend({
+  validation: {
+    email: [{
+      required: true,
+      msg: 'Please enter an email address'
+    },{
+      pattern: 'email',
+        msg: 'Please enter a valid email'
+    }]
+  }
+});
+```
 
 ## Configuration
 
@@ -117,29 +125,33 @@ The default implementation of `invalid` tries to look up an element within the v
 
 The default implementation of these can of course be overridden:
 
-  _.extend(Backbone.Validation.callbacks, {
-      valid: function(view, attr, selector) {
-      // do something
-    },
-      invalid: function(view, attr, error, selector) {
+```js
+_.extend(Backbone.Validation.callbacks, {
+  valid: function(view, attr, selector) {
     // do something
-    }
-    });
+  },
+  invalid: function(view, attr, error, selector) {
+    // do something
+  }
+});
+```
 
 You can also override these per view when binding:
 
-  var SomeView = Backbone.View.extend({
-    render: function(){
-      Backbone.Validation.bind(this, {
+```js
+var SomeView = Backbone.View.extend({
+  render: function(){
+    Backbone.Validation.bind(this, {
       valid: function(view, attr) {
         // do something
       },
-        invalid: function(view, attr, error) {
-      // do something
+      invalid: function(view, attr, error) {
+        // do something
       }
     });
-    }
-  });
+  }
+});
+```
 
 ### Selector
 
@@ -147,15 +159,19 @@ If you need to look up elements in the view by using for instance a class name o
 
 You can configure it globally by calling:
 
-  Backbone.Validation.configure({
-    selector: 'class'
-  });
+```js
+Backbone.Validation.configure({
+  selector: 'class'
+});
+```
 
 Or, you can configure it per view when binding:
 
-  Backbone.Validation.bind(this.view, {
-        selector: 'class'
-    });
+```js
+Backbone.Validation.bind(this.view, {
+  selector: 'class'
+});
+```
 
 If you have set the global selector to class, you can of course set the selector to name or id on specific views.
 
@@ -165,15 +181,19 @@ Sometimes it can be useful to update the model with invalid values. Especially w
 
 You can turn this on globally by calling:
 
-  Backbone.Validation.configure({
-    forceUpdate: true
-  });
+```js
+Backbone.Validation.configure({
+  forceUpdate: true
+});
+```
 
 Or, you can turn it on per view when binding:
 
-  Backbone.Validation.bind(this.view, {
-        forceUpdate: true
-    });
+```js
+Backbone.Validation.bind(this.view, {
+  forceUpdate: true
+});
+```
 
 Note that when switching this on, the error event is no longer triggered.
 
@@ -185,211 +205,244 @@ After validation is performed, the model will trigger some events with the resul
 
 The `validated` event is triggered after validation is performed, either it was successful or not. `isValid` is `true` or `false` depending on the result of the validation.
 
-  model.bind('validated', function(isValid, model, attrs) {
-    // do something
-  });
+```js
+model.bind('validated', function(isValid, model, attrs) {
+  // do something
+});
+```
 
 ### validated:valid
 
 The `validated:valid` event is triggered after a successful validation is performed.
 
-  model.bind('validated:valid', function(model) {
-    // do something
-  });
+```js
+model.bind('validated:valid', function(model) {
+  // do something
+});
+```
 
 ### validated:invalid
 
 The `validated:invalid` event is triggered after an unsuccessful validation is performed.
 
-  model.bind('validated:invalid', function(model, attrs) {
-    // do something
-  });
+```js
+model.bind('validated:invalid', function(model, attrs) {
+  // do something
+});
+```
 
 ## Built-in validators
 
 ### method validator
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      name: function(value) {
-          if(value !== 'something') {
-            return 'Name is invalid';
-          }
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    name: function(value) {
+      if(value !== 'something') {
+        return 'Name is invalid';
+      }
     }
-    }
-  });
+  }
+});
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      name: {
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    name: {
       fn: function(value) {
-          if(value !== 'something') {
-            return 'Name is invalid';
-          }
+        if(value !== 'something') {
+          return 'Name is invalid';
         }
+      }
     }
-    }
-  });
+  }
+});
+```
 
 ### named method validator
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      name: 'validateName'
-    },
-    validateName: function(value, attr) {
-    if(value !== 'something') {
-          return 'Name is invalid';
-        }
-    }
-  });
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    name: 'validateName'
+  },
+  validateName: function(value, attr) {
+  if(value !== 'something') {
+        return 'Name is invalid';
+      }
+  }
+});
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
+var SomeModel = Backbone.Model.extend({
+  validation: {
     name: {
       fn: 'validateName'
     }
-    },
-    validateName: function(value, attr) {
+  },
+  validateName: function(value, attr) {
     if(value !== 'something') {
-          return 'Name is invalid';
-        }
+      return 'Name is invalid';
     }
-  });
+  }
+});
+```
 
 ### required
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      name: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    name: {
       required: true | false
     }
-    }
-  });
+  }
+});
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      name: {
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    name: {
       required: function() {
-      return true | false;
+        return true | false;
       }
     }
-    }
-  });
+  }
+});
+```
 
 ### acceptance
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      termsOfUse: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    termsOfUse: {
       acceptance: true
     }
-    }
-  });
+  }
+});
+```
 
 ### min
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      age: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    age: {
       min: 1
     }
-    }
-  });
+  }
+});
+```
 
 ### max
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
       age: {
       max: 100
     }
-    }
-  });
+  }
+});
+```
 
 ### range
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      age: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    age: {
       range: [1, 10]
     }
-    }
-  });
+  }
+});
+```
 
 ### length
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      postalCode: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    postalCode: {
       length: 4
     }
-    }
-  });
+  }
+});
+```
 
 ### minLength
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      password: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    password: {
       minLength: 8
     }
-    }
-  });
+  }
+});
+```
 
 ### maxLength
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      password: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    password: {
       maxLength: 100
     }
-    }
-  });
+  }
+});
+```
 
 ### rangeLength
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      password: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    password: {
       rangeLength: [6, 100]
     }
-    }
-  });
+  }
+});
+```
 
 ### oneOf
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      country: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    country: {
       oneOf: ['Norway', 'Sweeden']
     }
-    }
-  });
+  }
+});
+```
 
 ### equalTo
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      password: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    password: {
       required: true
     },
     passwordRepeat: {
       equalTo: 'password'
     }
-    }
-  });
+  }
+});
+```
 
 ### pattern
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      email: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    email: {
       pattern: 'email'
     }
-    }
-  });
-
+  }
+});
+```
 where the built-in patterns are:
 
 * number
@@ -399,14 +452,15 @@ where the built-in patterns are:
 
 or specify any regular expression you like:
 
-  var SomeModel = Backbone.Model.extend({
-    validation: {
-      email: {
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    email: {
       pattern: /^sample/
     }
-    }
-  });
-
+  }
+});
+```
 See the [wiki](https://github.com/thedersen/backbone.validation/wiki) for more details about the validators.
 
 ## Extending Backbone.Validation
@@ -415,26 +469,28 @@ See the [wiki](https://github.com/thedersen/backbone.validation/wiki) for more d
 
 If you have custom validation logic that are used several places in your code, you can extend the validators with your own. And if you don't like the default implementation of one of the built-ins, you can override it.
 
-  _.extend(Backbone.Validation.validators, {
-      myValidator: function(value, attr, customValue, model) {
-        if(value !== customValue){
-          return 'error';
-        }
-      },
-      required: function(value, attr, customValue, model) {
-        if(!value){
-          return 'My version of the required validator';
-        }
-      },
-    });
+```js
+_.extend(Backbone.Validation.validators, {
+  myValidator: function(value, attr, customValue, model) {
+    if(value !== customValue){
+      return 'error';
+    }
+  },
+  required: function(value, attr, customValue, model) {
+    if(!value){
+      return 'My version of the required validator';
+    }
+  },
+});
 
-    var Model = Backbone.Model.extend({
-      validation: {
-        age: {
-          myValidator: 1 // uses your custom validator
-        }
-      }
-    });
+var Model = Backbone.Model.extend({
+  validation: {
+    age: {
+      myValidator: 1 // uses your custom validator
+    }
+  }
+});
+```
 
 The validator should return an error message when the value is invalid, and nothing (`undefined`) if the value is valid. If the validator returns `false`, this will result in that all other validators specified for the attribute is bypassed, and the attribute is considered valid.
 
@@ -442,18 +498,20 @@ The validator should return an error message when the value is invalid, and noth
 
 If you have custom patterns that are used several places in your code, you can extend the patterns with your own. And if you don't like the default implementation of one of the built-ins, you can override it.
 
-  _.extend(Backbone.Validation.patterns, {
-    myPattern: /my-pattern/,
-    email: /my-much-better-email-regex/
-  });
+```js
+_.extend(Backbone.Validation.patterns, {
+  myPattern: /my-pattern/,
+  email: /my-much-better-email-regex/
+});
 
-  var Model = Backbone.Model.extend({
-      validation: {
-        name: {
-          pattern: 'myPattern'
-        }
-      }
-  });
+var Model = Backbone.Model.extend({
+  validation: {
+    name: {
+      pattern: 'myPattern'
+    }
+  }
+});
+```
 
 ### Overriding the default error messages
 
@@ -461,10 +519,12 @@ If you don't like the default error messages there are several ways of customizi
 
 You can override the default ones globally:
 
-  _.extend(Backbone.Validation.messages, {
-    required: 'This field is required',
-    min: '{0}' should be at least {1} characters
-  });
+```js
+_.extend(Backbone.Validation.messages, {
+  required: 'This field is required',
+  min: '{0} should be at least {1} characters'
+});
+```
 
 The message can contain placeholders for arguments that will be replaced:
 
