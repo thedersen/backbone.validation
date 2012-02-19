@@ -1,4 +1,4 @@
-// Backbone.Validation v0.4.1
+// Backbone.Validation v0.5.0
 //
 // Copyright (C)2011 Thomas Pedersen
 // Distributed under MIT License
@@ -130,7 +130,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     };
 
     return {
-        version: '0.4.1',
+        version: '0.5.0',
 
         configure: function(options) {
             _.extend(defaultOptions, options);

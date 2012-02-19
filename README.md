@@ -1,4 +1,4 @@
-# Backbone.Validation v0.4.0
+# Backbone.Validation v0.5.0
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
 
@@ -33,6 +33,24 @@ To configure your validation rules, simply add a validation property with a prop
 });
 
 See the **built-in validators** section in this readme for a list of the validators and patterns that you can use.
+
+### Nested validation
+
+#### Example
+
+  var SomeModel = Backbone.Model.extend({
+      validation: {
+          image: {
+              required: true,
+              validation: {
+                  src: {
+                      required: true
+                  }
+              }
+          }
+      }
+  });
+
 
 ### Validation binding
 
@@ -456,10 +474,12 @@ The message can contain placeholders for arguments that will be replaced:
 
 ## Release notes
 
-#### v0.4.1
+#### v0.5.0
 
+* Support for Backbone v0.9.1
 * Context (this) in custom validators is the `Backbone.Validation.validators` object
 * Calling `unbind` on a view without model no longer throws (Fixes #17)
+* Support for object/nested validation (Fixed #20, thanks to [AndyUK](https://github.com/andyuk))
 
 #### v0.4.0
 
