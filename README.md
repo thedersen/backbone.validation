@@ -6,6 +6,11 @@ A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) 
 
 It's easy to get up and running. You only need to have Backbone (including underscore.js) in your page before including the Backbone.Validation plugin. If you are using the default implementation of the callbacks, you also need to include jQuery.
 
+The plugin is tested with, and should work with the following versions of Backbone:
+
+* 0.5.3
+* 0.9.1
+
 ### Configure validation rules on the Model
 
 To configure your validation rules, simply add a validation property with a property for each attribute you want to validate on your model. The validation rules can either be an object with one of the built-in validators or a combination of two or more of them, or a function where you implement your own custom validation logic. If you want to provide a custom error message when using one of the built-in validators, simply define the `msg` property with your message.
@@ -38,6 +43,8 @@ See the **built-in validators** section in this readme for a list of the validat
 
 ### Nested validation
 
+You can add a new `validation` attribute to handle objects within your model. It can be reused, and nested as deep as you like.
+
 #### Example
 
 ```js
@@ -57,7 +64,7 @@ var SomeModel = Backbone.Model.extend({
 
 ### Validation binding
 
-The validation binding code is executed with a call to `Backbone.Validation.bind(view)`. The [validate](http://documentcloud.github.com/backbone/#Model-validate) method on the view's model is then overridden to perform the validation. In addition, the model is extended with an `isValid()` method.
+The philosophy behind this plugin, is that you should be able to reuse your validation rules both to validate your model and to validate  form input, as well as providing a simple way of notifying users about errors when they are populating forms. For this to work, you need to bind your view. The validation binding code is executed with a call to `Backbone.Validation.bind(view)`.
 
 There are several places that it can be called from, depending on your circumstances.
 
@@ -82,6 +89,20 @@ var SomeView = Backbone.View.extend({
 var someView = new SomeView();
 Backbone.Validation.bind(someView);
 ```
+
+### Binding to view with a model
+
+When binding to a view with a model, the [validate](http://documentcloud.github.com/backbone/#Model-validate) method on the model is overridden to perform the validation. In addition, the model's [isValid](http://backbonejs.org/#Model-isValid) method is also overridden to provide some extra functionality.
+
+### Binding to view with a collection
+
+When binding to a view with a collection, all models in the collection are bound as described previously. When you are adding or removing models from your collection, they are bound/unbound accordingly.
+
+Note that if you add/remove models with the silent flag, they will not be bound/unbound since there is no way of knowing the the collection was modified.
+
+### Unbinding
+
+If you want to remove the validation binding, this is done with a call to `Backbone.Validation.unbind(view)`. This removes the validation binding on the model, or all models if you view contains a collection as well as removing all events hooked up on the collection.
 
 ### Specifying error messages
 
@@ -115,7 +136,8 @@ MyModel = Backbone.Model.extend({
 });
 ```
 
-### What gets validated?
+### What gets validated when?
+
 If you are using Backbone v0.5.3, only attributes that are being set are validated.
 If you are using Backbone v0.9.1, all attributes in a model will be validated. However, if for instance `name` never has been set (either explicitly or with a default value) that attribute will not be validated before it gets set.
 
@@ -185,7 +207,7 @@ If you have set the global selector to class, you can of course set the selector
 
 ### Force update
 
-Sometimes it can be useful to update the model with invalid values. Especially when using automatic modelbinding and late validation (e.g. when submitting the form).
+Sometimes it can be useful to update the model with invalid values. Especially when using automatic modelbinding and late validation (e.g. when submitting a form).
 
 You can turn this on globally by calling:
 
@@ -203,7 +225,7 @@ Backbone.Validation.bind(this.view, {
 });
 ```
 
-Note that when switching this on, the error event is no longer triggered.
+Note that when switching this on, Backbone's error event is no longer triggered.
 
 ## Events
 

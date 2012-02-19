@@ -4,7 +4,7 @@
 // Distributed under MIT License
 //
 // Documentation and full license available at:
-// http://github.com/thedersen/backbone.validation
+// http://thedersen.github.com/backbone.validation
 
 Backbone.Validation = (function(Backbone, _, undefined) {
     var defaultOptions = {
