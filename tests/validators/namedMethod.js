@@ -7,9 +7,10 @@ buster.testCase("named method validator", {
                     fn: 'validateName'
                 }
             },
-            validateName: function(val, attr){
+            validateName: function(val, attr, computed){
                 that.ctx = this;
                 that.attr = attr;
+                that.computed = computed;
                 if(val !== 'backbone') {
                     return 'Error';
                 }
@@ -43,6 +44,16 @@ buster.testCase("named method validator", {
     "second argument is the name of the attribute being validated": function() {
         this.model.set({name: ''});
         assert.equals('name', this.attr);
+    },
+
+    "third argument is a computed model state": function() {
+        this.model.set({attr: 'attr'}, {silent: true});
+        this.model.set({
+            name: 'name',
+            age: 1
+        });
+
+        assert.equals({attr:'attr', name:'name', age:1}, this.computed);
     }
 });
 
@@ -53,9 +64,10 @@ buster.testCase("named method validator short hand syntax", {
             validation: {
                 name: 'validateName'
             },
-            validateName: function(val, attr){
+            validateName: function(val, attr, computed){
                 that.ctx = this;
                 that.attr = attr;
+                that.computed = computed;
                 if(val !== 'backbone') {
                     return 'Error';
                 }
@@ -89,5 +101,15 @@ buster.testCase("named method validator short hand syntax", {
     "second argument is the name of the attribute being validated": function() {
         this.model.set({name: ''});
         assert.equals('name', this.attr);
+    },
+
+    "third argument is a computed model state": function() {
+        this.model.set({attr: 'attr'}, {silent: true});
+        this.model.set({
+            name: 'name',
+            age: 1
+        });
+
+        assert.equals({attr:'attr', name:'name', age:1}, this.computed);
     }
 });

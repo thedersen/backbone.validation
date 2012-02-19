@@ -238,7 +238,7 @@ model.bind('validated:invalid', function(model, attrs) {
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
-    name: function(value) {
+    name: function(value, attr, computedState) {
       if(value !== 'something') {
         return 'Name is invalid';
       }
@@ -249,7 +249,7 @@ var SomeModel = Backbone.Model.extend({
 var SomeModel = Backbone.Model.extend({
   validation: {
     name: {
-      fn: function(value) {
+      fn: function(value, attr, computedState) {
         if(value !== 'something') {
           return 'Name is invalid';
         }
@@ -266,7 +266,7 @@ var SomeModel = Backbone.Model.extend({
   validation: {
     name: 'validateName'
   },
-  validateName: function(value, attr) {
+  validateName: function(value, attr, computedState) {
   if(value !== 'something') {
         return 'Name is invalid';
       }
@@ -279,7 +279,7 @@ var SomeModel = Backbone.Model.extend({
       fn: 'validateName'
     }
   },
-  validateName: function(value, attr) {
+  validateName: function(value, attr, computedState) {
     if(value !== 'something') {
       return 'Name is invalid';
     }
@@ -540,6 +540,7 @@ The message can contain placeholders for arguments that will be replaced:
 * Context (this) in custom validators is the `Backbone.Validation.validators` object
 * Calling `unbind` on a view without model no longer throws (Fixes #17)
 * Support for object/nested validation (Fixed #20, thanks to [AndyUK](https://github.com/andyuk))
+* Method validators get a computed model state (i.e. the state of the model if the current set operation succeeds) as the third argument (Fixes #22)
 
 #### v0.4.0
 
