@@ -66,16 +66,17 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     };
 
     var validateAll = function(model, validation, attrs) {
-        if (attrs === undefined) {
+        if (!attrs) {
           return false;
         }
-        var isValid = true;
+        var isValid = true, error;
         for (var validatedAttr in validation) {
-            if (_.isUndefined(attrs[validatedAttr]) && validateAttr(model, validation, validatedAttr, model.get(validatedAttr))) {
+            error = validateAttr(model, validation, validatedAttr, model.get(validatedAttr));
+            if (_.isUndefined(attrs[validatedAttr]) && error) {
                 isValid = false;
                 break;
             }
-            if (hasChildValidaton(model, validation, validatedAttr)) {
+            if (error !== false && hasChildValidaton(model, validation, validatedAttr)) {
                 isValid = validateAll(model, validation[validatedAttr].validation, attrs[validatedAttr]);
             }
         }
@@ -100,13 +101,13 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 options.validFn(view, changedAttr, options.selector);
             }
 
-            if (hasChildValidaton(model, validation, changedAttr)) {
+            if (error !== false && hasChildValidaton(model, validation, changedAttr)) {
 
-              result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + '.');
+                result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + '.');
 
-              Array.prototype.push.apply(errorMessages, result.errorMessages);
-              Array.prototype.push.apply(invalidAttrs, result.invalidAttrs);
-              isValid = isValid && result.isValid;
+                Array.prototype.push.apply(errorMessages, result.errorMessages);
+                Array.prototype.push.apply(invalidAttrs, result.invalidAttrs);
+                isValid = isValid && result.isValid;
             }
         }
 
@@ -319,7 +320,7 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
             }
         },
         validation: function(value, attr, objectValue) {
-            if (! (value instanceof Object)) {
+            if (!_.isObject(value)) {
                 return format(messages.object, attr);
             }
         }

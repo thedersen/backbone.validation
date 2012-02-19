@@ -1,4 +1,4 @@
-buster.testCase("validation (recursive) validator - with required parent object", {
+buster.testCase("nested validation - with required parent object", {
     setUp: function() {
         var Model = Backbone.Model.extend({
             validation: {
@@ -89,7 +89,7 @@ buster.testCase("validation (recursive) validator - with required parent object"
     }
 });
 
-buster.testCase("validation (recursive) validator - without required parent", {
+buster.testCase("nested validation - without required parent", {
     setUp: function() {
         var Model = Backbone.Model.extend({
             validation: {
@@ -110,12 +110,16 @@ buster.testCase("validation (recursive) validator - without required parent", {
         Backbone.Validation.bind(this.view);
     },
 
+    "model is valid when nothing is set": function(){
+        assert(this.model.isValid(true));
+    },
+
     "undefined is invalid when a child attribute is required": function() {
         assert(this.model.set({
             image: undefined
         }));
 
-        refute(this.model.isValid(true));
+        assert(this.model.isValid(true));
     },
 
     "empty object is invalid when a child attribute is required": function() {
