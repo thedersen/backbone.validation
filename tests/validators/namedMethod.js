@@ -15,7 +15,7 @@ buster.testCase("named method validator", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -26,20 +26,20 @@ buster.testCase("named method validator", {
             invalid: this.spy()
         });
     },
-    
+
     "is invalid when method returns error message": function() {
         refute(this.model.set({name: ''}));
     },
-            
+
     "is valid when method returns undefined": function() {
         assert(this.model.set({name: 'backbone'}));
     },
-    
+
     "context is the model": function() {
         this.model.set({name: ''});
         assert.same(this.ctx, this.model);
     },
-    
+
     "second argument is the name of the attribute being validated": function() {
         this.model.set({name: ''});
         assert.equals('name', this.attr);
@@ -61,7 +61,7 @@ buster.testCase("named method validator short hand syntax", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -72,20 +72,20 @@ buster.testCase("named method validator short hand syntax", {
             invalid: this.spy()
         });
     },
-    
+
     "is invalid when method returns error message": function() {
         refute(this.model.set({name: ''}));
     },
-            
+
     "is valid when method returns undefined": function() {
         assert(this.model.set({name: 'backbone'}));
     },
-    
+
     "context is the model": function() {
         this.model.set({name: ''});
         assert.same(this.ctx, this.model);
     },
-    
+
     "second argument is the name of the attribute being validated": function() {
         this.model.set({name: ''});
         assert.equals('name', this.attr);
