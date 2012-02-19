@@ -64,7 +64,7 @@ var SomeModel = Backbone.Model.extend({
 
 ### Validation binding
 
-The philosophy behind this plugin, is that you should be able to reuse your validation rules both to validate your model and to validate  form input, as well as providing a simple way of notifying users about errors when they are populating forms. For this to work, you need to bind your view. The validation binding code is executed with a call to `Backbone.Validation.bind(view)`.
+The philosophy behind this way of using the plugin, is that you should be able to reuse your validation rules both to validate your model and to validate form input, as well as providing a simple way of notifying users about errors when they are populating forms. For this to work, you need to bind your view. The validation binding code is executed with a call to `Backbone.Validation.bind(view)`.
 
 There are several places that it can be called from, depending on your circumstances.
 
@@ -103,6 +103,16 @@ Note that if you add/remove models with the silent flag, they will not be bound/
 ### Unbinding
 
 If you want to remove the validation binding, this is done with a call to `Backbone.Validation.unbind(view)`. This removes the validation binding on the model, or all models if you view contains a collection as well as removing all events hooked up on the collection.
+
+### Validation mix-in
+
+If you want to use just the validation without the callbacks that update the model's view, you can do this by extending the `Backbone.Model.prototype`. By doing this, *all* models will have the validation hooked up without the need for binding to a view.
+
+```js
+_.extend(Backbone.Model.prototype, Backbone.Validation.mixin);
+```
+
+Of course, if you use this option the callbacks to update the view is not executed, since there is no way of knowing what view a model belongs to.
 
 ### Specifying error messages
 
