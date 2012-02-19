@@ -4,8 +4,10 @@ buster.testCase("method validator", {
         var Model = Backbone.Model.extend({
             validation: {
                 name: {
-                    fn: function(val) {
+                    fn: function(val, attr, computed) {
                         that.ctx = this;
+                        that.attr = attr;
+                        that.computed = computed;
                         if (name !== 'backbone') {
                             return 'Error';
                         }
@@ -41,6 +43,21 @@ buster.testCase("method validator", {
             name: ''
         });
         assert.same(this.ctx, this.model);
+    },
+
+    "second argument is the name of the attribute being validated": function() {
+        this.model.set({name: ''});
+        assert.equals('name', this.attr);
+    },
+
+    "third argument is a computed model state": function() {
+        this.model.set({attr: 'attr'}, {silent: true});
+        this.model.set({
+            name: 'name',
+            age: 1
+        });
+
+        assert.equals({attr:'attr', name:'name', age:1}, this.computed);
     }
 });
 
@@ -49,8 +66,10 @@ buster.testCase("method validator short hand syntax", {
         var that = this;
         var Model = Backbone.Model.extend({
             validation: {
-                name: function(val) {
+                name: function(val, attr, computed) {
                     that.ctx = this;
+                    that.attr = attr;
+                    that.computed = computed;
                     if (name !== 'backbone') {
                         return 'Error';
                     }
@@ -85,5 +104,20 @@ buster.testCase("method validator short hand syntax", {
             name: ''
         });
         assert.same(this.ctx, this.model);
+    },
+
+    "second argument is the name of the attribute being validated": function() {
+        this.model.set({name: ''});
+        assert.equals('name', this.attr);
+    },
+
+    "third argument is a computed model state": function() {
+        this.model.set({attr: 'attr'}, {silent: true});
+        this.model.set({
+            name: 'name',
+            age: 1
+        });
+
+        assert.equals({attr:'attr', name:'name', age:1}, this.computed);
     }
 });

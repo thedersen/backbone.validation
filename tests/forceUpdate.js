@@ -33,6 +33,20 @@ buster.testCase("forceUpdate", {
 		}
 	},
 
+	"forcing update when setting attribute": {
+		setUp: function() {
+			Backbone.Validation.bind(this.view);
+		},
+
+		"invalid values are set on model": function() {
+			if(Backbone.VERSION === '0.5.3') {
+				refute(this.model.set({name:''}, {forceUpdate: true}));
+			} else {
+				assert(this.model.set({name:''}, {forceUpdate: true}));
+			}
+		}
+	},
+
 	"forcing update globally": {
 		setUp: function() {
 			Backbone.Validation.configure({
