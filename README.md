@@ -588,6 +588,7 @@ The message can contain placeholders for arguments that will be replaced:
 * Support for Backbone v0.9.1
 * Support for object/nested validation (Fixed #20, thanks to [AndyUK](https://github.com/andyuk))
 * Support for binding to a view with a collection of models
+* Support for mixing in validation on `Backbone.Model.prototype`
 * Context (this) in custom validators is the `Backbone.Validation.validators` object
 * Calling `unbind` on a view without model no longer throws (Fixes #17)
 * Method validators get a computed model state (i.e. the state of the model if the current set operation succeeds) as the third argument (Fixes #22)
