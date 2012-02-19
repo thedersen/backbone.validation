@@ -136,6 +136,16 @@ MyModel = Backbone.Model.extend({
 });
 ```
 
+### validate()
+
+All validated models has a method that is used to force an validation to occur: `model.validate()`.
+
+### isValid()
+
+All validated models has a method that is used to check for the model's valid stated: `model.isValid()`.
+`isValid` returns `undefined` when no validation has occurred and the model has validation, otherwise, `true` or `false`.
+If you pass `true` as an argument, this will force an validation before the result is returned.
+
 ### What gets validated when?
 
 If you are using Backbone v0.5.3, only attributes that are being set are validated.
