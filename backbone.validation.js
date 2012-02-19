@@ -126,12 +126,13 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     var bindModel = function(view, model, options) {
         var isValid = _.isUndefined(model.validation) ? true : undefined;
 
-        model.validate = function(attrs) {
+        model.validate = function(attrs, setOptions) {
+            var opt = _.extend({}, options, setOptions);
             if(!attrs){
                 return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
             }
 
-            var result = validateObject(view, model, model.validation, attrs, options);
+            var result = validateObject(view, model, model.validation, attrs, opt);
             isValid = result.isValid;
 
             _.defer(function() {
@@ -139,7 +140,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 model.trigger('validated:' + (isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
             });
 
-            if(options.forceUpdate) {
+            if(opt.forceUpdate) {
                 return;
             }
 

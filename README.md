@@ -142,13 +142,14 @@ All validated models has a method that is used to force an validation to occur: 
 
 ### isValid()
 
-All validated models has a method that is used to check for the model's valid stated: `model.isValid()`.
+All validated models has a method that is used to check for the model's valid state: `model.isValid()`.
 `isValid` returns `undefined` when no validation has occurred and the model has validation, otherwise, `true` or `false`.
 If you pass `true` as an argument, this will force an validation before the result is returned.
 
 ### What gets validated when?
 
 If you are using Backbone v0.5.3, only attributes that are being set are validated.
+
 If you are using Backbone v0.9.1, all attributes in a model will be validated. However, if for instance `name` never has been set (either explicitly or with a default value) that attribute will not be validated before it gets set.
 
 This is very useful when validating forms as they are populated, since you don't want to alert the user about errors in input not yet entered.
@@ -231,6 +232,14 @@ Or, you can turn it on per view when binding:
 
 ```js
 Backbone.Validation.bind(this.view, {
+  forceUpdate: true
+});
+```
+
+Or, you can turn it on for one set operation only (Backbone.VERSION >= 0.9.1 only):
+
+```js
+model.set({attr: 'invalidValue'}, {
   forceUpdate: true
 });
 ```
@@ -582,6 +591,7 @@ The message can contain placeholders for arguments that will be replaced:
 * Context (this) in custom validators is the `Backbone.Validation.validators` object
 * Calling `unbind` on a view without model no longer throws (Fixes #17)
 * Method validators get a computed model state (i.e. the state of the model if the current set operation succeeds) as the third argument (Fixes #22)
+* `forceUpdate` can be specified when settings attributes (Backbone.VERSION >= 0.9.1 only)
 
 #### v0.4.0
 
