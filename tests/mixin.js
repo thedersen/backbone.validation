@@ -39,5 +39,31 @@ buster.testCase("Mixin validation", {
 
     "succeeds setting valid value": function() {
         assert(this.model.set({name: 'name'}));
+    },
+
+    "when forcing update succeeds setting invalid value": function() {
+        if(Backbone.VERSION === '0.5.3') {
+            refute(this.model.set({name:''}, {forceUpdate: true}));
+        } else {
+            assert(this.model.set({name:''}, {forceUpdate: true}));
+        }
+    },
+
+    "when forcing update globally": {
+        setUp: function() {
+            Backbone.Validation.configure({
+                forceUpdate: true
+            });
+        },
+
+        tearDown: function() {
+            Backbone.Validation.configure({
+                forceUpdate: false
+            });
+        },
+
+        "succeeds setting invalid value when forcing update globally": function() {
+            assert(this.model.set({name:''}));
+        }
     }
 });

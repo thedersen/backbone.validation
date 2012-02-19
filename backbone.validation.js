@@ -216,7 +216,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             }
         },
 
-        mixin: mixin()
+        mixin: mixin(null, defaultOptions)
     };
 } (Backbone, _));
 
