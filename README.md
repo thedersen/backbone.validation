@@ -154,7 +154,22 @@ All validated models has a method that is used to force an validation to occur: 
 
 All validated models has a method that is used to check for the model's valid state: `model.isValid()`.
 `isValid` returns `undefined` when no validation has occurred and the model has validation, otherwise, `true` or `false`.
-If you pass `true` as an argument, this will force an validation before the result is returned.
+
+If you pass `true` as an argument, this will force an validation before the result is returned:
+
+```js
+model.isValid(true);
+```
+
+If you pass the name of an attribute or an array of names, you can check whether or not the attributes are valid:
+
+```js
+// Check if name is valid
+model.isValid('name');
+
+// Check if name and age are valid
+model.isValid(['name', 'age']);
+```
 
 ### What gets validated when?
 
@@ -596,6 +611,7 @@ The message can contain placeholders for arguments that will be replaced:
 #### v0.5.1
 
 * `error` argument passed to the error event raised by Backbone is always an array
+* Can pass the name of an attribute or an array of names to `isValid` to verify if the attribute(s) are valid
 
 #### v0.5.0
 
