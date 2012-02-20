@@ -8,7 +8,7 @@ buster.testCase("acceptance validator", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -19,15 +19,15 @@ buster.testCase("acceptance validator", {
             invalid: this.spy()
         });
     },
-    
+
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals('agree must be accepted', error);
+            assert.equals(['agree must be accepted'], error);
             done();
         });
         this.model.set({agree:false});
     },
-    
+
     "non-boolean is invalid": function(){
         refute(this.model.set({
             agree: 'non-boolean'
@@ -39,7 +39,7 @@ buster.testCase("acceptance validator", {
             agree: 'true'
         }));
     },
-    
+
     "false boolean is invalid": function() {
         refute(this.model.set({
             agree: false

@@ -16,7 +16,7 @@ buster.testCase("required validator", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -27,10 +27,10 @@ buster.testCase("required validator", {
             invalid: this.spy()
         });
     },
-    
+
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals('name is required', error);
+            assert.equals(['name is required'], error);
             done();
         });
         this.model.set({name:''});
@@ -41,7 +41,7 @@ buster.testCase("required validator", {
             name: ''
         }));
     },
-    
+
     "non-empty string is valid": function() {
         assert(this.model.set({
             name: 'a'
@@ -77,14 +77,14 @@ buster.testCase("required validator", {
             agree: true
         }));
     },
-    
+
     "required can be specified as a method returning true or false": function() {
         assert(this.model.set({
             dependsOnName: undefined
         }));
-        
+
         this.model.set({name:'name'});
-        
+
         refute(this.model.set({
             dependsOnName: undefined
         }));

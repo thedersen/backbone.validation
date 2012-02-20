@@ -593,6 +593,10 @@ The message can contain placeholders for arguments that will be replaced:
 
 ## Release notes
 
+#### v0.5.1
+
+* `error` argument passed to the error event raised by Backbone is always an array
+
 #### v0.5.0
 
 * Support for Backbone v0.9.1
