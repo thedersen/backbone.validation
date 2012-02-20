@@ -8,7 +8,7 @@ buster.testCase("length validator", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -19,15 +19,15 @@ buster.testCase("length validator", {
             invalid: this.spy()
         });
     },
-    
+
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals('postalCode must be 2 characters', error);
+            assert.equals(['postalCode must be 2 characters'], error);
             done();
         });
         this.model.set({postalCode:''});
     },
-    
+
     "string with length shorter than length is invalid": function() {
         refute(this.model.set({
             postalCode: 'a'
@@ -45,21 +45,21 @@ buster.testCase("length validator", {
             postalCode: 'aa'
         }));
     },
-    
+
     "when required is not specified": {
         "undefined is invalid": function() {
             refute(this.model.set({
                 postalCode: undefined
             }));
         },
-        
+
         "null is invalid": function() {
             refute(this.model.set({
                 postalCode: null
             }));
         }
     },
-    
+
     "when required:false": {
         setUp: function() {
             this.model.validation.postalCode.required = false;
@@ -70,14 +70,14 @@ buster.testCase("length validator", {
                 postalCode: null
             }));
         },
-        
+
         "undefined is valid": function() {
             assert(this.model.set({
                 postalCode: undefined
             }));
         }
     },
-    
+
     "when required:true": {
         setUp: function() {
             this.model.validation.postalCode.required = true;

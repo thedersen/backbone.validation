@@ -42,6 +42,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, []);
     };
 
+    var hasChildValidaton = function(validation, attr) {
+        return _.isObject(validation) && _.isObject(validation[attr]) && _.isObject(validation[attr].validation);
+    };
+
     var validateAttr = function(model, validation, attr, value, computed) {
         var validators = getValidators(model, validation, attr);
 
@@ -61,10 +65,6 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, '');
     };
 
-    var hasChildValidaton = function(model, validation, attr) {
-        return _.isObject(validation) && _.isObject(validation[attr]) && _.isObject(validation[attr].validation);
-    };
-
     var validateAll = function(model, validation, attrs, computed) {
         if (!attrs) {
           return false;
@@ -76,7 +76,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 isValid = false;
                 break;
             }
-            if (error !== false && hasChildValidaton(model, validation, validatedAttr)) {
+            if (error !== false && hasChildValidaton(validation, validatedAttr)) {
                 isValid = validateAll(model, validation[validatedAttr].validation, attrs[validatedAttr], computed);
             }
         }
@@ -102,7 +102,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 if(view) options.valid(view, changedAttr, options.selector);
             }
 
-            if (error !== false && hasChildValidaton(model, validation, changedAttr)) {
+            if (error !== false && hasChildValidaton(validation, changedAttr)) {
 
                 result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + '.');
 
@@ -129,7 +129,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 if(forceValidation) {
                     this.validate();
                 }
-                return this.validation ? this._isValid: true;
+                return this.validation ? this._isValid : true;
             },
             validate: function(attrs, setOptions){
                 var model = this,
@@ -146,14 +146,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                     model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
                 });
 
-                if(opt.forceUpdate) {
-                    return;
-                }
-
-                if (result.errorMessages.length === 1) {
-                    return result.errorMessages[0];
-                }
-                if (result.errorMessages.length > 1) {
+                if (!opt.forceUpdate && result.errorMessages.length > 0) {
                     return result.errorMessages;
                 }
             }

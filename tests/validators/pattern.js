@@ -11,7 +11,7 @@ buster.testCase("pattern validator", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -22,15 +22,15 @@ buster.testCase("pattern validator", {
             invalid: this.spy()
         });
     },
-    
+
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals('email must be a valid email', error);
+            assert.equals(['email must be a valid email'], error);
             done();
         });
         this.model.set({email:''});
     },
-    
+
     "value not matching pattern is invalid": function() {
         refute(this.model.set({
             name: 'aaa'
@@ -42,7 +42,7 @@ buster.testCase("pattern validator", {
             name: 'test'
         }));
     },
-    
+
     "when required is not specified": {
          "undefined is invalid": function() {
              refute(this.model.set({
@@ -92,12 +92,12 @@ buster.testCase("pattern validator", {
              }));
          }
      },
-     
+
      "can use one of the built-in patterns by specifying the name of it": function(){
          refute(this.model.set({
              email: 'aaa'
              }));
-             
+
          assert(this.model.set({
              email: 'a@example.com'
          }));

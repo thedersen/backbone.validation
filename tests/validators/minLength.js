@@ -8,7 +8,7 @@ buster.testCase("minLength validator", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -22,12 +22,12 @@ buster.testCase("minLength validator", {
 
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals('name must be at least 2 characters', error);
+            assert.equals(['name must be at least 2 characters'], error);
             done();
         });
         this.model.set({name:''});
     },
-    
+
     "string with length shorter than minLenght is invalid": function() {
         refute(this.model.set({
             name: 'a'
@@ -39,27 +39,27 @@ buster.testCase("minLength validator", {
             name: 'aa'
         }));
     },
-    
+
     "string with length greater than minLength is valid": function() {
         assert(this.model.set({
             name: 'aaaa'
         }));
     },
-    
+
     "when required is not specified": {
         "undefined is invalid": function() {
             refute(this.model.set({
                 name: undefined
             }));
         },
-        
+
         "null is invalid": function() {
             refute(this.model.set({
                 name: null
             }));
         }
     },
-    
+
     "when required:false": {
         setUp: function() {
             this.model.validation.name.required = false;
@@ -70,14 +70,14 @@ buster.testCase("minLength validator", {
                 name: null
             }));
         },
-        
+
         "undefined is valid": function() {
             assert(this.model.set({
                 name: undefined
             }));
         }
     },
-    
+
     "when required:true": {
         setUp: function() {
             this.model.validation.name.required = true;
