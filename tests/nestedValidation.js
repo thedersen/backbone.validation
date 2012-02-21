@@ -23,7 +23,7 @@ buster.testCase("nested validation - with required parent object", {
 
     "string is invalid for an object": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals('image must be an object', error);
+            assert.equals(['image must be an object'], error);
             done();
         });
         this.model.set({image:'abc'});

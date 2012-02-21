@@ -41,7 +41,63 @@ buster.testCase("isValid", {
 		},
 
 		"can force validation by passing true": function() {
+			refute.defined(this.model.isValid());
 			assert(this.model.isValid(true) === false);
+		},
+
+		"and passing name of attribute": {
+			setUp: function() {
+				this.model.validation = {
+					name: {
+						required: true
+					},
+					age: {
+						required: true
+					}
+				};
+			},
+
+			"returns false when attribute is invalid": function() {
+				refute(this.model.isValid('name'));
+			},
+
+			"returns true when attribute is valid": function() {
+				this.model.set({name: 'name'}, { silent:true });
+
+				assert(this.model.isValid('name'));
+			}
+		},
+
+		"and passing array of attributes": {
+			setUp: function() {
+				this.model.validation = {
+					name: {
+						required: true
+					},
+					age: {
+						required: true
+					},
+					phone: {
+						required: true
+					}
+				};
+			},
+
+			"returns false when all attributes are invalid": function() {
+				refute(this.model.isValid(['name', 'age']));
+			},
+
+			"returns false when one attribute is invalid": function() {
+				this.model.set({name: 'name'}, { silent:true });
+
+				refute(this.model.isValid(['name', 'age']));
+			},
+
+			"returns true when all attributes are valid": function() {
+				this.model.set({name: 'name', age: 1 }, { silent:true });
+
+				assert(this.model.isValid(['name', 'age']));
+			}
 		}
 	}
 });

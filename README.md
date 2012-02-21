@@ -1,4 +1,4 @@
-# Backbone.Validation v0.5.0
+# Backbone.Validation v0.5.1
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
 
@@ -154,7 +154,22 @@ All validated models has a method that is used to force an validation to occur: 
 
 All validated models has a method that is used to check for the model's valid state: `model.isValid()`.
 `isValid` returns `undefined` when no validation has occurred and the model has validation, otherwise, `true` or `false`.
-If you pass `true` as an argument, this will force an validation before the result is returned.
+
+If you pass `true` as an argument, this will force an validation before the result is returned:
+
+```js
+model.isValid(true);
+```
+
+If you pass the name of an attribute or an array of names, you can check whether or not the attributes are valid:
+
+```js
+// Check if name is valid
+model.isValid('name');
+
+// Check if name and age are valid
+model.isValid(['name', 'age']);
+```
 
 ### What gets validated when?
 
@@ -592,6 +607,11 @@ The message can contain placeholders for arguments that will be replaced:
 * `{2}` will be replaced with the second value in a range validator
 
 ## Release notes
+
+#### v0.5.1
+
+* `error` argument passed to the error event raised by Backbone is always an array
+* Can pass the name of an attribute or an array of names to `isValid` to verify if the attribute(s) are valid
 
 #### v0.5.0
 

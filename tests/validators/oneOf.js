@@ -8,7 +8,7 @@ buster.testCase("oneOf validator", {
                 }
             }
         });
-        
+
         this.model = new Model();
         this.view = new Backbone.View({
             model: this.model
@@ -19,33 +19,33 @@ buster.testCase("oneOf validator", {
             invalid: this.spy()
         });
     },
-    
+
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals('country must be one of: Norway, Sweeden', error);
+            assert.equals(['country must be one of: Norway, Sweeden'], error);
             done();
         });
         this.model.set({country:''});
     },
-    
+
     "value is one of the values in the array is valid": function(){
         assert(this.model.set({
             country: 'Norway'
         }));
     },
-        
+
     "value is not one of the values in the arraye is invalid": function(){
         refute(this.model.set({
             country: 'Denmark'
         }));
     },
-    
+
     "is case sensitive": function(){
         refute(this.model.set({
             country: 'sweeden'
         }));
     },
-    
+
     "when required is not specified": {
          "undefined is invalid": function() {
              refute(this.model.set({

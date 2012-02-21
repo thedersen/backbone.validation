@@ -18,26 +18,26 @@ buster.testCase("Backbone.Validation events", {
 
         Backbone.Validation.bind(this.view);
     },
-    
+
     "model is updated before the events are raised": function() {
         this.model.bind('change', function(){
             assert.equals(1, this.model.get('age'));
         }, this);
-        
+
         this.model.bind('validated', function(){
             assert.equals(1, this.model.get('age'));
         }, this);
-        
+
         this.model.bind('validated:valid', function(){
             assert.equals(1, this.model.get('age'));
         }, this);
-                
+
         this.model.set({
             age: 1,
             name: 'name'
         });
     },
-    
+
     "when model is valid": {
         "validated event is triggered with true and model": function(done) {
             this.model.bind('validated', function(valid, model){
@@ -87,17 +87,17 @@ buster.testCase("Backbone.Validation events", {
             this.model.set({age:0});
         },
 
-        "error event is triggered with model and error as a string": function(done) {
+        "error event is triggered with model and error as an array": function(done) {
             this.model.bind('error', function(model, error) {
                 assert.same(this.model, model);
-                assert.equals('age', error);
+                assert.equals(['age'], error);
                 done();
             }, this);
 
             this.model.set({age:0});
         }
     },
-    
+
     "when two invalid values is set": {
         "validated event is triggered with false, model, and an array with the names of the attributes with error": function(done) {
             this.model.bind('validated', function(valid, model, attrs){
