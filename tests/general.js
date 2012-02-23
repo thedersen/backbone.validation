@@ -385,5 +385,86 @@ buster.testCase("Backbone.Validation", {
 
             assert(this.model.isValid());
         }
+    },
+
+    "when bound to model with to dependent attribute validations": {
+        setUp: function() {
+            var View = Backbone.View.extend({
+                render: function() {
+                    var html = $('<input type="text" name="one" /><input type="text" name="two" />');
+                    if(!this.$el) { // Backbone 0.5.3
+                        this.$(this.el).append(html);
+                    } else { // Backbone 0.9.0
+                        this.$el.append(html);
+                    }
+
+                    Backbone.Validation.bind(this);
+                }
+            });
+            var Model = Backbone.Model.extend({
+                validation: {
+                    one: function(val, attr, computed) {
+                        if(val < computed.two) {
+                            return 'error';
+                        }
+                    },
+                    two: function(val, attr, computed) {
+                        if(val > computed.one) {
+                            return 'return';
+                        }
+                    }
+                }
+            });
+
+
+            this.model = new Model();
+            this.view = new View({
+                model: this.model
+            });
+
+            this.view.render();
+            this.one = $(this.view.$('[name~=one]'));
+            this.two = $(this.view.$('[name~=two]'));
+        },
+
+        tearDown: function() {
+            this.view.remove();
+        },
+
+        "when setting invalid value on second input": {
+            setUp: function() {
+                this.model.set({one:1});
+                this.model.set({two:2});
+            },
+
+            "first input is valid": function() {
+                if(Backbone.VERSION === '0.5.3'){
+                    refute(this.one.hasClass('invalid'));
+                }
+                else {
+                    assert(this.one.hasClass('invalid'));
+                }
+            },
+
+            "second input is invalid": function() {
+                assert(this.two.hasClass('invalid'));
+            }
+        },
+
+        "when setting invalid value on second input and changing first": {
+            setUp: function() {
+                this.model.set({one:1});
+                this.model.set({two:2});
+                this.model.set({one:2});
+            },
+
+            "first input is valid": function() {
+                refute(this.one.hasClass('invalid'));
+            },
+
+            "second input is valid": function() {
+                refute(this.two.hasClass('invalid'));
+            }
+        }
     }
 });

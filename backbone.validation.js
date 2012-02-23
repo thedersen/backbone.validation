@@ -65,7 +65,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, '');
     };
 
-    var validateAll = function(model, validation, attrs, computed) {
+    var validateAll = function(model, validation, attrs, computed, view, options) {
         if (!attrs) {
           return false;
         }
@@ -75,6 +75,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             if (_.isUndefined(attrs[validatedAttr]) && error) {
                 isValid = false;
                 break;
+            } else if(!error && view) {
+                options.valid(view, validatedAttr, options.selector);
             }
             if (error !== false && hasChildValidaton(validation, validatedAttr)) {
                 isValid = validateAll(model, validation[validatedAttr].validation, attrs[validatedAttr], computed);
@@ -113,7 +115,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }
 
         if (isValid) {
-            isValid = validateAll(model, validation, attrs, computed);
+            isValid = validateAll(model, validation, attrs, computed, view, options);
         }
 
         return {
