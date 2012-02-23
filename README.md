@@ -1,4 +1,4 @@
-# Backbone.Validation v0.5.1
+# Backbone.Validation v0.5.2
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
 
@@ -607,6 +607,10 @@ The message can contain placeholders for arguments that will be replaced:
 * `{2}` will be replaced with the second value in a range validator
 
 ## Release notes
+
+#### v0.5.2
+
+* Fixed validation of attributes dependent on each other
 
 #### v0.5.1
 
