@@ -48,13 +48,14 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
     var validateAttr = function(model, validation, attr, value, computed) {
         var validators = getValidators(model, validation, attr);
+        var label = model.labels ? model.labels[attr] : undefined;
 
         if (_.isFunction(validators)) {
-            return validators.call(model, value, attr, computed);
+            return validators.call(model, value, label || attr, computed);
         }
 
         return _.reduce(validators, function(memo, validator){
-            var result = validator.fn.call(Backbone.Validation.validators, value, attr, validator.val, model, computed);
+            var result = validator.fn.call(Backbone.Validation.validators, value, label || attr, validator.val, model, computed);
             if(result === false || memo === false) {
                 return false;
             }
