@@ -1,4 +1,4 @@
-# Backbone.Validation v0.5.2
+# Backbone.Validation v0.5.3
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input. Inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
 
@@ -50,24 +50,7 @@ See the **built-in validators** section in this readme for a list of the validat
 
 ### Nested validation
 
-You can add a new `validation` attribute to handle objects within your model. It can be reused, and nested as deep as you like.
-
-#### Example
-
-```js
-var SomeModel = Backbone.Model.extend({
-  validation: {
-    image: {
-      required: true,
-      validation: {
-        src: {
-          required: true
-        }
-      }
-    }
-  }
-});
-```
+TODO: Describe the preferred ways of doing this.
 
 ### Validation binding
 
@@ -647,6 +630,11 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.5.2
+
+* *BREAKING:* Nested validation is no longer supported. See the documentation for preferred ways of acheiving this.
+* Arrays with attribute names in the events now contains the name of all attributes with error.
 
 #### v0.5.2
 
