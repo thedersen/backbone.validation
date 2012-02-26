@@ -9,7 +9,9 @@
 Backbone.Validation = (function(Backbone, _, undefined) {
     var defaultOptions = {
         forceUpdate: false,
-        selector: 'name'
+        selector: 'name',
+        valid: Function.prototype,
+        invalid: Function.prototype
     };
 
     var getValidatedAttrs = function(model){
@@ -19,8 +21,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, {});
     };
 
-    var getValidators = function(model, validation, attr) {
-        var attrValidation = validation[attr] || {};
+    var getValidators = function(model, attr) {
+        var attrValidation = model.validation[attr] || {};
 
         if (_.isFunction(attrValidation)) {
             return attrValidation;
@@ -42,12 +44,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, []);
     };
 
-    var hasChildValidaton = function(validation, attr) {
-        return _.isObject(validation) && _.isObject(validation[attr]) && _.isObject(validation[attr].validation);
-    };
-
-    var validateAttr = function(model, validation, attr, value, computed) {
-        var validators = getValidators(model, validation, attr);
+    var validateAttr = function(model, attr, value, computed) {
+        var validators = getValidators(model, attr);
 
         if (_.isFunction(validators)) {
             return validators.call(model, value, attr, computed);
@@ -65,62 +63,25 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, '');
     };
 
-    var validateAll = function(model, validation, attrs, computed, view, options) {
-        if (!attrs) {
-          return false;
-        }
-        var isValid = true, error;
-        for (var validatedAttr in validation) {
-            error = validateAttr(model, validation, validatedAttr, model.get(validatedAttr), computed);
-            if (_.isUndefined(attrs[validatedAttr]) && error) {
-                isValid = false;
-                break;
-            } else if(!error && view) {
-                options.valid(view, validatedAttr, options.selector);
-            }
-            if (error !== false && hasChildValidaton(validation, validatedAttr)) {
-                isValid = validateAll(model, validation[validatedAttr].validation, attrs[validatedAttr], computed);
-            }
-        }
-        return isValid;
-    };
-
-    var validateObject = function(view, model, validation, attrs, options, attrPath) {
-        attrPath = attrPath || '';
-        var result, error, changedAttr,
-            errorMessages = [],
+    var validateModel = function(model, attrs) {
+        var result, error, attr,
             invalidAttrs = [],
+            errorMessages = [],
             isValid = true,
-            computed = _.extend(model.toJSON(), attrs);
+            computed = _.clone(attrs);
 
-        for (changedAttr in attrs) {
-            error = validateAttr(model, validation, changedAttr, attrs[changedAttr], computed);
+        for (attr in attrs) {
+            error = validateAttr(model, attr, attrs[attr], computed);
             if (error) {
+                invalidAttrs.push(attr);
                 errorMessages.push(error);
-                invalidAttrs.push(attrPath + changedAttr);
                 isValid = false;
-                if(view) options.invalid(view, changedAttr, error, options.selector);
-            } else {
-                if(view) options.valid(view, changedAttr, options.selector);
             }
-
-            if (error !== false && hasChildValidaton(validation, changedAttr)) {
-
-                result = validateObject(view, model, validation[changedAttr].validation, attrs[changedAttr], options, attrPath + changedAttr + '.');
-
-                Array.prototype.push.apply(errorMessages, result.errorMessages);
-                Array.prototype.push.apply(invalidAttrs, result.invalidAttrs);
-                isValid = isValid && result.isValid;
-            }
-        }
-
-        if (isValid) {
-            isValid = validateAll(model, validation, attrs, computed, view, options);
         }
 
         return {
-            errorMessages: errorMessages,
             invalidAttrs: invalidAttrs,
+            errorMessages: errorMessages,
             isValid: isValid
         };
     };
@@ -129,11 +90,11 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         return {
             isValid: function(option) {
                 if(_.isString(option)){
-                    return !validateAttr(this, this.validation, option, this.get(option), this.toJSON());
+                    return !validateAttr(this, option, this.get(option), this.toJSON());
                 }
                 if(_.isArray(option)){
                     for (var i = 0; i < option.length; i++) {
-                        if(validateAttr(this, this.validation, option[i], this.get(option[i]), this.toJSON())){
+                        if(validateAttr(this, option[i], this.get(option[i]), this.toJSON())){
                             return false;
                         }
                     }
@@ -144,22 +105,32 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 }
                 return this.validation ? this._isValid : true;
             },
+
             validate: function(attrs, setOptions){
                 var model = this,
-                    opt = _.extend({}, options, setOptions);
-                if(!attrs){
-                    return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
-                }
+                    validateAll = !attrs,
+                    opt = _.extend({}, options, setOptions),
+                    allAttrs = _.extend(getValidatedAttrs(model), model.toJSON(), attrs),
+                    changedAttrs = attrs || allAttrs,
+                    result = validateModel(model, allAttrs);
 
-                var result = validateObject(view, model, model.validation, attrs, opt);
                 model._isValid = result.isValid;
 
+                for(var attr in allAttrs) {
+                    var index = _.indexOf(result.invalidAttrs, attr);
+                    if(index !== -1 && (changedAttrs.hasOwnProperty(attr) || validateAll)){
+                        opt.invalid(view, attr, result.errorMessages[index], opt.selector);
+                    }
+                    if(!_.include(result.invalidAttrs, attr)){
+                        opt.valid(view, attr, opt.selector);
+                    }
+                }
                 _.defer(function() {
                     model.trigger('validated', model._isValid, model, result.invalidAttrs);
                     model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
                 });
 
-                if (!opt.forceUpdate && result.errorMessages.length > 0) {
+                if (!opt.forceUpdate && _.intersection(result.invalidAttrs, _.keys(changedAttrs)).length > 0) {
                     return result.errorMessages;
                 }
             }
