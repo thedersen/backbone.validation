@@ -610,6 +610,7 @@ The message can contain placeholders for arguments that will be replaced:
 
 #### v0.5.2
 
+* Fixed equalTo validator when setting both values at the same time (Fixes #27)
 * Fixed validation of attributes dependent on each other
 
 #### v0.5.1

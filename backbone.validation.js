@@ -349,8 +349,8 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
                 return format(messages.oneOf, attr, values.join(', '));
             }
         },
-        equalTo: function(value, attr, equalTo, model) {
-            if(value !== model.get(equalTo)) {
+        equalTo: function(value, attr, equalTo, model, computed) {
+            if(value !== computed[equalTo]) {
                 return format(messages.equalTo, attr, equalTo);
             }
         },

@@ -49,5 +49,12 @@ buster.testCase("equalTo validator", {
         refute(this.model.set({
             passwordRepeat: 'Password'
         }));
+    },
+
+    "setting both at the same time to the same value is valid": function() {
+        assert(this.model.set({
+            password: 'a',
+            passwordRepeat: 'a'
+        }));
     }
 });
