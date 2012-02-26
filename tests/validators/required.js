@@ -17,7 +17,11 @@ buster.testCase("required validator", {
             }
         });
 
-        this.model = new Model();
+        this.model = new Model({
+            name: 'name',
+            agree: true,
+            dependsOnName: 'depends'
+        });
         this.view = new Backbone.View({
             model: this.model
         });
@@ -79,6 +83,8 @@ buster.testCase("required validator", {
     },
 
     "required can be specified as a method returning true or false": function() {
+        this.model.set({name:'aaa'});
+
         assert(this.model.set({
             dependsOnName: undefined
         }));

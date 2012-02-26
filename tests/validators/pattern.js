@@ -12,7 +12,10 @@ buster.testCase("pattern validator", {
             }
         });
 
-        this.model = new Model();
+        this.model = new Model({
+            name: 'test',
+            email: 'test@example.com'
+        });
         this.view = new Backbone.View({
             model: this.model
         });
