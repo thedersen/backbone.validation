@@ -638,11 +638,6 @@ Basic behaviour:
 
 #### v0.5.2
 
-* *BREAKING:* Nested validation is no longer supported. See the documentation for preferred ways of acheiving this.
-* Arrays with attribute names in the events now contains the name of all attributes with error.
-
-#### v0.5.2
-
 * Fixed equalTo validator when setting both values at the same time (Fixes #27)
 * Fixed removing invalid class in view when validating dependent attributes, and changing one makes the other valid
 
