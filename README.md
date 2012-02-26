@@ -610,7 +610,8 @@ The message can contain placeholders for arguments that will be replaced:
 
 #### v0.5.2
 
-* Fixed validation of attributes dependent on each other
+* Fixed equalTo validator when setting both values at the same time (Fixes #27)
+* Fixed removing invalid class in view when validating dependent attributes, and changing one makes the other valid
 
 #### v0.5.1
 
