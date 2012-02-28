@@ -171,16 +171,6 @@ model.isValid('name');
 model.isValid(['name', 'age']);
 ```
 
-### What gets validated when?
-
-If you are using Backbone v0.5.3, only attributes that are being set are validated.
-
-If you are using Backbone v0.9.1, all attributes in a model will be validated. However, if for instance `name` never has been set (either explicitly or with a default value) that attribute will not be validated before it gets set.
-
-This is very useful when validating forms as they are populated, since you don't want to alert the user about errors in input not yet entered.
-
-If you need to validate entire model (both attributes that has been set or not) you can call `validate()` or `isValid(true)` on the model.
-
 ## Configuration
 
 ### Callbacks
@@ -605,6 +595,18 @@ The message can contain placeholders for arguments that will be replaced:
 * `{0}` will be replaced with the name of the attribute being validated
 * `{1}` will be replaced with the allowed value configured in the validation (or the first one in a range validator)
 * `{2}` will be replaced with the second value in a range validator
+
+## FAQ
+
+### What gets validated when?
+
+If you are using Backbone v0.5.3, only attributes that are being set are validated.
+
+If you are using Backbone v0.9.1, all attributes in a model will be validated. However, if for instance `name` never has been set (either explicitly or with a default value) that attribute will not be validated before it gets set.
+
+This is very useful when validating forms as they are populated, since you don't want to alert the user about errors in input not yet entered.
+
+If you need to validate entire model (both attributes that has been set or not) you can call `validate()` or `isValid(true)` on the model.
 
 ## Release notes
 
