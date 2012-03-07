@@ -90,11 +90,11 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         return {
             isValid: function(option) {
                 if(_.isString(option)){
-                    return !validateAttr(this, option, this.get(option), this.toJSON());
+                    return !validateAttr(this, option, this.get(option), _.extend({}, this.attributes));
                 }
                 if(_.isArray(option)){
                     for (var i = 0; i < option.length; i++) {
-                        if(validateAttr(this, option[i], this.get(option[i]), this.toJSON())){
+                        if(validateAttr(this, option[i], this.get(option[i]), _.extend({}, this.attributes))){
                             return false;
                         }
                     }
@@ -110,7 +110,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 var model = this,
                     validateAll = !attrs,
                     opt = _.extend({}, options, setOptions),
-                    allAttrs = _.extend(getValidatedAttrs(model), model.toJSON(), attrs),
+                    allAttrs = _.extend(getValidatedAttrs(model), model.attributes, attrs),
                     changedAttrs = attrs || allAttrs,
                     result = validateModel(model, allAttrs);
 
