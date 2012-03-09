@@ -230,8 +230,7 @@ Backbone.Validation.messages = {
     rangeLength: '{0} must be between {1} and {2} characters',
     oneOf: '{0} must be one of: {1}',
     equalTo: '{0} must be the same as {1}',
-    pattern: '{0} must be a valid {1}',
-    object: '{0} must be an object'
+    pattern: '{0} must be a valid {1}'
 };
 
 Backbone.Validation.validators = (function(patterns, messages, _) {
@@ -328,11 +327,6 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
         pattern: function(value, attr, pattern) {
             if (!hasValue(value) || !value.toString().match(patterns[pattern] || pattern)) {
                 return format(messages.pattern, attr, pattern);
-            }
-        },
-        validation: function(value, attr, objectValue) {
-            if (!_.isObject(value)) {
-                return format(messages.object, attr);
             }
         }
     };
