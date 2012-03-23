@@ -221,7 +221,7 @@ Backbone.Validation.patterns = {
 Backbone.Validation.messages = {
     required: '{0} is required',
     acceptance: '{0} must be accepted',
-    min: '{0} must be grater than or equal to {1}',
+    min: '{0} must be greater than or equal to {1}',
     max: '{0} must be less than or equal to {1}',
     range: '{0} must be between {1} and {2}',
     length: '{0} must be {1} characters',
