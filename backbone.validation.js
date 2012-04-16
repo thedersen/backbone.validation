@@ -155,8 +155,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 model._isValid = result.isValid;
 
                 _.defer(function() {
-                    model.trigger('validated', model._isValid, model, result.invalidAttrs);
-                    model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
+                    model.trigger('validated', model._isValid, model, result.invalidAttrs,  result.errorMessages);
+                    model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs,  result.errorMessages);
                 });
 
                 if (!opt.forceUpdate && result.errorMessages.length > 0) {
