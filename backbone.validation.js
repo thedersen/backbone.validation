@@ -19,7 +19,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         }, {});
     };
 
-    var getValidators = function(model, validation, attr) {
+    var _getValidators = function(model, validation, attr) {
         var attrValidation = validation[attr] || {};
 
         if (_.isFunction(attrValidation)) {
@@ -32,14 +32,28 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
         return _.reduce(attrValidation, function(memo, attrValidation){
             _.each(_.without(_.keys(attrValidation), 'msg'), function(validator){
+                var validationData = !_.isFunction(attrValidation[validator]) && _.isObject(attrValidation[validator]) ? _.clone(attrValidation[validator]) : {
+                    value : attrValidation[validator],
+                    msg   : attrValidation.msg
+                };
+
                 memo.push({
                     fn: Backbone.Validation.validators[validator],
-                    val: attrValidation[validator],
-                    msg: attrValidation.msg
+                    val: validationData.value,
+                    msg: validationData.msg
                 });
             });
             return memo;
         }, []);
+    };
+
+    var validationCache = {};
+    var getValidators = function(model, validation, attr) {
+        if (!validationCache[model.cid + '-' + attr]) {
+            validationCache[model.cid + '-' + attr] = _getValidators(model, validation, attr);
+        }
+
+        return validationCache[model.cid + '-' + attr];
     };
 
     var hasChildValidaton = function(validation, attr) {
@@ -155,8 +169,8 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 model._isValid = result.isValid;
 
                 _.defer(function() {
-                    model.trigger('validated', model._isValid, model, result.invalidAttrs);
-                    model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
+                    model.trigger('validated', model._isValid, model, result.invalidAttrs,  result.errorMessages);
+                    model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs,  result.errorMessages);
                 });
 
                 if (!opt.forceUpdate && result.errorMessages.length > 0) {
