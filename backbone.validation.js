@@ -114,7 +114,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             }
         }
 
-        if (isValid) {
+        if (isValid && !options.isolatedValidation) {
             isValid = validateAll(model, validation, attrs, computed, view, options);
         }
 
