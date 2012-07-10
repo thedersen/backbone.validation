@@ -1,6 +1,13 @@
 # Backbone.Validation v0.5.2
 
-A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
+A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input. Inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
+
+## Download and source code
+
+You can download the raw source from [GitHub](http://github.com/thedersen/backbone.validation) or use the links below for the latest stable version.
+
+* Development: [backbone.validation.js](https://raw.github.com/thedersen/backbone.validation/master/backbone.validation.js)
+* Production:  [backbone.validation.min.js](https://raw.github.com/thedersen/backbone.validation/master/backbone.validation.min.js)
 
 ## Getting started
 
