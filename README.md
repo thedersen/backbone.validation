@@ -615,7 +615,26 @@ This is very useful when validating forms as they are populated, since you don't
 
 If you need to validate entire model (both attributes that has been set or not) you can call `validate()` or `isValid(true)` on the model.
 
-### Use with Twitter Bootstrap
+### How can I allow empty values but still validate if the user enters something?
+
+By default, if you configure a validator for an attribute, it is considered required. However, if you want to allow empty values and still validate when something is entered, add required: false in addition to other validators.
+
+	validation: {
+  		value: {
+    		min: 1,
+            required: false
+        }
+    }
+
+### I there an elegant way to display the error message that is put into the data-error attribute?
+
+The default implementation of the callbacks are a bit naïve, since it is very difficult to make a general implementation that suits everybody.
+
+My recommendation is to override the callbacks and implement your own strategy for displaying the error messages.
+
+Please refer to [this section](/#configuration/callbacks) for more details.
+
+### How can I use it with Twitter Bootstrap?
 
 [driehle](https://github.com/driehle) put together a gist in Coffee Script that helps rendering the error messages for Twitter Bootstrap:
 
