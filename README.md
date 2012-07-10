@@ -615,6 +615,18 @@ This is very useful when validating forms as they are populated, since you don't
 
 If you need to validate entire model (both attributes that has been set or not) you can call `validate()` or `isValid(true)` on the model.
 
+### Use with Twitter Bootstrap
+
+[driehle](https://github.com/driehle) put together a gist in Coffee Script that helps rendering the error messages for Twitter Bootstrap:
+
+https://gist.github.com/2909552
+
+Basic behaviour:
+
+* The control-group gets an error class so that inputs get the red border
+* By default error messages get rendered as &lt;p class="help-block"&gt; (which has red text because of the error class)
+* You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
+
 ## Release notes
 
 #### v0.5.2
