@@ -91,7 +91,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
             errorMessages = [],
             invalidAttrs = [],
             isValid = true,
-            computed = _.extend(model.toJSON(), attrs);
+            computed = _.extend({}, model.attributes, attrs);
 
         for (changedAttr in attrs) {
             error = validateAttr(model, validation, changedAttr, attrs[changedAttr], computed);
@@ -129,11 +129,11 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         return {
             isValid: function(option) {
                 if(_.isString(option)){
-                    return !validateAttr(this, this.validation, option, this.get(option), this.toJSON());
+                    return !validateAttr(this, this.validation, option, this.get(option), _.extend({}, this.attributes));
                 }
                 if(_.isArray(option)){
                     for (var i = 0; i < option.length; i++) {
-                        if(validateAttr(this, this.validation, option[i], this.get(option[i]), this.toJSON())){
+                        if(validateAttr(this, this.validation, option[i], this.get(option[i]), _.extend({}, this.attributes))){
                             return false;
                         }
                     }
@@ -148,7 +148,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 var model = this,
                     opt = _.extend({}, options, setOptions);
                 if(!attrs){
-                    return model.validate.call(model, _.extend(getValidatedAttrs(model), model.toJSON()));
+                    return model.validate.call(model, _.extend(getValidatedAttrs(model), _.extend({}, model.attributes)));
                 }
 
                 var result = validateObject(view, model, model.validation, attrs, opt);

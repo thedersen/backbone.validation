@@ -344,6 +344,29 @@ buster.testCase("Backbone.Validation", {
         }
     },
 
+    "when bound to model with custom toJSON": {
+        setUp: function() {
+            this.model.toJSON = function() {
+                return {
+                    'person': {
+                        'age': this.attributes.age,
+                        'name': this.attributes.name
+                    }
+                }
+            }
+
+            Backbone.Validation.bind(this.view);
+        },
+
+        "and conforming to all validators the model is valid": function (){
+            this.model.set({age: 12});
+            this.model.set({name: 'Jack'});
+
+            this.model.validate()
+            assert(this.model.isValid())
+        }
+    },
+
     "when bound to model with three validators on one attribute": {
         setUp: function() {
             this.Model = Backbone.Model.extend({
