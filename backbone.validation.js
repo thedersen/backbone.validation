@@ -248,6 +248,11 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
 
                     return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
                 };
+    var sentenceCase = function(str) {
+        return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(match, index) {
+            return index === 0 ? match.toUpperCase() : ' ' + match.toLowerCase();
+        }).replace('_', ' ');
+    };
     var format = function() {
         var args = Array.prototype.slice.call(arguments);
         var text = args.shift();
@@ -275,62 +280,62 @@ Backbone.Validation.validators = (function(patterns, messages, _) {
                 return false; // overrides all other validators
             }
             if (isRequired && !hasValue(value)) {
-                return format(messages.required, attr);
+                return format(messages.required, sentenceCase(attr));
             }
         },
         acceptance: function(value, attr) {
             if(value !== 'true' && (!_.isBoolean(value) || value === false)) {
-                return format(messages.acceptance, attr);
+                return format(messages.acceptance, sentenceCase(attr));
             }
         },
         min: function(value, attr, minValue) {
             if (!isNumber(value) || value < minValue) {
-                return format(messages.min, attr, minValue);
+                return format(messages.min, sentenceCase(attr), minValue);
             }
         },
         max: function(value, attr, maxValue) {
             if (!isNumber(value) || value > maxValue) {
-                return format(messages.max, attr, maxValue);
+                return format(messages.max, sentenceCase(attr), maxValue);
             }
         },
         range: function(value, attr, range) {
             if(!isNumber(value) || value < range[0] || value > range[1]) {
-                return format(messages.range, attr, range[0], range[1]);
+                return format(messages.range, sentenceCase(attr), range[0], range[1]);
             }
         },
         length: function(value, attr, length) {
             if (!hasValue(value) || trim(value).length !== length) {
-                return format(messages.length, attr, length);
+                return format(messages.length, sentenceCase(attr), length);
             }
         },
         minLength: function(value, attr, minLength) {
             if (!hasValue(value) || trim(value).length < minLength) {
-                return format(messages.minLength, attr, minLength);
+                return format(messages.minLength, sentenceCase(attr), minLength);
             }
         },
         maxLength: function(value, attr, maxLength) {
             if (!hasValue(value) || trim(value).length > maxLength) {
-                return format(messages.maxLength, attr, maxLength);
+                return format(messages.maxLength, sentenceCase(attr), maxLength);
             }
         },
         rangeLength: function(value, attr, range) {
             if(!hasValue(value) || trim(value).length < range[0] || trim(value).length > range[1]) {
-                return format(messages.rangeLength, attr, range[0], range[1]);
+                return format(messages.rangeLength, sentenceCase(attr), range[0], range[1]);
             }
         },
         oneOf: function(value, attr, values) {
             if(!_.include(values, value)){
-                return format(messages.oneOf, attr, values.join(', '));
+                return format(messages.oneOf, sentenceCase(attr), values.join(', '));
             }
         },
         equalTo: function(value, attr, equalTo, model, computed) {
             if(value !== computed[equalTo]) {
-                return format(messages.equalTo, attr, equalTo);
+                return format(messages.equalTo, sentenceCase(attr), sentenceCase(equalTo));
             }
         },
         pattern: function(value, attr, pattern) {
             if (!hasValue(value) || !value.toString().match(patterns[pattern] || pattern)) {
-                return format(messages.pattern, attr, pattern);
+                return format(messages.pattern, sentenceCase(attr), pattern);
             }
         }
     };

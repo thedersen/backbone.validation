@@ -22,7 +22,7 @@ buster.testCase("acceptance validator", {
 
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals(['agree must be accepted'], error);
+            assert.equals(['Agree must be accepted'], error);
             done();
         });
         this.model.set({agree:false});

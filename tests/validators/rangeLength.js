@@ -22,7 +22,7 @@ buster.testCase("rangeLength validator", {
 
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals(['name must be between 2 and 4 characters'], error);
+            assert.equals(['Name must be between 2 and 4 characters'], error);
             done();
         });
         this.model.set({name:'a'});

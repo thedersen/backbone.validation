@@ -22,7 +22,7 @@ buster.testCase("oneOf validator", {
 
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals(['country must be one of: Norway, Sweeden'], error);
+            assert.equals(['Country must be one of: Norway, Sweeden'], error);
             done();
         });
         this.model.set({country:''});

@@ -27,7 +27,7 @@ buster.testCase("equalTo validator", {
 
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals(['passwordRepeat must be the same as password'], error);
+            assert.equals(['Password repeat must be the same as Password'], error);
             done();
         });
         this.model.set({passwordRepeat:'123'});
