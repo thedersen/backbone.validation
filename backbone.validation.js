@@ -15,14 +15,14 @@ Backbone.Validation = (function(Backbone, _, undefined) {
     };
 
     var getValidatedAttrs = function(model){
-        return _.reduce(_.keys(model.validation), function(memo, key){
+        return _.reduce(_.keys(model.validation || {}), function(memo, key){
             memo[key] = undefined;
             return memo;
         }, {});
     };
 
     var getValidators = function(model, attr) {
-        var attrValidation = model.validation[attr] || {};
+        var attrValidation = model.validation ? model.validation[attr] || {} : {};
 
         if (_.isFunction(attrValidation)) {
             return attrValidation;

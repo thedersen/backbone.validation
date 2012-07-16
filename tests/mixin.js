@@ -65,5 +65,15 @@ buster.testCase("Mixin validation", {
         "succeeds setting invalid value when forcing update globally": function() {
             assert(this.model.set({name:''}));
         }
+    },
+
+    "when setting attribute on model without validation": {
+        setUp: function(){
+            this.model = new Backbone.Model();
+        },
+
+        "it should not complain": function() {
+            assert(this.model.set({someAttr: 'someValue'}));
+        }
     }
 });
