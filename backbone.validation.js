@@ -175,7 +175,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
         delete model.isValid;
     };
 
-    var collectonAdd = function(model) {
+    var collectionAdd = function(model) {
         bindModel(this.view, model, this.options);
     };
 
@@ -202,7 +202,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 collection.each(function(model){
                     bindModel(view, model, opt);
                 });
-                collection.bind('add', collectonAdd, {view: view, options: opt});
+                collection.bind('add', collectionAdd, {view: view, options: opt});
                 collection.bind('remove', collectionRemove);
             }
         },
@@ -217,7 +217,7 @@ Backbone.Validation = (function(Backbone, _, undefined) {
                 collection.each(function(model){
                     unbindModel(model);
                 });
-                collection.unbind('add', collectonAdd);
+                collection.unbind('add', collectionAdd);
                 collection.unbind('remove', collectionRemove);
             }
         },
