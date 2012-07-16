@@ -88,6 +88,10 @@ Backbone.Validation = (function(Backbone, _, undefined) {
 
     var mixin = function(view, options) {
         return {
+            preValidate: function(attr, value) {
+                return validateAttr(this, attr, value, _.extend({}, this.attributes));
+            },
+
             isValid: function(option) {
                 if(_.isString(option)){
                     return !validateAttr(this, option, this.get(option), _.extend({}, this.attributes));
