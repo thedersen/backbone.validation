@@ -22,7 +22,7 @@ buster.testCase("min validator", {
 
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals(['age must be grater than or equal to 1'], error);
+            assert.equals(['age must be greater than or equal to 1'], error);
             done();
         });
         this.model.set({age: 0});
