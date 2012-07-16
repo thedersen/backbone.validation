@@ -109,6 +109,7 @@ buster.testCase("Backbone.Validation", {
         "nothing happens": function() {
             delete this.view.model;
             Backbone.Validation.unbind(this.view);
+            assert(true);
         }
     },
 
