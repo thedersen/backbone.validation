@@ -12,7 +12,7 @@ Backbone.Validation is a bit opinionated, meaning that you have to follow some c
 
 ## Download and source code
 
-You can download the raw source from [GitHub](http://github.com/thedersen/backbone.validation), se the [annotated source](http://thedersen.com/projects/backbone-validation/docs) or use the links below for the latest stable version.
+You can download the raw source from [GitHub](http://github.com/thedersen/backbone.validation), see the [annotated source](http://thedersen.com/projects/backbone-validation/docs) or use the links below for the latest stable version.
 
 * Development: [backbone.validation.js](https://raw.github.com/thedersen/backbone.validation/master/backbone.validation.js)
 * Production:  [backbone.validation.min.js](https://raw.github.com/thedersen/backbone.validation/master/backbone.validation.min.js)
@@ -84,13 +84,13 @@ MyModel = Backbone.Model.extend({
       msg: 'Please enter an email address'
     },{
       pattern: 'email',
-        msg: 'Please enter a valid email'
+      msg: 'Please enter a valid email'
     }]
   }
 });
 ```
 
-## Using form validation
+## Using form+model validation
 
 The philosophy behind this way of using the plugin, is that you should be able to reuse your validation rules both to validate your model and to validate form input, as well as providing a simple way of notifying users about errors when they are populating forms.
 
@@ -158,7 +158,7 @@ _.extend(Backbone.Model.prototype, Backbone.Validation.mixin);
 
 ### validate
 
-This is called by Backbone when it needs to perform validation. You can call it manually without any parameters to validate the entire model.
+This is called by Backbone when it needs to perform validation. You can also call it manually without any parameters to validate the entire model.
 
 ### isValid
 
@@ -292,7 +292,7 @@ Note that when switching this on, Backbone's error event is no longer triggered.
 
 *Default: sentenceCase*
 
-Label formatters determines how an attribute name is transformed before displayed in an error message.
+Label formatters determines how an attribute name is transformed before it is displayed in an error message.
 
 There are three options available:
 
@@ -582,7 +582,7 @@ var SomeModel = Backbone.Model.extend({
 ```
 where the built-in patterns are:
 
-* number - Matched any number (e.g. -100.000,00)
+* number - Matches any number (e.g. -100.000,00)
 * email - Matches a valid email address (e.g. mail@example.com)
 * url - Mathes any valid url (e.g. http://www.xample.com)
 * digits - Matches any digit(s) (i.e. 0-9)
@@ -652,9 +652,7 @@ var Model = Backbone.Model.extend({
 
 ### Overriding the default error messages
 
-If you don't like the default error messages there are several ways of customizing them.
-
-You can override the default ones globally:
+If you don't like the default error messages you can easilly customize them by override the default ones globally:
 
 ```js
 _.extend(Backbone.Validation.messages, {
@@ -665,15 +663,13 @@ _.extend(Backbone.Validation.messages, {
 
 The message can contain placeholders for arguments that will be replaced:
 
-* `{0}` will be replaced with the [formattet name](#configuration/label-formatter) of the attribute being validated
+* `{0}` will be replaced with the [formatted name](#configuration/label-formatter) of the attribute being validated
 * `{1}` will be replaced with the allowed value configured in the validation (or the first one in a range validator)
 * `{2}` will be replaced with the second value in a range validator
 
 ## FAQ
 
 ### What gets validated when?
-
-If you are using Backbone v0.5.3, only attributes that are being set are validated.
 
 If you are using Backbone v0.9.1 or later, all attributes in a model will be validated. However, if for instance `name` never has been set (either explicitly or with a default value) that attribute will not be validated before it gets set.
 
