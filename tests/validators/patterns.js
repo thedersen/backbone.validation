@@ -4,21 +4,21 @@ buster.testCase("Backbone.Validation patterns", {
         this.valid = function(value) {
             assert(value.match(that.pattern), value + ' should be valid');
         };
-        
+
         this.invalid = function(value) {
             refute(value.match(that.pattern), value + ' should be invalid');
         };
     },
-    
+
     "email pattern matches all valid email addresses": function() {
         this.pattern = Backbone.Validation.patterns.email;
-        
+
         this.valid('name@example.com');
         this.valid('name@example.com');
         this.valid('name+@example.co');
         this.valid('n@e.co');
         this.valid('first.last@backbone.example.com');
-        
+
         this.invalid('name');
         this.invalid('name@');
         this.invalid('name@example');
@@ -37,7 +37,7 @@ buster.testCase("Backbone.Validation patterns", {
 
     "url pattern matches all valid urls": function() {
         this.pattern = Backbone.Validation.patterns.url;
-        
+
         this.valid('http://thedersen.com');
         this.valid('http://www.thedersen.com/');
         this.valid('http://øya.no/');
@@ -46,7 +46,7 @@ buster.testCase("Backbone.Validation patterns", {
         this.valid('http://thedersen.com/backbone.validation/?query=string');
         this.valid('ftp://thedersen.com');
         this.valid('http://127.0.0.1');
-        
+
         this.invalid('thedersen.com');
         this.invalid('http://thedersen');
         this.invalid('http://thedersen.');
@@ -58,14 +58,14 @@ buster.testCase("Backbone.Validation patterns", {
 
     "url pattern is case insensitive": function() {
         this.pattern = Backbone.Validation.patterns.url;
-        
+
         this.valid('http://Thedersen.com');
         this.valid('HTTP://THEDERSEN.COM');
     },
-    
+
     "number pattern matches all numbers, including decimal numbers": function() {
         this.pattern = Backbone.Validation.patterns.number;
-        
+
         this.valid('123');
         this.valid('-123');
         this.valid('123,000');
@@ -76,17 +76,17 @@ buster.testCase("Backbone.Validation patterns", {
         this.valid('-123,000.45');
         this.valid('123,000.00');
         this.valid('-123,000.00');
-        
+
         this.invalid('abc');
         this.invalid('abc123');
         this.invalid('123abc');
         this.invalid('123.000,00');
         this.invalid('123.0.0,00');
     },
-    
+
     "digits pattern matches single or multiple digits": function() {
         this.pattern = Backbone.Validation.patterns.digits;
-        
+
         this.valid('1');
         this.valid('123');
 
