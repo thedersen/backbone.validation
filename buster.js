@@ -1,6 +1,6 @@
 var config = exports;
 
-var versions = ['0.5.3', '0.9.1', '0.9.2'];
+var versions = ['0.9.2'];
 for (var i = 0; i < versions.length; i++) {
     var ver = versions[i];
 
