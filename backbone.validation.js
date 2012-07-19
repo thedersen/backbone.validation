@@ -14,6 +14,7 @@
   var defaultOptions = {
       forceUpdate: false,
       selector: 'name',
+      labelFormatter: 'sentenceCase',
       valid: Function.prototype,
       invalid: Function.prototype
   };
@@ -337,6 +338,48 @@
     pattern: '{0} must be a valid {1}'
   };
 
+  // Label formatters
+  // ----------------
+
+  // Label formatters are used to convert the attribute name
+  // to a more human friendly label when using the built in
+  // error messages.
+  // Configure which one to use with a call to
+  //
+  //     Backbone.Validation.configure({
+  //       labelFormatter: 'label'
+  //     });
+  var defaultLabelFormatters = Backbone.Validation.labelFormatters = {
+
+    // Returns the attribute name with applying any formatting
+    none: function(attrName) {
+      return attrName;
+    },
+
+    // Converts attributeName or attribute_name to Attribute name
+    sentenceCase: function(attrName) {
+      return attrName.replace(/(?:^\w|[A-Z]|\b\w)/g, function(match, index) {
+        return index === 0 ? match.toUpperCase() : ' ' + match.toLowerCase();
+      }).replace('_', ' ');
+    },
+
+    // Looks for a label configured on the model and returns it
+    //
+    //      var Model = Backbone.Model.extend({
+    //        validation: {
+    //          someAttribute: {
+    //            required: true
+    //          }
+    //        },
+    //
+    //        labels: {
+    //          someAttribute: 'Custom label'
+    //        }
+    //      });
+    label: function(attrName, model) {
+      return model.labels[attrName] || attrName;
+    }
+  };
 
   // Built in validators
   // -------------------
@@ -354,11 +397,10 @@
             return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
         };
 
-    // Converts attributeName or attribute_name to Attribute name
-    var sentenceCase = function(str) {
-      return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(match, index) {
-        return index === 0 ? match.toUpperCase() : ' ' + match.toLowerCase();
-      }).replace('_', ' ');
+    // Uses the configured label formatter to format the attribute name
+    // to make it more readable for the user
+    var formatLabel = function(attrName, model) {
+      return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
     };
 
     // Replaces nummeric placeholders like {0} in a string with arguments
@@ -397,84 +439,84 @@
           return false; // overrides all other validators
         }
         if (isRequired && !hasValue(value)) {
-          return format(defaultMessages.required, sentenceCase(attr));
+          return format(defaultMessages.required, formatLabel(attr, model));
         }
       },
 
       // Acceptance validator
-      acceptance: function(value, attr) {
+      acceptance: function(value, attr, accept, model) {
         if(value !== 'true' && (!_.isBoolean(value) || value === false)) {
-          return format(defaultMessages.acceptance, sentenceCase(attr));
+          return format(defaultMessages.acceptance, formatLabel(attr, model));
         }
       },
 
       // Min validator
-      min: function(value, attr, minValue) {
+      min: function(value, attr, minValue, model) {
         if (!isNumber(value) || value < minValue) {
-          return format(defaultMessages.min, sentenceCase(attr), minValue);
+          return format(defaultMessages.min, formatLabel(attr, model), minValue);
         }
       },
 
       // Max validator
-      max: function(value, attr, maxValue) {
+      max: function(value, attr, maxValue, model) {
         if (!isNumber(value) || value > maxValue) {
-          return format(defaultMessages.max, sentenceCase(attr), maxValue);
+          return format(defaultMessages.max, formatLabel(attr, model), maxValue);
         }
       },
 
       // Range validator
-      range: function(value, attr, range) {
+      range: function(value, attr, range, model) {
         if(!isNumber(value) || value < range[0] || value > range[1]) {
-          return format(defaultMessages.range, sentenceCase(attr), range[0], range[1]);
+          return format(defaultMessages.range, formatLabel(attr, model), range[0], range[1]);
         }
       },
 
       // Length validator
-      length: function(value, attr, length) {
+      length: function(value, attr, length, model) {
         if (!hasValue(value) || trim(value).length !== length) {
-          return format(defaultMessages.length, sentenceCase(attr), length);
+          return format(defaultMessages.length, formatLabel(attr, model), length);
         }
       },
 
       // Min length validator
-      minLength: function(value, attr, minLength) {
+      minLength: function(value, attr, minLength, model) {
         if (!hasValue(value) || trim(value).length < minLength) {
-          return format(defaultMessages.minLength, sentenceCase(attr), minLength);
+          return format(defaultMessages.minLength, formatLabel(attr, model), minLength);
         }
       },
 
       // Max length validator
-      maxLength: function(value, attr, maxLength) {
+      maxLength: function(value, attr, maxLength, model) {
         if (!hasValue(value) || trim(value).length > maxLength) {
-          return format(defaultMessages.maxLength, sentenceCase(attr), maxLength);
+          return format(defaultMessages.maxLength, formatLabel(attr, model), maxLength);
         }
       },
 
       // Range length validator
-      rangeLength: function(value, attr, range) {
+      rangeLength: function(value, attr, range, model) {
         if(!hasValue(value) || trim(value).length < range[0] || trim(value).length > range[1]) {
-          return format(defaultMessages.rangeLength, sentenceCase(attr), range[0], range[1]);
+          return format(defaultMessages.rangeLength, formatLabel(attr, model), range[0], range[1]);
         }
       },
 
       // One of validator
-      oneOf: function(value, attr, values) {
+      oneOf: function(value, attr, values, model) {
         if(!_.include(values, value)){
-          return format(defaultMessages.oneOf, sentenceCase(attr), values.join(', '));
+          return format(defaultMessages.oneOf, formatLabel(attr, model), values.join(', '));
         }
       },
 
       // Equal to validator
       equalTo: function(value, attr, equalTo, model, computed) {
         if(value !== computed[equalTo]) {
-          return format(defaultMessages.equalTo, sentenceCase(attr), sentenceCase(equalTo));
+          return format(defaultMessages.equalTo, formatLabel(attr, model), formatLabel(equalTo, model));
         }
       },
 
       // Pattern validator
-      pattern: function(value, attr, pattern) {
+      pattern: function(value, attr, pattern, model) {
         if (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
-          return format(defaultMessages.pattern, sentenceCase(attr), pattern);
+          return format(defaultMessages.pattern, formatLabel(attr, model), pattern);
         }
       }
     };
