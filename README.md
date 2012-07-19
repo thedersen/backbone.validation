@@ -1,6 +1,9 @@
 # Backbone.Validation v0.6.0
 
-A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input. Inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
+A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
+
+<iframe class="github-btn" src="http://markdotto.github.com/github-buttons/github-btn.html?user=thedersen&repo=backbone.validation&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="112px" height="20px"></iframe>
+<iframe class="github-btn" src="http://markdotto.github.com/github-buttons/github-btn.html?user=thedersen&repo=backbone.validation&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="112px" height="20px"></iframe>
 
 ## Introduction
 
@@ -681,12 +684,14 @@ If you need to validate entire model (both attributes that has been set or not) 
 
 By default, if you configure a validator for an attribute, it is considered required. However, if you want to allow empty values and still validate when something is entered, add required: false in addition to other validators.
 
-	validation: {
-  		value: {
-    		min: 1,
-            required: false
-        }
-    }
+```js
+validation: {
+	value: {
+		min: 1,
+    required: false
+  }
+}
+```
 
 ### I there an elegant way to display the error message that is put into the data-error attribute?
 
@@ -808,6 +813,10 @@ Basic behaviour:
 #### v0.1.2
 
 * Initial release
+
+## Inspiration
+
+Backbone.Validation is inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
 
 ## License
 
