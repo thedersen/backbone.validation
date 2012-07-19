@@ -434,8 +434,8 @@
       },
 
       // Required validator
-      required: function(value, attr, required, model) {
-        var isRequired = _.isFunction(required) ? required.call(model) : required;
+      required: function(value, attr, required, model, computed) {
+        var isRequired = _.isFunction(required) ? required.call(model, value, attr, computed) : required;
         if(!isRequired && !hasValue(value)) {
           return false; // overrides all other validators
         }

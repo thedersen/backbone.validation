@@ -10,7 +10,10 @@ buster.testCase("required validator", {
                     required: true
                 },
                 dependsOnName: {
-                    required: function() {
+                    required: function(val, attr, computed) {
+                        that.ctx = this;
+                        that.attr = attr;
+                        that.computed = computed;
                         return this.get('name') === 'name';
                     }
                 }
@@ -94,5 +97,27 @@ buster.testCase("required validator", {
         refute(this.model.set({
             dependsOnName: undefined
         }));
+    },
+
+    "context is the model": function() {
+        this.model.set({
+            dependsOnName: ''
+        });
+        assert.same(this.ctx, this.model);
+    },
+
+    "second argument is the name of the attribute being validated": function() {
+        this.model.set({dependsOnName: ''});
+        assert.equals('dependsOnName', this.attr);
+    },
+
+    "third argument is a computed model state": function() {
+        this.model.set({attr: 'attr'}, {silent: true});
+        this.model.set({
+            name: 'name',
+            dependsOnName: 'value'
+        });
+
+        assert.equals({agree:true, attr:'attr', dependsOnName:'value', name:'name'}, this.computed);
     }
 });
