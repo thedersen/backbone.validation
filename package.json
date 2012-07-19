@@ -1,7 +1,7 @@
 l{
     "author": "Thomas Pedersen (http://thedersen.com/)",
     "name": "backbone-validation",
-    "version": "0.5.3",
+    "version": "0.6.0",
     "url": "http://thedersen.github.com/backbone.validation",
     "repository": "git://github.com/thedersen/backbone.validation.git",
     "scripts": {
