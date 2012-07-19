@@ -376,7 +376,7 @@
     //        }
     //      });
     label: function(attrName, model) {
-      return model.labels[attrName] || attrName;
+      return model.labels[attrName] || defaultLabelFormatters.sentenceCase(attrName, model);
     }
   };
 

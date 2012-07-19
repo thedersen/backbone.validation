@@ -50,8 +50,8 @@ buster.testCase('Label formatters', {
         assert.equals('Custom label is required', this.model.preValidate('someAttribute', ''));
       },
 
-      "returns attribute name when label is not found": function(){
-        assert.equals('some_attribute is required', this.model.preValidate('some_attribute', ''));
+      "returns sentence cased name when label is not found": function(){
+        assert.equals('Some attribute is required', this.model.preValidate('some_attribute', ''));
       }
     },
 
