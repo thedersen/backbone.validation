@@ -70,7 +70,7 @@ buster.testCase("Backbone.Validation events", {
             this.model.bind('validated', function(valid, model, attr){
                 refute(valid);
                 assert.same(this.model, model);
-                assert.equals(['age', 'name'], attr);
+                assert.equals({age:'age', name:'name'}, attr);
                 done();
             }, this);
 
@@ -80,7 +80,7 @@ buster.testCase("Backbone.Validation events", {
         "validated:invalid event is triggered with model and name of attributes with error": function(done) {
             this.model.bind('validated:invalid', function(model, attr){
                 assert.same(this.model, model);
-                assert.equals(['age', 'name'], attr);
+                assert.equals({age: 'age', name: 'name'}, attr);
                 done();
             }, this);
 
@@ -90,7 +90,7 @@ buster.testCase("Backbone.Validation events", {
         "error event is triggered with model and error as an array of attribute names with error": function(done) {
             this.model.bind('error', function(model, error) {
                 assert.same(this.model, model);
-                assert.equals(['age', 'name'], error);
+                assert.equals({age: 'age', name: 'name'}, error);
                 done();
             }, this);
 
@@ -103,7 +103,7 @@ buster.testCase("Backbone.Validation events", {
             this.model.bind('validated', function(valid, model, attrs){
                 refute(valid);
                 assert.same(this.model, model);
-                assert.equals(['name'], attrs);
+                assert.equals({name: 'name'}, attrs);
                 done();
             }, this);
 
@@ -115,7 +115,7 @@ buster.testCase("Backbone.Validation events", {
         "validated:invalid event is triggered with model and an array with the names of the attributes with error": function(done) {
             this.model.bind('validated:invalid', function(model, attrs){
                 assert.same(this.model, model);
-                assert.equals(['name'], attrs);
+                assert.equals({name: 'name'}, attrs);
                 done();
             }, this);
 

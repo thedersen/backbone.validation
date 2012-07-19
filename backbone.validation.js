@@ -102,23 +102,20 @@
     // as well as error messages.
     var validateModel = function(model, attrs) {
       var result, error, attr,
-          invalidAttrs = [],
-          errorMessages = [],
+          invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs);
 
       for (attr in attrs) {
         error = validateAttr(model, attr, attrs[attr], computed);
-          if (error) {
-            invalidAttrs.push(attr);
-            errorMessages.push(error);
-            isValid = false;
-          }
+        if (error) {
+          invalidAttrs[attr] = error;
+          isValid = false;
+        }
       }
 
       return {
         invalidAttrs: invalidAttrs,
-        errorMessages: errorMessages,
         isValid: isValid
       };
     };
@@ -170,11 +167,12 @@
           // After validation is performed, loop through all changed attributes
           // and call either the valid or invalid callback so the view is updated.
           for(var attr in allAttrs) {
-            var index = _.indexOf(result.invalidAttrs, attr);
-            if(index !== -1 && (changedAttrs.hasOwnProperty(attr) || validateAll)){
-              opt.invalid(view, attr, result.errorMessages[index], opt.selector);
+            var invalid = result.invalidAttrs.hasOwnProperty(attr),
+                changed = changedAttrs.hasOwnProperty(attr);
+            if(invalid && (changed || validateAll)){
+              opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
             }
-            if(!_.include(result.invalidAttrs, attr)){
+            if(!invalid){
               opt.valid(view, attr, opt.selector);
             }
           }
@@ -190,8 +188,8 @@
           // Return any error messages to Backbone, unless the forceUpdate flag is set.
           // Then we do not return anything and fools Backbone to believe the validation was
           // a success. That way Backbone will update the model regardless.
-          if (!opt.forceUpdate && _.intersection(result.invalidAttrs, _.keys(changedAttrs)).length > 0) {
-            return result.errorMessages;
+          if (!opt.forceUpdate && _.intersection(_.keys(result.invalidAttrs), _.keys(changedAttrs)).length > 0) {
+            return result.invalidAttrs;
           }
         }
       };

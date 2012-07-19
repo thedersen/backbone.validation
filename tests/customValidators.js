@@ -107,11 +107,11 @@ buster.testCase("Chaining built-in validators with custom", {
     },
 
     "violating first validator in chain return first error message": function() {
-        assert.equals(['Name is required'], this.model.validate({name:''}));
+        assert.equals({name: 'Name is required'}, this.model.validate({name:''}));
     },
 
     "violating second validator in chain return second error message": function() {
-        assert.equals(['error'], this.model.validate({name:'a'}));
+        assert.equals({name: 'error'}, this.model.validate({name:'a'}));
     },
 
     "violating none of the validators returns undefined": function() {

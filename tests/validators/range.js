@@ -22,7 +22,7 @@ buster.testCase("range validator", {
 
     "has default error message": function(done) {
         this.model.bind('error', function(model, error){
-            assert.equals(['Age must be between 1 and 10'], error);
+            assert.equals({age: 'Age must be between 1 and 10'}, error);
             done();
         });
         this.model.set({age:0});
