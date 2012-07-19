@@ -39,26 +39,24 @@
     // attribute. Returns an array of any validators defined,
     // or an empty array if none is defined.
     var getValidators = function(model, attr) {
-      var attrValidation = model.validation ? model.validation[attr] || {} : {};
+      var attrValidationSet = model.validation ? model.validation[attr] || {} : {};
 
-      // If the validator is a function, just return it
-      if (_.isFunction(attrValidation)) {
-        return attrValidation;
+      // If the validator is a function or a string, wrap it in a function validator
+      if (_.isFunction(attrValidationSet) || _.isString(attrValidationSet)) {
+        attrValidationSet = {
+          fn: attrValidationSet
+        };
       }
-      // If the validator is a string, return the method
-      // with that name from the model.
-      else if(_.isString(attrValidation)) {
-        return model[attrValidation];
-      }
+
       // Stick the validator object into an array
-      else if(!_.isArray(attrValidation)) {
-        attrValidation = [attrValidation];
+      if(!_.isArray(attrValidationSet)) {
+        attrValidationSet = [attrValidationSet];
       }
 
       // Reduces the array of validators into a new array with objects
       // with a validation method to call, the value to validate against
       // and the specified error message, if any
-      return _.reduce(attrValidation, function(memo, attrValidation) {
+      return _.reduce(attrValidationSet, function(memo, attrValidation) {
         _.each(_.without(_.keys(attrValidation), 'msg'), function(validator) {
           memo.push({
             fn: defaultValidators[validator],
@@ -75,17 +73,10 @@
     // the first error message is returned.
     // If the attribute is valid, an empty string is returned.
     var validateAttr = function(model, attr, value, computed) {
-      var attrValidators = getValidators(model, attr);
-
-      // If the validator is a function just go ahead and call it
-      if (_.isFunction(attrValidators)) {
-        return attrValidators.call(model, value, attr, computed);
-      }
-
       // Reduces the array of validators to an error message by
       // applying all the validators and returning the first error
       // message, if any.
-      return _.reduce(attrValidators, function(memo, validator){
+      return _.reduce(getValidators(model, attr), function(memo, validator){
         var result = validator.fn.call(defaultValidators, value, attr, validator.val, model, computed);
         if(result === false || memo === false) {
           return false;
@@ -101,7 +92,7 @@
     // Returns and object containing names of invalid attributes
     // as well as error messages.
     var validateModel = function(model, attrs) {
-      var result, error, attr,
+      var error, attr,
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs);
