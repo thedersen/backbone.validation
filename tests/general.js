@@ -92,6 +92,10 @@ buster.testCase("Backbone.Validation", {
             refute.defined(this.model.validate);
         },
 
+        "the model's preValidate function is undefined": function() {
+            refute.defined(this.model.preValidate);
+        },
+
         "the model's isValid function is restored": function() {
             assert.same(this.model.isValid, Backbone.Model.prototype.isValid);
         }

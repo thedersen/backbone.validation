@@ -205,6 +205,7 @@
     // Removes the methods added to a model
     var unbindModel = function(model) {
       delete model.validate;
+      delete model.preValidate;
       delete model.isValid;
     };
 
