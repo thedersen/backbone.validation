@@ -5,8 +5,15 @@
 //
 // Documentation and full license available at:
 // http://thedersen.com/projects/backbone-validation
-
-(function(Backbone, _){
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['backbone', 'underscore'], factory);
+    } else {
+        // Browser globals
+        factory(Backbone, _);
+    }
+}(function (Backbone, _) {
 
   // Default options
   // ---------------
@@ -511,5 +518,4 @@
       }
     };
   })();
-
-})(Backbone, _);
+}));
