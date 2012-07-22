@@ -3,10 +3,14 @@ buster.testCase("Backbone.Validation events", {
         var Model = Backbone.Model.extend({
             validation: {
                 age: function(val){
-                    if(!val) return 'age';
+                    if(!val) {
+                        return 'age';
+                    }
                 },
                 name: function(val){
-                    if(!val) return 'name';
+                    if(!val) {
+                        return 'name';
+                    }
                 }
             }
         });

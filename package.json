@@ -1,18 +1,36 @@
-l{
-    "author": "Thomas Pedersen (http://thedersen.com/)",
-    "name": "backbone-validation",
-    "version": "0.6.0",
-    "url": "http://thedersen.github.com/backbone.validation",
-    "repository": "git://github.com/thedersen/backbone.validation.git",
-    "scripts": {
-        "test": "buster test"
-    },
-    "engines": {
-        "node": ">=0.6.3"
-    },
-    "dependencies": {},
-    "devDependencies": {
-        "buster": "0.4.3",
-        "uglify-js": "1.2.5"
-    }
+{
+  "name": "backbone-validation",
+  "title": "Backbone.Validation",
+  "version": "0.6.0",
+  "author": {
+    "name": "Thomas Pedersen",
+    "url": "http://thedersen.com/"
+  },
+  "homepage": "http://thedersen.com/projects/backbone-validation",
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://thedersen.mit-license.org/"
+  }],
+  "bugs": {
+    "url": "http://github.com/thedersen/backbone.validation/issues"
+  },
+  "directories": {
+    "lib": "./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/thedersen/backbone.validation.git"
+  },
+  "scripts": {
+    "test": "buster test",
+    "prepublish": "grunt"
+  },
+  "main": "./dest/backbone-validation-amd.js",
+  "dependencies": {
+    "backbone": ">=0.9.1",
+    "underscore": ">=1.3.1"
+  },
+  "devDependencies": {
+    "buster": ">=0.6.2"
+  }
 }

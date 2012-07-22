@@ -1,12 +1,13 @@
 // Backbone.Validation v0.6.0
 //
-// Copyright (C)2011-2012 Thomas Pedersen
+// Copyright (c) 2011-2012 Thomas Pedersen
 // Distributed under MIT License
 //
 // Documentation and full license available at:
 // http://thedersen.com/projects/backbone-validation
 
 (function(Backbone, _){
+  'use strict';
 
   // Default options
   // ---------------
@@ -262,7 +263,7 @@
       // with validation
       mixin: mixin(null, defaultOptions)
     };
-  })();
+  }());
 
 
   // Callbacks
@@ -399,7 +400,7 @@
       var args = Array.prototype.slice.call(arguments);
       var text = args.shift();
       return text.replace(/\{(\d+)\}/g, function(match, number) {
-        return typeof args[number] != 'undefined' ? args[number] : match;
+        return typeof args[number] !== 'undefined' ? args[number] : match;
       });
     };
 
@@ -510,6 +511,6 @@
         }
       }
     };
-  })();
+  }());
 
-})(Backbone, _);
+}(Backbone, _));

@@ -10,7 +10,7 @@ for (var i = 0; i < versions.length; i++) {
             'lib/jquery-1.6.2.js',
             'lib/underscore.js',
             'lib/backbone-' + ver + '.js',
-            'backbone.validation.js'
+            'dist/backbone-validation.js'
         ],
         tests: [
             'tests/**/*.js'

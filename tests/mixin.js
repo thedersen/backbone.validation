@@ -7,7 +7,9 @@ buster.testCase("Mixin validation", {
         var Model = Backbone.Model.extend({
             validation: {
                 name: function(val) {
-                    if(!val) return 'error';
+                    if(!val) {
+                        return 'error';
+                    }
                 }
             }
         });
