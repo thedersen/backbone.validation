@@ -2,7 +2,7 @@ module.exports = function(grunt) {
   var childProcess = require('child_process'),
       log = grunt.log;
 
-  grunt.registerTask('buster', 'runs BusterJS tests.', function() {
+  grunt.registerTask('buster', 'Run Buster.JS tests. Make sure you have started buster server first.', function() {
     var done = this.async(),
         args = [],
         config = grunt.config('buster');
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 
     childProcess.exec('command -v buster-test', { env: process.env }, function(error, stdout, stderr) {
       if (error) {
-        log.writeln('Unknown error occurred when running Buster.js');
+        log.writeln('Unknown error occurred when running Buster.JS');
         done(false);
       }
       else {
