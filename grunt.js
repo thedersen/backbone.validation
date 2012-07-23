@@ -1,16 +1,18 @@
+
 module.exports = function(grunt) {
+  require('./grunt-buster')(grunt);
 
   // Project configuration.
   grunt.initConfig({
     pkg: '<json:package.json>',
     meta: {
-      banner: '// <%= pkg.title || pkg.name %> v<%= pkg.version %>\n' +
+      banner: '// <%= pkg.title %> v<%= pkg.version %>\n' +
               '//\n' +
               '// Copyright (c) 2011-<%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
               '// Distributed under MIT License\n' +
               '//\n' +
               '// Documentation and full license available at:\n' +
-              '// <%= pkg.homepage ? pkg.homepage : "" %>'
+              '// <%= pkg.homepage %>'
     },
     concat: {
       browser: {
@@ -26,10 +28,13 @@ module.exports = function(grunt) {
     },
     watch: {
       files: '<config:lint.files>',
-      tasks: 'lint'
+      tasks: 'default'
+    },
+    buster: {
+      config: 'buster.js'
     },
     lint: {
-      files: ['grunt.js', 'src/**/*.js', 'tests/**/*.js']
+      files: ['*.js', 'src/**/*.js', 'tests/**/*.js']
     },
     jshint: {
       options: {
@@ -60,6 +65,6 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'concat lint min');
+  grunt.registerTask('default', 'concat lint buster min');
 
 };

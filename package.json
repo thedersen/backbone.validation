@@ -22,7 +22,7 @@
     "url": "http://github.com/thedersen/backbone.validation.git"
   },
   "scripts": {
-    "test": "buster test",
+    "test": "grunt buster",
     "prepublish": "grunt"
   },
   "main": "./dest/backbone-validation-amd.js",
