@@ -507,7 +507,7 @@
 
       // Equal to validator
       equalTo: function(value, attr, equalTo, model, computed) {
-        if(value !== computed[equalTo]) {
+        if(value !== equalTo) {
           return format(defaultMessages.equalTo, formatLabel(attr, model), formatLabel(equalTo, model));
         }
       },
