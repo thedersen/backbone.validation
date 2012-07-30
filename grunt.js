@@ -1,6 +1,5 @@
 
 module.exports = function(grunt) {
-  require('./grunt-buster')(grunt);
 
   // Project configuration.
   grunt.initConfig({
@@ -31,10 +30,17 @@ module.exports = function(grunt) {
       tasks: 'default'
     },
     buster: {
-      config: 'buster.js'
+      test: {
+        'config': 'buster.js',
+        'color': 'none',
+        'config-group': 'Development'
+      },
+      server: {
+        'port': '1111'
+      }
     },
     lint: {
-      files: ['*.js', 'src/**/*.js', 'tests/**/*.js']
+      files: ['grunt.js', 'src/**/*.js', 'tests/**/*.js']
     },
     jshint: {
       options: {
@@ -66,5 +72,5 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', 'concat lint buster min');
-
+  grunt.loadNpmTasks('grunt-buster');
 };

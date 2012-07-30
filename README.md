@@ -17,8 +17,8 @@ Backbone.Validation is a bit opinionated, meaning that you have to follow some c
 
 You can download the raw source from [GitHub](http://github.com/thedersen/backbone.validation), see the [annotated source](http://thedersen.com/projects/backbone-validation/docs) or use the links below for the latest stable version.
 
-* Development: [backbone.validation.js](https://raw.github.com/thedersen/backbone.validation/master/backbone.validation.js)
-* Production:  [backbone.validation.min.js](https://raw.github.com/thedersen/backbone.validation/master/backbone.validation.min.js)
+* Development: [backbone.validation.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js)
+* Production:  [backbone.validation.min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-min.js)
 
 ## Getting started
 
