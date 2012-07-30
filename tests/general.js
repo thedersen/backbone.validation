@@ -82,6 +82,12 @@ buster.testCase("Backbone.Validation", {
         }
     },
 
+    "when binding to view without model or collection": function(){
+      assert.exception(function(){
+        Backbone.Validation.bind(new Backbone.View());
+      });
+    },
+
     "when unbinding":{
         setUp: function(){
             Backbone.Validation.bind(this.view);

@@ -221,6 +221,11 @@ Backbone.Validation = (function(_){
             collection = view.collection;
         options = _.extend({}, defaultOptions, defaultCallbacks, options);
 
+        if(typeof model === 'undefined' && typeof collection === 'undefined'){
+          throw 'Before you execute the binding your view must have a model or a collection.\n' +
+                'See http://thedersen.com/projects/backbone-validation/#using-form-model-validation for more information.';
+        }
+
         if(model) {
           bindModel(view, model, options);
         }
