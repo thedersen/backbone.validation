@@ -1,27 +1,22 @@
 var config = exports;
 
-config['Shared'] = {
+config['Browser'] = {
   environment: 'browser',
   sources: [
     'lib/jquery-1.6.2.js',
     'lib/underscore.js',
-    'lib/backbone-0.9.2.js'
+    'lib/backbone-0.9.2.js',
+    'dist/backbone-validation.js'
   ],
   tests: [
-    'tests/**/*.js'
+    'tests/*.js',
+    'tests/validators/*.js'
   ]
 };
 
-config['Development'] = {
-  extends: 'Shared',
-  sources: [
-    'dist/backbone-validation.js'
-  ]
-};
-
-config['Minified'] = {
-  extends: 'Shared',
-  sources: [
-    'dist/backbone-validation-min.js'
+config['Node'] = {
+  environment: 'node',
+  tests: [
+    'tests/node/*.js'
   ]
 };

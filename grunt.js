@@ -17,12 +17,20 @@ module.exports = function(grunt) {
       browser: {
         src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
         dest: 'dist/<%= pkg.name %>.js'
+      },
+      amd: {
+        src: ['<banner:meta.banner>', 'src/amd-intro.tmpl', '<file_strip_banner:src/<%= pkg.name %>.js>', 'src/amd-outro.tmpl'],
+        dest: 'dist/<%= pkg.name %>-amd.js'
       }
     },
     min: {
       browser: {
         src: ['<banner:meta.banner>', '<config:concat.browser.dest>'],
         dest: 'dist/<%= pkg.name %>-min.js'
+      },
+      amd: {
+        src: ['<banner:meta.banner>', '<config:concat.amd.dest>'],
+        dest: 'dist/<%= pkg.name %>-amd-min.js'
       }
     },
     watch: {
@@ -33,7 +41,7 @@ module.exports = function(grunt) {
       test: {
         'config': 'buster.js',
         'color': 'none',
-        'config-group': 'Development'
+        'config-group': 'Browser'
       },
       server: {
         'port': '1111'
