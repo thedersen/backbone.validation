@@ -1,4 +1,4 @@
-(function(Backbone, _){
+Backbone.Validation = (function(_){
   'use strict';
 
   // Default options
@@ -16,7 +16,7 @@
   // Validation
   // ----------
 
-  Backbone.Validation = (function(){
+  var Validation = (function(){
 
     // Returns an object with undefined properties for all
     // attributes on the model that has defined one or more
@@ -261,7 +261,7 @@
   // Callbacks
   // ---------
 
-  var defaultCallbacks = Backbone.Validation.callbacks = {
+  var defaultCallbacks = Validation.callbacks = {
 
     // Gets called when a previously invalid field in the
     // view becomes valid. Removes any error message.
@@ -286,7 +286,7 @@
   // Patterns
   // --------
 
-  var defaultPatterns = Backbone.Validation.patterns = {
+  var defaultPatterns = Validation.patterns = {
     // Matches any digit(s) (i.e. 0-9)
     digits: /^\d+$/,
 
@@ -306,7 +306,7 @@
 
   // Error message for the build in validators.
   // {x} gets swapped out with arguments form the validator.
-  var defaultMessages = Backbone.Validation.messages = {
+  var defaultMessages = Validation.messages = {
     required: '{0} is required',
     acceptance: '{0} must be accepted',
     min: '{0} must be greater than or equal to {1}',
@@ -332,7 +332,7 @@
   //     Backbone.Validation.configure({
   //       labelFormatter: 'label'
   //     });
-  var defaultLabelFormatters = Backbone.Validation.labelFormatters = {
+  var defaultLabelFormatters = Validation.labelFormatters = {
 
     // Returns the attribute name with applying any formatting
     none: function(attrName) {
@@ -367,7 +367,7 @@
   // Built in validators
   // -------------------
 
-  var defaultValidators = Backbone.Validation.validators = (function(){
+  var defaultValidators = Validation.validators = (function(){
     // Use native trim when defined
     var trim = String.prototype.trim ?
         function(text) {
@@ -505,4 +505,5 @@
     };
   }());
 
-}(Backbone, _));
+  return Validation;
+}(_));
