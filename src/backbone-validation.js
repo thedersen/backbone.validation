@@ -413,6 +413,7 @@ Backbone.Validation = (function(_){
 
     return {
       // Function validator
+      // Lets you implement a custom function used for validation
       fn: function(value, attr, fn, model, computed) {
         if(_.isString(fn)){
           fn = model[fn];
@@ -421,6 +422,7 @@ Backbone.Validation = (function(_){
       },
 
       // Required validator
+      // Validates if the attribute is required or not
       required: function(value, attr, required, model, computed) {
         var isRequired = _.isFunction(required) ? required.call(model, value, attr, computed) : required;
         if(!isRequired && !hasValue(value)) {
@@ -432,6 +434,8 @@ Backbone.Validation = (function(_){
       },
 
       // Acceptance validator
+      // Validates that something has to be accepted, e.g. terms of use
+      // `true` or 'true' are valid
       acceptance: function(value, attr, accept, model) {
         if(value !== 'true' && (!_.isBoolean(value) || value === false)) {
           return format(defaultMessages.acceptance, formatLabel(attr, model));
@@ -439,6 +443,8 @@ Backbone.Validation = (function(_){
       },
 
       // Min validator
+      // Validates that the value has to be a number and equal to or greater than
+      // the min value specified
       min: function(value, attr, minValue, model) {
         if (!isNumber(value) || value < minValue) {
           return format(defaultMessages.min, formatLabel(attr, model), minValue);
@@ -446,6 +452,8 @@ Backbone.Validation = (function(_){
       },
 
       // Max validator
+      // Validates that the value has to be a number and equal to or less than
+      // the max value specified
       max: function(value, attr, maxValue, model) {
         if (!isNumber(value) || value > maxValue) {
           return format(defaultMessages.max, formatLabel(attr, model), maxValue);
@@ -453,6 +461,8 @@ Backbone.Validation = (function(_){
       },
 
       // Range validator
+      // Validates that the value has to be a number and equal to or between
+      // the two numbers specified
       range: function(value, attr, range, model) {
         if(!isNumber(value) || value < range[0] || value > range[1]) {
           return format(defaultMessages.range, formatLabel(attr, model), range[0], range[1]);
@@ -460,6 +470,8 @@ Backbone.Validation = (function(_){
       },
 
       // Length validator
+      // Validates that the value has to be a string with length equal to
+      // the length value specified
       length: function(value, attr, length, model) {
         if (!hasValue(value) || trim(value).length !== length) {
           return format(defaultMessages.length, formatLabel(attr, model), length);
@@ -467,6 +479,8 @@ Backbone.Validation = (function(_){
       },
 
       // Min length validator
+      // Validates that the value has to be a string with length equal to or greater than
+      // the min length value specified
       minLength: function(value, attr, minLength, model) {
         if (!hasValue(value) || trim(value).length < minLength) {
           return format(defaultMessages.minLength, formatLabel(attr, model), minLength);
@@ -474,6 +488,8 @@ Backbone.Validation = (function(_){
       },
 
       // Max length validator
+      // Validates that the value has to be a string with length equal to or less than
+      // the max length value specified
       maxLength: function(value, attr, maxLength, model) {
         if (!hasValue(value) || trim(value).length > maxLength) {
           return format(defaultMessages.maxLength, formatLabel(attr, model), maxLength);
@@ -481,6 +497,8 @@ Backbone.Validation = (function(_){
       },
 
       // Range length validator
+      // Validates that the value has to be a string and equal to or between
+      // the two numbers specified
       rangeLength: function(value, attr, range, model) {
         if(!hasValue(value) || trim(value).length < range[0] || trim(value).length > range[1]) {
           return format(defaultMessages.rangeLength, formatLabel(attr, model), range[0], range[1]);
@@ -488,6 +506,8 @@ Backbone.Validation = (function(_){
       },
 
       // One of validator
+      // Validates that the value has to be equal to one of the elements in
+      // the specified array. Case sensitive matching
       oneOf: function(value, attr, values, model) {
         if(!_.include(values, value)){
           return format(defaultMessages.oneOf, formatLabel(attr, model), values.join(', '));
@@ -495,6 +515,8 @@ Backbone.Validation = (function(_){
       },
 
       // Equal to validator
+      // Validates that the value has to be equal to the value of the attribute
+      // with the name specified
       equalTo: function(value, attr, equalTo, model, computed) {
         if(value !== computed[equalTo]) {
           return format(defaultMessages.equalTo, formatLabel(attr, model), formatLabel(equalTo, model));
@@ -502,6 +524,8 @@ Backbone.Validation = (function(_){
       },
 
       // Pattern validator
+      // Validates that the value has to match the pattern specified.
+      // Can be a regular expression or the name of one of the built in patterns
       pattern: function(value, attr, pattern, model) {
         if (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
           return format(defaultMessages.pattern, formatLabel(attr, model), pattern);
