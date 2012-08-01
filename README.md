@@ -1,4 +1,4 @@
-# Backbone.Validation v0.6.0
+# Backbone.Validation v0.6.1
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
@@ -11,14 +11,27 @@ Good client side validation is an important part of giving your users a great ex
 
 Backbone.Validation tries to solve both these problems. It gives you a simple, extensible way of declaring validation rules on your model, and overrides Backbone's validate method behind the scene. And, it gives you a nice hook where you can implement your own way of showing the error messages to your user.
 
+If you are using node.js on the server you can also reuse your models and validation on the server side. How cool is that?
+
 Backbone.Validation is a bit opinionated, meaning that you have to follow some conventions in order for it to work properly.
 
 ## Download and source code
 
 You can download the raw source from [GitHub](http://github.com/thedersen/backbone.validation), see the [annotated source](http://thedersen.com/projects/backbone-validation/docs) or use the links below for the latest stable version.
 
-* Development: [backbone.validation.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js)
-* Production:  [backbone.validation.min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-min.js)
+#### Standard builds
+
+* Development: [backbone-validation.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js) *21.1kb*
+* Production:  [backbone-validation-min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-min.js) *2.5kb gzipped*
+
+#### AMD builds
+
+* Development: [backbone-validation-amd.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd.js) *21.4kb*
+* Production:  [backbone-validation-amd-min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd-min.js) *2.6kb gzipped*
+
+#### Node.js builds
+
+    npm install backbone-validation
 
 ## Getting started
 
@@ -151,10 +164,22 @@ The philosophy behind this way of using the plugin, is to give you an easy way t
 
 ### Validation mix-in
 
-If you want to use just the validation without the callbacks that update the model's view, you can do this by mixing in the validation on the Model's prototype.
+To add validation to your models, mix in the validation on the Model's prototype.
 
 ```js
 _.extend(Backbone.Model.prototype, Backbone.Validation.mixin);
+```
+
+## Using server validation
+
+If you are using node.js on your server, you can also reuse your models and validation on the server. For this to work you must share your models between the server and the client.
+
+```js
+var backbone = require('backbone'),
+    _ = require('underscore'),
+    validation = require('backbone-validation');
+
+_.extend(backbone.Model.prototype, validation.mixin);
 ```
 
 ## Methods
@@ -375,6 +400,8 @@ model.bind('validated:invalid', function(model, errors) {
 
 ### method validator
 
+Lets you implement a custom function used for validation.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -400,6 +427,8 @@ var SomeModel = Backbone.Model.extend({
 ```
 
 ### named method validator
+
+Lets you implement a custom function used for validation.
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -429,6 +458,8 @@ var SomeModel = Backbone.Model.extend({
 
 ### required
 
+Validates if the attribute is required or not.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -451,6 +482,8 @@ var SomeModel = Backbone.Model.extend({
 
 ### acceptance
 
+Validates that something has to be accepted, e.g. terms of use. `true` or 'true' are valid.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -462,6 +495,8 @@ var SomeModel = Backbone.Model.extend({
 ```
 
 ### min
+
+Validates that the value has to be a number and equal to or greater than the min value specified.
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -475,6 +510,8 @@ var SomeModel = Backbone.Model.extend({
 
 ### max
 
+Validates that the value has to be a number and equal to or less than the max value specified.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -486,6 +523,8 @@ var SomeModel = Backbone.Model.extend({
 ```
 
 ### range
+
+Validates that the value has to be a number and equal to or between the two numbers specified.
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -499,6 +538,8 @@ var SomeModel = Backbone.Model.extend({
 
 ### length
 
+Validates that the value has to be a string with length equal to the length value specified.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -510,6 +551,8 @@ var SomeModel = Backbone.Model.extend({
 ```
 
 ### minLength
+
+Validates that the value has to be a string with length equal to or greater than the min length value specified.
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -523,6 +566,8 @@ var SomeModel = Backbone.Model.extend({
 
 ### maxLength
 
+Validates that the value has to be a string with length equal to or less than the max length value specified.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -534,6 +579,8 @@ var SomeModel = Backbone.Model.extend({
 ```
 
 ### rangeLength
+
+Validates that the value has to be a string and equal to or between the two numbers specified.
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -547,6 +594,8 @@ var SomeModel = Backbone.Model.extend({
 
 ### oneOf
 
+Validates that the value has to be equal to one of the elements in the specified array. Case sensitive matching.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -558,6 +607,8 @@ var SomeModel = Backbone.Model.extend({
 ```
 
 ### equalTo
+
+Validates that the value has to be equal to the value of the attribute with the name specified.
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -574,6 +625,8 @@ var SomeModel = Backbone.Model.extend({
 
 ### pattern
 
+Validates that the value has to match the pattern specified. Can be a regular expression or the name of one of the built in patterns.
+
 ```js
 var SomeModel = Backbone.Model.extend({
   validation: {
@@ -583,14 +636,14 @@ var SomeModel = Backbone.Model.extend({
   }
 });
 ```
-where the built-in patterns are:
+The built-in patterns are:
 
 * number - Matches any number (e.g. -100.000,00)
 * email - Matches a valid email address (e.g. mail@example.com)
 * url - Mathes any valid url (e.g. http://www.xample.com)
 * digits - Matches any digit(s) (i.e. 0-9)
 
-or specify any regular expression you like:
+Specify any regular expression you like:
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -601,7 +654,6 @@ var SomeModel = Backbone.Model.extend({
   }
 });
 ```
-See the [wiki](https://github.com/thedersen/backbone.validation/wiki) for more details about the validators.
 
 ## Extending Backbone.Validation
 
@@ -714,6 +766,12 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.6.1
+
+* AMD and node.js support in a seperate download
+* Available on npm
+* Throws error if the view has no model or collection when executing the binding
 
 #### v0.6.0
 
