@@ -1,4 +1,4 @@
-# Backbone.Validation v0.6.1
+# Backbone.Validation v0.6.2
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
@@ -766,6 +766,10 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.6.2
+
+* Fixed typo in the package.json (Thanks to [Patrick Scott](https://github.com/patrickleet))
 
 #### v0.6.1
 
