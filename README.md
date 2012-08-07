@@ -722,6 +722,10 @@ The message can contain placeholders for arguments that will be replaced:
 * `{1}` will be replaced with the allowed value configured in the validation (or the first one in a range validator)
 * `{2}` will be replaced with the second value in a range validator
 
+## Examples
+
+Some examples can be found [here](http://thedersen.com/projects/backbone-validation/examples/). This is by far not complete, but I hope you get the idea. View source to see how it's made.
+
 ## FAQ
 
 ### What gets validated when?
