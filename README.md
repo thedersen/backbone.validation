@@ -2,9 +2,6 @@
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
-<iframe class="github-btn" src="http://markdotto.github.com/github-buttons/github-btn.html?user=thedersen&repo=backbone.validation&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="112px" height="20px"></iframe>
-<iframe class="github-btn" src="http://markdotto.github.com/github-buttons/github-btn.html?user=thedersen&repo=backbone.validation&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="112px" height="20px"></iframe>
-
 ## Introduction
 
 Good client side validation is an important part of giving your users a great experience when they visit your site. Backbone provides a [validate](http://backbonejs.org/#Model-validate) method, but it is left undefined and it is up to you to override it with your custom validation logic. Too many times I have seen validation implemented as lots of nested ifs and elses. This quickly becomes a big mess. One other thing is that with libraries like Backbone, you hold your state in a Model, and don't tie it to the DOM. Still, when validating your models you probably want to inform your users about errors etc., which means modifying the DOM.
