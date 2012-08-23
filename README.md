@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/thedersen/backbone.validation.png)](http://travis-ci.org/thedersen/backbone.validation)
 # Backbone.Validation v0.6.2
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
