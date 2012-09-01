@@ -13,6 +13,17 @@ buster.testCase("isValid", {
 
 	"when model has defined validation": {
 		setUp: function() {
+			this.originalCallbacks = {};
+			_.extend(this.originalCallbacks, Backbone.Validation.callbacks);
+
+			this.valid = this.spy();
+			this.invalid = this.spy();
+
+			_.extend(Backbone.Validation.callbacks, {
+				valid: this.valid,
+				invalid: this.invalid
+			});
+
 			var Model = Backbone.Model.extend({
 				validation: {
 					name: {
@@ -22,6 +33,10 @@ buster.testCase("isValid", {
 			});
 			this.model = new Model();
 			Backbone.Validation.bind(new Backbone.View({model: this.model}));
+		},
+
+		tearDown: function(){
+			_.extend(Backbone.Validation.callbacks, this.originalCallbacks);
 		},
 
 		"returns undefined when model is never validated": function() {
@@ -40,9 +55,17 @@ buster.testCase("isValid", {
 			refute(this.model.isValid());
 		},
 
-		"can force validation by passing true": function() {
-			refute.defined(this.model.isValid());
-			assert(this.model.isValid(true) === false);
+		"and passing forceValidation": {
+			"forces validation and calls callbacks when model is valid": function() {
+				this.model.set({name: 'name'}, { silent:true });
+				assert(this.model.isValid(true));
+				assert.called(this.valid);
+			},
+
+			"forces validation and calls callbacks when model is invalid": function() {
+				refute(this.model.isValid(true));
+				assert.called(this.invalid);
+			}
 		},
 
 		"and passing name of attribute": {
@@ -65,6 +88,20 @@ buster.testCase("isValid", {
 				this.model.set({name: 'name'}, { silent:true });
 
 				assert(this.model.isValid('name'));
+			},
+
+			"and passing forceValidation": {
+				"returns false and fires callback when attribute is invalid": function() {
+					refute(this.model.isValid('name', true));
+					assert.called(this.invalid);
+				},
+
+				"returns true and fires callback when attribute is valid": function() {
+					this.model.set({name: 'name'}, { silent:true });
+
+					assert(this.model.isValid('name', true));
+					assert.called(this.valid);
+				}
 			}
 		},
 
@@ -97,6 +134,27 @@ buster.testCase("isValid", {
 				this.model.set({name: 'name', age: 1 }, { silent:true });
 
 				assert(this.model.isValid(['name', 'age']));
+			},
+
+			"and passing forceValidation": {
+				"returns false and fires callback when all attributes are invalid": function() {
+					refute(this.model.isValid(['name', 'age'], true));
+					assert.called(this.invalid);
+				},
+
+				"returns false and fires callback when one attribute is invalid": function() {
+					this.model.set({name: 'name'}, { silent:true });
+
+					refute(this.model.isValid(['name', 'age'], true));
+					assert.called(this.invalid);
+				},
+
+				"returns true and fires callback when all attributes are valid": function() {
+					this.model.set({name: 'name', age: 1 }, { silent:true });
+
+					assert(this.model.isValid(['name', 'age'], true));
+					assert.called(this.valid);
+				}
 			}
 		}
 	}
