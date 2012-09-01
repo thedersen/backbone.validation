@@ -114,24 +114,40 @@ Backbone.Validation = (function(_){
           return validateAttr(this, attr, value, _.extend({}, this.attributes));
         },
 
-        // Check to see if an attribute, an array of attributes or the
-        // entire model is valid. Passing true will force a validation
-        // of the model.
-        isValid: function(option) {
-          if(_.isString(option)){
-            return !validateAttr(this, option, this.get(option), _.extend({}, this.attributes));
+        // Check to see if an attribute, an array of attributes, or the
+        // entire model is valid, triggering callbacks on the specified
+        // field(s) via validate() if forceValidation is set. Passing
+        // true will force a validation with callbacks on the entire
+        // model.
+        isValid: function(fields, forceValidation) {
+          var attrs;
+
+          if(_.isString(fields)) {
+            fields = [fields];
           }
-          if(_.isArray(option)){
-            for (var i = 0; i < option.length; i++) {
-              if(validateAttr(this, option[i], this.get(option[i]), _.extend({}, this.attributes))){
+
+          if(forceValidation === undefined) {
+            forceValidation = fields;
+          } else {
+            attrs = _.reduce(fields, function(memo, field) {
+              memo[field] = this.get(field);
+              return memo;
+            }, {}, this);
+          }
+
+          if(forceValidation === true) {
+            return !this.validate(attrs);
+          }
+
+          if(_.isArray(fields)) {
+            for (var i = 0; i < fields.length; i++) {
+              if(validateAttr(this, fields[i], this.get(fields[i]), _.extend({}, this.attributes))){
                 return false;
               }
             }
             return true;
           }
-          if(option === true) {
-            this.validate();
-          }
+
           return this.validation ? this._isValid : true;
         },
 
