@@ -8,6 +8,7 @@ Backbone.Validation = (function(_){
       forceUpdate: false,
       selector: 'name',
       labelFormatter: 'sentenceCase',
+      ignoredChangeSources: [],
       valid: Function.prototype,
       invalid: Function.prototype
   };
@@ -145,7 +146,9 @@ Backbone.Validation = (function(_){
               allAttrs = _.extend(getValidatedAttrs(model), model.attributes, attrs),
               changedAttrs = attrs || allAttrs,
               result = validateModel(model, allAttrs);
-
+          
+          if(_.contains(opt.ignoredChangeSources, setOptions.changeSource)) return;
+          
           model._isValid = result.isValid;
 
           // After validation is performed, loop through all changed attributes
