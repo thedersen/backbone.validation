@@ -1,4 +1,4 @@
-# Backbone.Validation v0.6.2
+# Backbone.Validation v0.6.3
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
@@ -18,12 +18,12 @@ You can download the raw source from [GitHub](http://github.com/thedersen/backbo
 
 #### Standard builds
 
-* Development: [backbone-validation.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js) *21.1kb*
+* Development: [backbone-validation.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js) *21.5kb*
 * Production:  [backbone-validation-min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-min.js) *2.5kb gzipped*
 
 #### AMD builds
 
-* Development: [backbone-validation-amd.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd.js) *21.4kb*
+* Development: [backbone-validation-amd.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd.js) *21.8kb*
 * Production:  [backbone-validation-amd-min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd-min.js) *2.6kb gzipped*
 
 #### Node.js builds
@@ -107,7 +107,7 @@ MyModel = Backbone.Model.extend({
 
 The philosophy behind this way of using the plugin, is that you should be able to reuse your validation rules both to validate your model and to validate form input, as well as providing a simple way of notifying users about errors when they are populating forms.
 
-Note that Backbone.Validation does not provide any automatic/two-way binding between your model and the view, that's up you to implement (you can for instance use [Backbone.ModelBinder](https://github.com/theironcook/Backbone.ModelBinder) or [Rivets.js](http://rivetsjs.com/)).
+Note that Backbone.Validation does not provide any automatic/two-way binding between your model and the view, that's up you to implement (you can for instance use [Backbone.stickit](http://nytimes.github.com/backbone.stickit/).
 
 Before you can start using form validation, you need to bind your view.
 
@@ -767,6 +767,13 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.6.3
+
+* Labelformatter set to 'label' no longer crashes when no `labels` attribute is present on the model
+* Does not invoke callbacks for attributes that are not validated
+* Valid callbacks are always called before invalid callbacks (Thanks to [Justin Etheredge](https://github.com/jetheredge))
+* Fixed typo in the readme
 
 #### v0.6.2
 

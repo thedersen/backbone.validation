@@ -1,4 +1,4 @@
-// Backbone.Validation v0.6.2
+// Backbone.Validation v0.6.3
 //
 // Copyright (c) 2011-2012 Thomas Pedersen
 // Distributed under MIT License
@@ -158,24 +158,32 @@ Backbone.Validation = (function(_){
           var model = this,
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
-              allAttrs = _.extend(getValidatedAttrs(model), model.attributes, attrs),
+              validatedAttrs = getValidatedAttrs(model),
+              allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = attrs || allAttrs,
               result = validateModel(model, allAttrs);
 
           model._isValid = result.isValid;
 
           // After validation is performed, loop through all changed attributes
-          // and call either the valid or invalid callback so the view is updated.
-          for(var attr in allAttrs) {
-            var invalid = result.invalidAttrs.hasOwnProperty(attr),
-                changed = changedAttrs.hasOwnProperty(attr);
-            if(invalid && (changed || validateAll)){
-              opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
-            }
+          // and call the valid callbacks so the view is updated.
+          _.each(_.keys(validatedAttrs), function(attr){
+            var invalid = result.invalidAttrs.hasOwnProperty(attr);
             if(!invalid){
               opt.valid(view, attr, opt.selector);
             }
-          }
+          });
+
+          // After validation is performed, loop through all changed attributes
+          // and call the invalid callback so the view is updated.
+          _.each(_.keys(validatedAttrs), function(attr){
+            var invalid = result.invalidAttrs.hasOwnProperty(attr),
+                changed = changedAttrs.hasOwnProperty(attr);
+
+            if(invalid && (changed || validateAll)){
+              opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+            }
+          });
 
           // Trigger validated events.
           // Need to defer this so the model is actually updated before
@@ -223,7 +231,7 @@ Backbone.Validation = (function(_){
     return {
 
       // Current version of the library
-      version: '0.6.2',
+      version: '0.6.3',
 
       // Called to configure the default options
       configure: function(options) {
@@ -381,7 +389,7 @@ Backbone.Validation = (function(_){
     //        }
     //      });
     label: function(attrName, model) {
-      return model.labels[attrName] || defaultLabelFormatters.sentenceCase(attrName, model);
+      return (model.labels && model.labels[attrName]) || defaultLabelFormatters.sentenceCase(attrName, model);
     }
   };
 

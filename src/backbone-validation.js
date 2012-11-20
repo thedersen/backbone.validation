@@ -215,7 +215,7 @@ Backbone.Validation = (function(_){
     return {
 
       // Current version of the library
-      version: '0.6.2',
+      version: '0.6.3',
 
       // Called to configure the default options
       configure: function(options) {
