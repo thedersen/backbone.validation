@@ -637,7 +637,7 @@ The built-in patterns are:
 
 * number - Matches any number (e.g. -100.000,00)
 * email - Matches a valid email address (e.g. mail@example.com)
-* url - Mathes any valid url (e.g. http://www.xample.com)
+* url - Matches any valid url (e.g. http://www.example.com)
 * digits - Matches any digit(s) (i.e. 0-9)
 
 Specify any regular expression you like:
