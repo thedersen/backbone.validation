@@ -351,6 +351,17 @@ buster.testCase("Backbone.Validation", {
 
                 assert.calledWith(this.valid, this.view, 'age');
                 assert.calledWith(this.valid, this.view, 'name');
+            },
+
+            "callbacks are not called for unvalidated attributes": function(){
+
+                this.model.set({age: 1, name: 'name', someProp: 'some value'}, {silent:true});
+
+                this.model.validate();
+
+                assert.calledWith(this.valid, this.view, 'age');
+                assert.calledWith(this.valid, this.view, 'name');
+                refute.calledWith(this.valid, this.view, 'someProp');
             }
         }
     },

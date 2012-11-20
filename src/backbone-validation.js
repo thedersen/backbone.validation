@@ -142,7 +142,8 @@ Backbone.Validation = (function(_){
           var model = this,
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
-              allAttrs = _.extend(getValidatedAttrs(model), model.attributes, attrs),
+              validatedAttrs = getValidatedAttrs(model),
+              allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = attrs || allAttrs,
               result = validateModel(model, allAttrs);
 
@@ -150,7 +151,7 @@ Backbone.Validation = (function(_){
 
           // After validation is performed, loop through all changed attributes
           // and call the valid callbacks so the view is updated.
-          _.each(_.keys(allAttrs), function(attr){
+          _.each(_.keys(validatedAttrs), function(attr){
             var invalid = result.invalidAttrs.hasOwnProperty(attr);
             if(!invalid){
               opt.valid(view, attr, opt.selector);
@@ -159,7 +160,7 @@ Backbone.Validation = (function(_){
 
           // After validation is performed, loop through all changed attributes
           // and call the invalid callback so the view is updated.
-          _.each(_.keys(allAttrs), function(attr){
+          _.each(_.keys(validatedAttrs), function(attr){
             var invalid = result.invalidAttrs.hasOwnProperty(attr),
                 changed = changedAttrs.hasOwnProperty(attr);
 
