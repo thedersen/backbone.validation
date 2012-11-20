@@ -150,22 +150,23 @@ Backbone.Validation = (function(_){
 
           // After validation is performed, loop through all changed attributes
           // and call the valid callbacks so the view is updated.
-          for(var attr in allAttrs) {
+          _.each(_.keys(allAttrs), function(attr){
             var invalid = result.invalidAttrs.hasOwnProperty(attr);
             if(!invalid){
               opt.valid(view, attr, opt.selector);
             }
-          }
+          });
 
           // After validation is performed, loop through all changed attributes
           // and call the invalid callback so the view is updated.
-          for(var attr in allAttrs) {
+          _.each(_.keys(allAttrs), function(attr){
             var invalid = result.invalidAttrs.hasOwnProperty(attr),
                 changed = changedAttrs.hasOwnProperty(attr);
+
             if(invalid && (changed || validateAll)){
               opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
             }
-          }
+          });
 
           // Trigger validated events.
           // Need to defer this so the model is actually updated before
