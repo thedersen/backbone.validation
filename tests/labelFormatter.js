@@ -52,6 +52,21 @@ buster.testCase('Label formatters', {
 
       "returns sentence cased name when label is not found": function(){
         assert.equals('Some attribute is required', this.model.preValidate('some_attribute', ''));
+      },
+
+      "returns sentence cased name when label attribute is not defined": function(){
+        var Model = Backbone.Model.extend({
+          validation: {
+            someAttribute: {
+              required: true
+            }
+          }
+        });
+
+        var model = new Model();
+        _.extend(model, Backbone.Validation.mixin);
+
+        assert.equals('Some attribute is required', model.preValidate('someAttribute', ''));
       }
     },
 

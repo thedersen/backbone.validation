@@ -373,7 +373,7 @@ Backbone.Validation = (function(_){
     //        }
     //      });
     label: function(attrName, model) {
-      return model.labels[attrName] || defaultLabelFormatters.sentenceCase(attrName, model);
+      return (model.labels && model.labels[attrName]) || defaultLabelFormatters.sentenceCase(attrName, model);
     }
   };
 
