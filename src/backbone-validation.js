@@ -13,6 +13,27 @@ Backbone.Validation = (function(_){
   };
 
 
+  // Helper functions used when formatting error messages
+  // ----------------------------------------------------
+  
+  var formatFunctions = {
+      // Uses the configured label formatter to format the attribute name
+      // to make it more readable for the user
+      formatLabel: function(attrName, model) {
+        return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
+      },
+
+      // Replaces nummeric placeholders like {0} in a string with arguments
+      // passed to the function
+      format: function() {
+        var args = Array.prototype.slice.call(arguments);
+        var text = args.shift();
+        return text.replace(/\{(\d+)\}/g, function(match, number) {
+          return typeof args[number] !== 'undefined' ? args[number] : match;
+        });
+      }
+  };
+  
   // Validation
   // ----------
 
@@ -70,7 +91,11 @@ Backbone.Validation = (function(_){
       // applying all the validators and returning the first error
       // message, if any.
       return _.reduce(getValidators(model, attr), function(memo, validator){
-        var result = validator.fn.call(defaultValidators, value, attr, validator.val, model, computed);
+        // Pass the format functions plus the default 
+        // validators as the context to the validator
+        var ctx = _.extend({}, formatFunctions, defaultValidators),
+            result = validator.fn.call(ctx, value, attr, validator.val, model, computed);
+
         if(result === false || memo === false) {
           return false;
         }
@@ -377,6 +402,7 @@ Backbone.Validation = (function(_){
     }
   };
 
+
   // Built in validators
   // -------------------
 
@@ -404,22 +430,6 @@ Backbone.Validation = (function(_){
     };
 
     return {
-      // Uses the configured label formatter to format the attribute name
-      // to make it more readable for the user
-      formatLabel: function(attrName, model) {
-        return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
-      },
-
-      // Replaces nummeric placeholders like {0} in a string with arguments
-      // passed to the function
-      format: function() {
-        var args = Array.prototype.slice.call(arguments);
-        var text = args.shift();
-        return text.replace(/\{(\d+)\}/g, function(match, number) {
-          return typeof args[number] !== 'undefined' ? args[number] : match;
-        });
-      },
-
       // Function validator
       // Lets you implement a custom function used for validation
       fn: function(value, attr, fn, model, computed) {

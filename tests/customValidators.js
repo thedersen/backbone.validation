@@ -31,11 +31,6 @@ buster.testCase('Extending Backbone.Validation with custom validator', {
         refute(this.model.set({
             age: 2
         }));
-    },
-
-    "context is the validators object": function() {
-        this.model.set({age:1});
-        assert.same(Backbone.Validation.validators, this.context);
     }
 });
 
