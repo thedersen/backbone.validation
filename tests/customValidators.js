@@ -118,3 +118,32 @@ buster.testCase("Chaining built-in validators with custom", {
         refute.defined(this.model.validate({name:'custom'}));
     }
 });
+
+buster.testCase("Formatting custom validator messages", {
+    setUp: function() {
+        _.extend(Backbone.Validation.validators, {
+            custom: function(value, attr, customValue, model) {
+                if (value !== customValue) {
+                    return this.format("{0} must be equal to {1}", this.formatLabel(attr, model), customValue);
+                }
+            }
+        });
+
+        var Model = Backbone.Model.extend({
+            validation: {
+                name: {
+                    custom: 'custom'
+                }
+            }
+        });
+
+        this.model = new Model();
+        Backbone.Validation.bind(new Backbone.View({
+            model: this.model
+        }));
+    },
+
+    "a custom validator can return a formatted message": function() {
+        assert.equals({name: 'Name must be equal to custom'}, this.model.validate({name:''}));
+    }
+});

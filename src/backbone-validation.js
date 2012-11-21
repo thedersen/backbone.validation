@@ -393,22 +393,6 @@ Backbone.Validation = (function(_){
             return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
         };
 
-    // Uses the configured label formatter to format the attribute name
-    // to make it more readable for the user
-    var formatLabel = function(attrName, model) {
-      return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
-    };
-
-    // Replaces nummeric placeholders like {0} in a string with arguments
-    // passed to the function
-    var format = function() {
-      var args = Array.prototype.slice.call(arguments);
-      var text = args.shift();
-      return text.replace(/\{(\d+)\}/g, function(match, number) {
-        return typeof args[number] !== 'undefined' ? args[number] : match;
-      });
-    };
-
     // Determines whether or not a value is a number
     var isNumber = function(value){
       return _.isNumber(value) || (_.isString(value) && value.match(defaultPatterns.number));
@@ -420,6 +404,22 @@ Backbone.Validation = (function(_){
     };
 
     return {
+      // Uses the configured label formatter to format the attribute name
+      // to make it more readable for the user
+      formatLabel: function(attrName, model) {
+        return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
+      },
+
+      // Replaces nummeric placeholders like {0} in a string with arguments
+      // passed to the function
+      format: function() {
+        var args = Array.prototype.slice.call(arguments);
+        var text = args.shift();
+        return text.replace(/\{(\d+)\}/g, function(match, number) {
+          return typeof args[number] !== 'undefined' ? args[number] : match;
+        });
+      },
+
       // Function validator
       // Lets you implement a custom function used for validation
       fn: function(value, attr, fn, model, computed) {
@@ -437,7 +437,7 @@ Backbone.Validation = (function(_){
           return false; // overrides all other validators
         }
         if (isRequired && !hasValue(value)) {
-          return format(defaultMessages.required, formatLabel(attr, model));
+          return this.format(defaultMessages.required, this.formatLabel(attr, model));
         }
       },
 
@@ -446,7 +446,7 @@ Backbone.Validation = (function(_){
       // `true` or 'true' are valid
       acceptance: function(value, attr, accept, model) {
         if(value !== 'true' && (!_.isBoolean(value) || value === false)) {
-          return format(defaultMessages.acceptance, formatLabel(attr, model));
+          return this.format(defaultMessages.acceptance, this.formatLabel(attr, model));
         }
       },
 
@@ -455,7 +455,7 @@ Backbone.Validation = (function(_){
       // the min value specified
       min: function(value, attr, minValue, model) {
         if (!isNumber(value) || value < minValue) {
-          return format(defaultMessages.min, formatLabel(attr, model), minValue);
+          return this.format(defaultMessages.min, this.formatLabel(attr, model), minValue);
         }
       },
 
@@ -464,7 +464,7 @@ Backbone.Validation = (function(_){
       // the max value specified
       max: function(value, attr, maxValue, model) {
         if (!isNumber(value) || value > maxValue) {
-          return format(defaultMessages.max, formatLabel(attr, model), maxValue);
+          return this.format(defaultMessages.max, this.formatLabel(attr, model), maxValue);
         }
       },
 
@@ -473,7 +473,7 @@ Backbone.Validation = (function(_){
       // the two numbers specified
       range: function(value, attr, range, model) {
         if(!isNumber(value) || value < range[0] || value > range[1]) {
-          return format(defaultMessages.range, formatLabel(attr, model), range[0], range[1]);
+          return this.format(defaultMessages.range, this.formatLabel(attr, model), range[0], range[1]);
         }
       },
 
@@ -482,7 +482,7 @@ Backbone.Validation = (function(_){
       // the length value specified
       length: function(value, attr, length, model) {
         if (!hasValue(value) || trim(value).length !== length) {
-          return format(defaultMessages.length, formatLabel(attr, model), length);
+          return this.format(defaultMessages.length, this.formatLabel(attr, model), length);
         }
       },
 
@@ -491,7 +491,7 @@ Backbone.Validation = (function(_){
       // the min length value specified
       minLength: function(value, attr, minLength, model) {
         if (!hasValue(value) || trim(value).length < minLength) {
-          return format(defaultMessages.minLength, formatLabel(attr, model), minLength);
+          return this.format(defaultMessages.minLength, this.formatLabel(attr, model), minLength);
         }
       },
 
@@ -500,7 +500,7 @@ Backbone.Validation = (function(_){
       // the max length value specified
       maxLength: function(value, attr, maxLength, model) {
         if (!hasValue(value) || trim(value).length > maxLength) {
-          return format(defaultMessages.maxLength, formatLabel(attr, model), maxLength);
+          return this.format(defaultMessages.maxLength, this.formatLabel(attr, model), maxLength);
         }
       },
 
@@ -509,7 +509,7 @@ Backbone.Validation = (function(_){
       // the two numbers specified
       rangeLength: function(value, attr, range, model) {
         if(!hasValue(value) || trim(value).length < range[0] || trim(value).length > range[1]) {
-          return format(defaultMessages.rangeLength, formatLabel(attr, model), range[0], range[1]);
+          return this.format(defaultMessages.rangeLength, this.formatLabel(attr, model), range[0], range[1]);
         }
       },
 
@@ -518,7 +518,7 @@ Backbone.Validation = (function(_){
       // the specified array. Case sensitive matching
       oneOf: function(value, attr, values, model) {
         if(!_.include(values, value)){
-          return format(defaultMessages.oneOf, formatLabel(attr, model), values.join(', '));
+          return this.format(defaultMessages.oneOf, this.formatLabel(attr, model), values.join(', '));
         }
       },
 
@@ -527,7 +527,7 @@ Backbone.Validation = (function(_){
       // with the name specified
       equalTo: function(value, attr, equalTo, model, computed) {
         if(value !== computed[equalTo]) {
-          return format(defaultMessages.equalTo, formatLabel(attr, model), formatLabel(equalTo, model));
+          return this.format(defaultMessages.equalTo, this.formatLabel(attr, model), this.formatLabel(equalTo, model));
         }
       },
 
@@ -536,7 +536,7 @@ Backbone.Validation = (function(_){
       // Can be a regular expression or the name of one of the built in patterns
       pattern: function(value, attr, pattern, model) {
         if (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
-          return format(defaultMessages.pattern, formatLabel(attr, model), pattern);
+          return this.format(defaultMessages.pattern, this.formatLabel(attr, model), pattern);
         }
       }
     };
