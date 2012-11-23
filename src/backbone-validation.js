@@ -34,6 +34,25 @@ Backbone.Validation = (function(_){
       }
   };
   
+  var flatten = function (obj, into, prefix) {
+    into = into || {};
+    prefix = prefix || '';
+
+    for(var k in obj){
+      if(obj.hasOwnProperty(k)){
+        var prop = obj[k];
+        if (prop && typeof prop === "object" && !(prop instanceof Date || prop instanceof RegExp)) {
+          flatten(prop, into, prefix + k + '.');
+        }
+        else {
+          into[prefix + k] = prop;
+        }
+      }
+    }
+
+    return into;
+  };
+
   // Validation
   // ----------
 
@@ -113,10 +132,11 @@ Backbone.Validation = (function(_){
       var error, attr,
           invalidAttrs = {},
           isValid = true,
-          computed = _.clone(attrs);
+          computed = _.clone(attrs),
+          flattened = flatten(attrs);
 
-      for (attr in attrs) {
-        error = validateAttr(model, attr, attrs[attr], computed);
+      for (attr in flattened) {
+        error = validateAttr(model, attr, flattened[attr], computed);
         if (error) {
           invalidAttrs[attr] = error;
           isValid = false;
@@ -143,12 +163,14 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
+          var flattened = flatten(this.attributes);
+
           if(_.isString(option)){
-            return !validateAttr(this, option, this.get(option), _.extend({}, this.attributes));
+            return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
           }
           if(_.isArray(option)){
             for (var i = 0; i < option.length; i++) {
-              if(validateAttr(this, option[i], this.get(option[i]), _.extend({}, this.attributes))){
+              if(validateAttr(this, option[i], flattened[option[i]], _.extend({}, this.attributes))){
                 return false;
               }
             }
@@ -169,7 +191,7 @@ Backbone.Validation = (function(_){
               opt = _.extend({}, options, setOptions),
               validatedAttrs = getValidatedAttrs(model),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
-              changedAttrs = attrs || allAttrs,
+              changedAttrs = flatten(attrs || allAttrs),
               result = validateModel(model, allAttrs);
 
           model._isValid = result.isValid;
