@@ -17,6 +17,9 @@ buster.testCase("preValidate", {
         validation: {
           name: {
             required: true
+          },
+          authenticated: {
+            required: false
           }
         }
       });
@@ -34,6 +37,10 @@ buster.testCase("preValidate", {
 
     "returns nothing when attribute pre-validated has no validation": function(){
       refute(this.model.preValidate('age', 2));
+    },
+
+    "handles null value": function() {
+      refute(this.model.preValidate('authenticated', null));
     }
   }
 });

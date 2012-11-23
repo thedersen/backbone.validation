@@ -211,7 +211,7 @@ model.isValid(['name', 'age']);
 
 Sometimes it can be useful to check (on each key press) if the input is valid - without changing the model - to perform some sort of live validation. You can execute the set of validators for an attribute by calling the `preValidate` method and pass it the name of the attribute and the value to validate.
 
-If the value is not valid, the error message is returned, otherwise it returns undefined.
+If the value is not valid, the error message is returned (truthy), otherwise it returns a falsy value.
 
 ```js
 var errorMessage = model.preValidate('attributeName', 'Value');
