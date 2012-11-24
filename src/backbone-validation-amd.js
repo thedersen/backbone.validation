@@ -5,3 +5,6 @@
     define(['backbone', 'underscore'], factory);
   }
 }(function (Backbone, _) {
+  //= backbone-validation.js
+  return Backbone.Validation;
+}));

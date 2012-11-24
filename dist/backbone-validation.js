@@ -5,7 +5,6 @@
 //
 // Documentation and full license available at:
 // http://thedersen.com/projects/backbone-validation
-
 Backbone.Validation = (function(_){
   'use strict';
 

@@ -13,23 +13,23 @@ module.exports = function(grunt) {
               '// Documentation and full license available at:\n' +
               '// <%= pkg.homepage %>'
     },
-    concat: {
+    rig: {
       browser: {
         src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
         dest: 'dist/<%= pkg.name %>.js'
       },
       amd: {
-        src: ['<banner:meta.banner>', 'src/amd-intro.tmpl', '<file_strip_banner:src/<%= pkg.name %>.js>', 'src/amd-outro.tmpl'],
+        src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>-amd.js>'],
         dest: 'dist/<%= pkg.name %>-amd.js'
       }
     },
     min: {
       browser: {
-        src: ['<banner:meta.banner>', '<config:concat.browser.dest>'],
+        src: ['<banner:meta.banner>', '<config:rig.browser.dest>'],
         dest: 'dist/<%= pkg.name %>-min.js'
       },
       amd: {
-        src: ['<banner:meta.banner>', '<config:concat.amd.dest>'],
+        src: ['<banner:meta.banner>', '<config:rig.amd.dest>'],
         dest: 'dist/<%= pkg.name %>-amd-min.js'
       }
     },
@@ -72,7 +72,8 @@ module.exports = function(grunt) {
         $: true,
         buster: true,
         assert: true,
-        refute: true
+        refute: true,
+        define: true
       }
     },
     uglify: {},
@@ -120,10 +121,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', 'concat lint buster min');
+  grunt.registerTask('default', 'rig lint buster min');
   grunt.registerTask('publish', 'docco shell');
 
   grunt.loadNpmTasks('grunt-buster');
   grunt.loadNpmTasks('grunt-docco');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-rigger');
 };
