@@ -900,6 +900,10 @@ Basic behaviour:
 
 * Initial release
 
+## Contribute
+
+In lieu of a formal styleguide, use two spaces for tabs and take care to maintain the existing coding style. Oh, and please add some tests:)
+
 ## Inspiration
 
 Backbone.Validation is inspired by [Backbone.ModelBinding](http://github.com/derickbailey/backbone.modelbinding), and another implementation with a slightly different approach than mine at [Backbone.Validations](http://github.com/n-time/backbone.validations).
