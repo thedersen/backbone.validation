@@ -89,34 +89,41 @@ module.exports = function(grunt) {
     shell: {
       npm: {
         command: 'npm publish',
-        stdout: true
+        stdout: true,
+        stderr: true
       },
       clone: {
         command: 'git clone git@github.com:thedersen/thedersen.github.com.git',
-        stdout: true
+        stdout: true,
+        stderr: true
       },
       copyDocco: {
         command: 'cp docs/backbone-validation.html thedersen.github.com/projects/backbone-validation/docs/index.html',
-        stdout: true
+        stdout: true,
+        stderr: true
       },
       copyCss: {
         command: 'cp docs/docco.css thedersen.github.com/projects/backbone-validation/docs/docco.css',
-        stdout: true
+        stdout: true,
+        stderr: true
       },
       copyExamples: {
         command: 'cp -rf examples/ thedersen.github.com/projects/backbone-validation/examples/',
-        stdout: true
+        stdout: true,
+        stderr: true
       },
       push: {
         command: 'git commit -am "Updated docs for Backbone.Validation" && git push origin master',
         stdout: true,
+        stderr: true
         execOptions: {
           cwd: 'thedersen.github.com'
         }
       },
       cleanup: {
         command: 'rm -rf thedersen.github.com',
-        stdout: true
+        stdout: true,
+        stderr: true
       }
     }
   });
