@@ -202,17 +202,17 @@ Check to see if an attribute, an array of attributes or the entire model is vali
 If you pass `true` as an argument, this will force an validation before the result is returned:
 
 ```js
-model.isValid(true);
+var isValid = model.isValid(true);
 ```
 
 If you pass the name of an attribute or an array of names, you can check whether or not the attributes are valid:
 
 ```js
 // Check if name is valid
-model.isValid('name');
+var isValid = model.isValid('name');
 
 // Check if name and age are valid
-model.isValid(['name', 'age']);
+var isValid = model.isValid(['name', 'age']);
 ```
 
 ### preValidate
@@ -441,9 +441,9 @@ var SomeModel = Backbone.Model.extend({
     name: 'validateName'
   },
   validateName: function(value, attr, computedState) {
-  if(value !== 'something') {
-        return 'Name is invalid';
-      }
+    if(value !== 'something') {
+      return 'Name is invalid';
+    }
   }
 });
 
