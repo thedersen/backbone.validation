@@ -13,9 +13,10 @@ Backbone.Validation = (function(_){
   };
 
 
-  // Helper functions used when formatting error messages
-  // ----------------------------------------------------
+  // Helper functions
+  // ----------------
   
+  // Formatting functions used for formatting error messages
   var formatFunctions = {
       // Uses the configured label formatter to format the attribute name
       // to make it more readable for the user
@@ -34,21 +35,36 @@ Backbone.Validation = (function(_){
       }
   };
   
+  // Flattens an object
+  // eg:
+  //
+  //     var o = {
+  //       address: {
+  //         street: 'Street',
+  //         zip: 1234
+  //       }
+  //     };
+  //
+  // becomes:
+  //
+  //     var o = {
+  //       'address.street': 'Street',
+  //       'address.zip': 1234
+  //     };
   var flatten = function (obj, into, prefix) {
     into = into || {};
     prefix = prefix || '';
 
-    for(var k in obj){
-      if(obj.hasOwnProperty(k)){
-        var prop = obj[k];
-        if (prop && typeof prop === "object" && !(prop instanceof Date || prop instanceof RegExp)) {
-          flatten(prop, into, prefix + k + '.');
+    _.each(obj, function(val, key) {
+      if(obj.hasOwnProperty(key)) {
+        if (val && typeof val === 'object' && !(val instanceof Date || val instanceof RegExp)) {
+          flatten(val, into, prefix + key + '.');
         }
         else {
-          into[prefix + k] = prop;
+          into[prefix + key] = val;
         }
       }
-    }
+    });
 
     return into;
   };
@@ -129,19 +145,19 @@ Backbone.Validation = (function(_){
     // Returns and object containing names of invalid attributes
     // as well as error messages.
     var validateModel = function(model, attrs) {
-      var error, attr,
+      var error,
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs),
           flattened = flatten(attrs);
 
-      for (attr in flattened) {
-        error = validateAttr(model, attr, flattened[attr], computed);
+      _.each(flattened, function(val, attr) {
+        error = validateAttr(model, attr, val, computed);
         if (error) {
           invalidAttrs[attr] = error;
           isValid = false;
         }
-      }
+      });
 
       return {
         invalidAttrs: invalidAttrs,
