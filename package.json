@@ -32,6 +32,8 @@
   },
   "devDependencies": {
     "buster": ">=0.6.2",
+    "grunt-docco": ">=0.1.2",
+    "grunt-shell": ">=0.1.3",
     "grunt-buster": ">=0.1.1"
   }
 }

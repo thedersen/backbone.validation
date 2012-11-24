@@ -75,10 +75,55 @@ module.exports = function(grunt) {
         refute: true
       }
     },
-    uglify: {}
+    uglify: {},
+    docco: {
+      app: {
+        src: ['dist/backbone-validation.js'],
+        options: {
+          template: 'docco.jst'
+        }
+      }
+    },
+
+    shell: {
+      npm: {
+        command: 'npm publish',
+        stdout: true
+      },
+      clone: {
+        command: 'git clone git@github.com:thedersen/thedersen.github.com.git',
+        stdout: true
+      },
+      copyDocco: {
+        command: 'cp docs/backbone-validation.html thedersen.github.com/projects/backbone-validation/docs/index.html',
+        stdout: true
+      },
+      copyCss: {
+        command: 'cp docs/docco.css thedersen.github.com/projects/backbone-validation/docs/docco.css',
+        stdout: true
+      },
+      copyExamples: {
+        command: 'cp examples/* thedersen.github.com/projects/backbone-validation/example',
+        stdout: true
+      },
+      push: {
+        command: 'git commit -am "Updated docs for Backbone.Validation" && git push origin master',
+        stdout: true,
+        execOptions: {
+          cwd: 'thedersen.github.com'
+        }
+      },
+      cleanup: {
+        command: 'rm -rf thedersen.github.com',
+        stdout: true
+      }
+    }
   });
 
-  // Default task.
   grunt.registerTask('default', 'concat lint buster min');
+  grunt.registerTask('publish', 'docco shell');
+
   grunt.loadNpmTasks('grunt-buster');
+  grunt.loadNpmTasks('grunt-docco');
+  grunt.loadNpmTasks('grunt-shell');
 };
