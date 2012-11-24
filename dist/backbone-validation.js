@@ -1,4 +1,4 @@
-// Backbone.Validation v0.6.4
+// Backbone.Validation v0.7.0
 //
 // Copyright (c) 2011-2012 Thomas Pedersen
 // Distributed under MIT License
@@ -21,9 +21,10 @@ Backbone.Validation = (function(_){
   };
 
 
-  // Helper functions used when formatting error messages
-  // ----------------------------------------------------
+  // Helper functions
+  // ----------------
   
+  // Formatting functions used for formatting error messages
   var formatFunctions = {
       // Uses the configured label formatter to format the attribute name
       // to make it more readable for the user
@@ -42,6 +43,40 @@ Backbone.Validation = (function(_){
       }
   };
   
+  // Flattens an object
+  // eg:
+  //
+  //     var o = {
+  //       address: {
+  //         street: 'Street',
+  //         zip: 1234
+  //       }
+  //     };
+  //
+  // becomes:
+  //
+  //     var o = {
+  //       'address.street': 'Street',
+  //       'address.zip': 1234
+  //     };
+  var flatten = function (obj, into, prefix) {
+    into = into || {};
+    prefix = prefix || '';
+
+    _.each(obj, function(val, key) {
+      if(obj.hasOwnProperty(key)) {
+        if (val && typeof val === 'object' && !(val instanceof Date || val instanceof RegExp)) {
+          flatten(val, into, prefix + key + '.');
+        }
+        else {
+          into[prefix + key] = val;
+        }
+      }
+    });
+
+    return into;
+  };
+
   // Validation
   // ----------
 
@@ -118,18 +153,19 @@ Backbone.Validation = (function(_){
     // Returns and object containing names of invalid attributes
     // as well as error messages.
     var validateModel = function(model, attrs) {
-      var error, attr,
+      var error,
           invalidAttrs = {},
           isValid = true,
-          computed = _.clone(attrs);
+          computed = _.clone(attrs),
+          flattened = flatten(attrs);
 
-      for (attr in attrs) {
-        error = validateAttr(model, attr, attrs[attr], computed);
+      _.each(flattened, function(val, attr) {
+        error = validateAttr(model, attr, val, computed);
         if (error) {
           invalidAttrs[attr] = error;
           isValid = false;
         }
-      }
+      });
 
       return {
         invalidAttrs: invalidAttrs,
@@ -151,12 +187,14 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
+          var flattened = flatten(this.attributes);
+
           if(_.isString(option)){
-            return !validateAttr(this, option, this.get(option), _.extend({}, this.attributes));
+            return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
           }
           if(_.isArray(option)){
             for (var i = 0; i < option.length; i++) {
-              if(validateAttr(this, option[i], this.get(option[i]), _.extend({}, this.attributes))){
+              if(validateAttr(this, option[i], flattened[option[i]], _.extend({}, this.attributes))){
                 return false;
               }
             }
@@ -177,7 +215,7 @@ Backbone.Validation = (function(_){
               opt = _.extend({}, options, setOptions),
               validatedAttrs = getValidatedAttrs(model),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
-              changedAttrs = attrs || allAttrs,
+              changedAttrs = flatten(attrs || allAttrs),
               result = validateModel(model, allAttrs);
 
           model._isValid = result.isValid;
@@ -248,7 +286,7 @@ Backbone.Validation = (function(_){
     return {
 
       // Current version of the library
-      version: '0.6.4',
+      version: '0.7.0',
 
       // Called to configure the default options
       configure: function(options) {
