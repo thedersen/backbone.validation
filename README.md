@@ -44,6 +44,8 @@ The plugin is tested with, and should work with the following versions of Backbo
 
 To configure your validation rules, simply add a validation property with a property for each attribute you want to validate on your model. The validation rules can either be an object with one of the built-in validators or a combination of two or more of them, or a function where you implement your own custom validation logic.
 
+Validating complex objects is also supported. To configure validation rules for objects, use dot notation in the name of the attribute, e.g `'address.street'`.
+
 #### Example
 
 ```js
@@ -51,6 +53,12 @@ var SomeModel = Backbone.Model.extend({
   validation: {
     name: {
       required: true
+    },
+    'address.street': {
+      required: true
+    },
+    'address.zip': {
+      length: 4
     },
     age: {
       range: [1, 80]
