@@ -104,7 +104,7 @@ module.exports = function(grunt) {
         stdout: true
       },
       copyExamples: {
-        command: 'cp examples/* thedersen.github.com/projects/backbone-validation/example',
+        command: 'cp -rf examples/ thedersen.github.com/projects/backbone-validation/examples/',
         stdout: true
       },
       push: {
