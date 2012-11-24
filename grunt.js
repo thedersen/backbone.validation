@@ -115,7 +115,7 @@ module.exports = function(grunt) {
       push: {
         command: 'git commit -am "Updated docs for Backbone.Validation" && git push origin master',
         stdout: true,
-        stderr: true
+        stderr: true,
         execOptions: {
           cwd: 'thedersen.github.com'
         }
