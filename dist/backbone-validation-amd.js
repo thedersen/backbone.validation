@@ -29,7 +29,7 @@
   
     // Helper functions
     // ----------------
-    
+  
     // Formatting functions used for formatting error messages
     var formatFunctions = {
       // Uses the configured label formatter to format the attribute name
@@ -48,7 +48,7 @@
         });
       }
     };
-    
+  
     // Flattens an object
     // eg:
     //
@@ -140,7 +140,7 @@
         // applying all the validators and returning the first error
         // message, if any.
         return _.reduce(getValidators(model, attr), function(memo, validator){
-          // Pass the format functions plus the default 
+          // Pass the format functions plus the default
           // validators as the context to the validator
           var ctx = _.extend({}, formatFunctions, defaultValidators),
               result = validator.fn.call(ctx, value, attr, validator.val, model, computed);
