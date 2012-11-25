@@ -19,11 +19,11 @@
     // ---------------
   
     var defaultOptions = {
-        forceUpdate: false,
-        selector: 'name',
-        labelFormatter: 'sentenceCase',
-        valid: Function.prototype,
-        invalid: Function.prototype
+      forceUpdate: false,
+      selector: 'name',
+      labelFormatter: 'sentenceCase',
+      valid: Function.prototype,
+      invalid: Function.prototype
     };
   
   
@@ -32,21 +32,21 @@
     
     // Formatting functions used for formatting error messages
     var formatFunctions = {
-        // Uses the configured label formatter to format the attribute name
-        // to make it more readable for the user
-        formatLabel: function(attrName, model) {
-          return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
-        },
+      // Uses the configured label formatter to format the attribute name
+      // to make it more readable for the user
+      formatLabel: function(attrName, model) {
+        return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
+      },
   
-        // Replaces nummeric placeholders like {0} in a string with arguments
-        // passed to the function
-        format: function() {
-          var args = Array.prototype.slice.call(arguments),
-              text = args.shift();
-          return text.replace(/\{(\d+)\}/g, function(match, number) {
-            return typeof args[number] !== 'undefined' ? args[number] : match;
-          });
-        }
+      // Replaces nummeric placeholders like {0} in a string with arguments
+      // passed to the function
+      format: function() {
+        var args = Array.prototype.slice.call(arguments),
+            text = args.shift();
+        return text.replace(/\{(\d+)\}/g, function(match, number) {
+          return typeof args[number] !== 'undefined' ? args[number] : match;
+        });
+      }
     };
     
     // Flattens an object
@@ -460,15 +460,15 @@
     var defaultValidators = Validation.validators = (function(){
       // Use native trim when defined
       var trim = String.prototype.trim ?
-          function(text) {
-              return text === null ? '' : String.prototype.trim.call(text);
-          } :
-          function(text) {
-              var trimLeft = /^\s+/,
-                  trimRight = /\s+$/;
+        function(text) {
+          return text === null ? '' : String.prototype.trim.call(text);
+        } :
+        function(text) {
+          var trimLeft = /^\s+/,
+              trimRight = /\s+$/;
   
-              return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
-          };
+          return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
+        };
   
       // Determines whether or not a value is a number
       var isNumber = function(value){
