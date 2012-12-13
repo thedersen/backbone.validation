@@ -1,7 +1,15 @@
 {
   "name": "backbone-validation",
+  "description": "A validation plugin for Backbone.js that validates both your model as well as form input.",
   "title": "Backbone.Validation",
   "version": "0.7.0",
+  "keywords": [
+    "backbone",
+    "plugin",
+    "validation",
+    "client",
+    "browser"
+  ],
   "author": {
     "name": "Thomas Pedersen",
     "url": "http://thedersen.com/"
