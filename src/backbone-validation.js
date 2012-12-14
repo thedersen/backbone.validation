@@ -343,7 +343,7 @@ Backbone.Validation = (function(_){
     // view becomes valid. Removes any error message.
     // Should be overridden with custom functionality.
     valid: function(view, attr, selector) {
-      view.$('[' + selector + '~=' + attr + ']')
+      view.$('[' + selector + '~="' + attr + '"]')
           .removeClass('invalid')
           .removeAttr('data-error');
     },
@@ -352,7 +352,7 @@ Backbone.Validation = (function(_){
     // Adds a error message.
     // Should be overridden with custom functionality.
     invalid: function(view, attr, error, selector) {
-      view.$('[' + selector + '~=' + attr + ']')
+      view.$('[' + selector + '~="' + attr + '"]')
           .addClass('invalid')
           .attr('data-error', error);
     }
