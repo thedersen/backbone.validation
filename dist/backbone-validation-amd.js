@@ -313,7 +313,7 @@
           if(model) {
             bindModel(view, model, options);
           }
-          if(collection) {
+          else if(collection) {
             collection.each(function(model){
               bindModel(view, model, options);
             });
@@ -356,7 +356,7 @@
       // view becomes valid. Removes any error message.
       // Should be overridden with custom functionality.
       valid: function(view, attr, selector) {
-        view.$('[' + selector + '~=' + attr + ']')
+        view.$('[' + selector + '~="' + attr + '"]')
             .removeClass('invalid')
             .removeAttr('data-error');
       },
@@ -365,7 +365,7 @@
       // Adds a error message.
       // Should be overridden with custom functionality.
       invalid: function(view, attr, error, selector) {
-        view.$('[' + selector + '~=' + attr + ']')
+        view.$('[' + selector + '~="' + attr + '"]')
             .addClass('invalid')
             .attr('data-error', error);
       }
