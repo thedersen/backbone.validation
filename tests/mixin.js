@@ -46,11 +46,7 @@ buster.testCase("Mixin validation", {
     },
 
     "when forcing update succeeds setting invalid value": function() {
-        if(Backbone.VERSION === '0.5.3') {
-            refute(this.model.set({name:''}, {forceUpdate: true}));
-        } else {
-            assert(this.model.set({name:''}, {forceUpdate: true}));
-        }
+        assert(this.model.set({name:''}, {forceUpdate: true}));
     },
 
     "when forcing update globally": {
