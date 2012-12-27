@@ -1,4 +1,4 @@
-// Backbone.Validation v0.7.0
+// Backbone.Validation v0.7.1
 //
 // Copyright (c) 2011-2012 Thomas Pedersen
 // Distributed under MIT License
@@ -283,7 +283,7 @@ Backbone.Validation = (function(_){
     return {
 
       // Current version of the library
-      version: '0.7.0',
+      version: '0.7.1',
 
       // Called to configure the default options
       configure: function(options) {
