@@ -3,11 +3,7 @@ buster.testCase("Backbone.Validation", {
         var View = Backbone.View.extend({
             render: function() {
                 var html = $('<input type="text" name="name" /><input type="text" name="age" />');
-                if(!this.$el) { // Backbone 0.5.3
-                    this.$(this.el).append(html);
-                } else { // Backbone 0.9.0
-                    this.$el.append(html);
-                }
+                this.$el.append(html);
             }
         });
 
@@ -414,11 +410,7 @@ buster.testCase("Backbone.Validation", {
             var View = Backbone.View.extend({
                 render: function() {
                     var html = $('<input type="text" name="one" /><input type="text" name="two" />');
-                    if(!this.$el) { // Backbone 0.5.3
-                        this.$(this.el).append(html);
-                    } else { // Backbone 0.9.0
-                        this.$el.append(html);
-                    }
+                    this.$el.append(html);
 
                     Backbone.Validation.bind(this);
                 }
@@ -460,12 +452,7 @@ buster.testCase("Backbone.Validation", {
             },
 
             "first input is valid": function() {
-                if(Backbone.VERSION === '0.5.3'){
-                    refute(this.one.hasClass('invalid'));
-                }
-                else {
-                    assert(this.one.hasClass('invalid'));
-                }
+                assert(this.one.hasClass('invalid'));
             },
 
             "second input is invalid": function() {

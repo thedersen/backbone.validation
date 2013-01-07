@@ -4,7 +4,7 @@ buster.testCase("Mixin validation", {
 
         _.extend(Backbone.Model.prototype, Backbone.Validation.mixin);
 
-        var Model = Backbone.Model.extend({
+        this.Model = Backbone.Model.extend({
             validation: {
                 name: function(val) {
                     if(!val) {
@@ -14,15 +14,17 @@ buster.testCase("Mixin validation", {
             }
         });
 
-        this.model = new Model();
+        this.model = new this.Model();
     },
 
     tearDown: function() {
         Backbone.Model.prototype = this.origPrototype;
     },
 
-    "isValid is undefined when no validation has occurred": function() {
-        refute.defined(this.model.isValid());
+    // This breaks in v0.9.9 since validation is called from ctor.
+    // Will change i v.next of BB
+    "//isValid is undefined when no validation has occurred": function() {
+        refute.defined(new this.Model().isValid());
     },
 
     "isValid is false when model is invalid": function() {
@@ -44,11 +46,7 @@ buster.testCase("Mixin validation", {
     },
 
     "when forcing update succeeds setting invalid value": function() {
-        if(Backbone.VERSION === '0.5.3') {
-            refute(this.model.set({name:''}, {forceUpdate: true}));
-        } else {
-            assert(this.model.set({name:''}, {forceUpdate: true}));
-        }
+        assert(this.model.set({name:''}, {forceUpdate: true}));
     },
 
     "when forcing update globally": {

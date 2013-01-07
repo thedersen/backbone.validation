@@ -5,7 +5,7 @@ config['Browser'] = {
   sources: [
     'lib/jquery-1.6.2.js',
     'lib/underscore.js',
-    'lib/backbone-0.9.2.js',
+    'lib/backbone-0.9.9.js',
     'dist/backbone-validation.js'
   ],
   tests: [

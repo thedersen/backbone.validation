@@ -1,4 +1,4 @@
-# Backbone.Validation v0.7.0
+# Backbone.Validation v0.7.1
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
@@ -18,12 +18,12 @@ You can download the raw source from [GitHub](http://github.com/thedersen/backbo
 
 #### Standard builds
 
-* Development: [backbone-validation.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js) *22.7kb*
+* Development: [backbone-validation.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js) *22.6kb*
 * Production:  [backbone-validation-min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-min.js) *2.7kb gzipped*
 
 #### AMD builds
 
-* Development: [backbone-validation-amd.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd.js) *23.1kb*
+* Development: [backbone-validation-amd.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd.js) *24.1kb*
 * Production:  [backbone-validation-amd-min.js](https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation-amd-min.js) *2.8kb gzipped*
 
 #### Node.js builds
@@ -36,9 +36,9 @@ It's easy to get up and running. You only need to have Backbone (including under
 
 The plugin is tested with, and should work with the following versions of Backbone:
 
-* 0.5.3
 * 0.9.1
 * 0.9.2
+* 0.9.9
 
 ### Configure validation rules on the Model
 
@@ -197,7 +197,7 @@ This is called by Backbone when it needs to perform validation. You can also cal
 
 Check to see if an attribute, an array of attributes or the entire model is valid.
 
-`isValid` returns `undefined` when no validation has occurred and the model has validation, otherwise, `true` or `false`.
+`isValid` returns `undefined` when no validation has occurred and the model has validation (except with Backbone v0.9.9 where validation is called from the constructor), otherwise, `true` or `false`.
 
 If you pass `true` as an argument, this will force an validation before the result is returned:
 
@@ -776,15 +776,21 @@ Basic behaviour:
 
 ## Release notes
 
-#### v0.7.0
+#### v0.7.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.7.0...v0.7.1)
+
+* Fixed Sizzle error: "unrecognized expression" (Thanks to [Vladimir Tsvang](https://github.com/vtsvang))
+* Only binds to a collection when a model is not present on the view. Fixes #89
+* Tested with Backbone v0.9.9
+
+#### v0.7.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.6.4...v0.7.0)
 
 * Nested validation is back! See [Configure validation rules](#configure-validation-rules-on-the-model)
 
-#### v0.6.4
+#### v0.6.4 [commits](https://github.com/thedersen/backbone.validation/compare/v0.6.3...v0.6.4)
 
 * `format(...)` and `formatLabel(...)` are made available for custom validators on `this` (Thanks to [rafanoronha](https://github.com/rafanoronha))
 
-#### v0.6.3
+#### v0.6.3 [commits](https://github.com/thedersen/backbone.validation/compare/v0.6.2...v0.6.3)
 
 * Labelformatter set to 'label' no longer crashes when no `labels` attribute is present on the model
 * Does not invoke callbacks for attributes that are not validated

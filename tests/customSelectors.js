@@ -3,11 +3,7 @@ buster.testCase("Overriding default id selector with class", {
         var View = Backbone.View.extend({
             render: function() {
                 var html = $('<input type="text" class="name" />');
-                if(!this.$el) { // Backbone 0.5.3
-                    this.$(this.el).append(html);
-                } else { // Backbone 0.9.0
-                    this.$el.append(html);
-                }
+                this.$el.append(html);
             }
         });
 

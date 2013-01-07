@@ -39,11 +39,7 @@ buster.testCase("forceUpdate", {
 		},
 
 		"invalid values are set on model": function() {
-			if(Backbone.VERSION === '0.5.3') {
-				refute(this.model.set({name:''}, {forceUpdate: true}));
-			} else {
-				assert(this.model.set({name:''}, {forceUpdate: true}));
-			}
+      assert(this.model.set({name:''}, {forceUpdate: true}));
 		}
 	},
 

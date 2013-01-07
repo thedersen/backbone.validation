@@ -1,4 +1,4 @@
-// Backbone.Validation v0.7.0
+// Backbone.Validation v0.7.1
 //
 // Copyright (c) 2011-2012 Thomas Pedersen
 // Distributed under MIT License
@@ -19,36 +19,36 @@
     // ---------------
   
     var defaultOptions = {
-        forceUpdate: false,
-        selector: 'name',
-        labelFormatter: 'sentenceCase',
-        valid: Function.prototype,
-        invalid: Function.prototype
+      forceUpdate: false,
+      selector: 'name',
+      labelFormatter: 'sentenceCase',
+      valid: Function.prototype,
+      invalid: Function.prototype
     };
   
   
     // Helper functions
     // ----------------
-    
+  
     // Formatting functions used for formatting error messages
     var formatFunctions = {
-        // Uses the configured label formatter to format the attribute name
-        // to make it more readable for the user
-        formatLabel: function(attrName, model) {
-          return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
-        },
+      // Uses the configured label formatter to format the attribute name
+      // to make it more readable for the user
+      formatLabel: function(attrName, model) {
+        return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
+      },
   
-        // Replaces nummeric placeholders like {0} in a string with arguments
-        // passed to the function
-        format: function() {
-          var args = Array.prototype.slice.call(arguments);
-          var text = args.shift();
-          return text.replace(/\{(\d+)\}/g, function(match, number) {
-            return typeof args[number] !== 'undefined' ? args[number] : match;
-          });
-        }
+      // Replaces nummeric placeholders like {0} in a string with arguments
+      // passed to the function
+      format: function() {
+        var args = Array.prototype.slice.call(arguments),
+            text = args.shift();
+        return text.replace(/\{(\d+)\}/g, function(match, number) {
+          return typeof args[number] !== 'undefined' ? args[number] : match;
+        });
+      }
     };
-    
+  
     // Flattens an object
     // eg:
     //
@@ -140,7 +140,7 @@
         // applying all the validators and returning the first error
         // message, if any.
         return _.reduce(getValidators(model, attr), function(memo, validator){
-          // Pass the format functions plus the default 
+          // Pass the format functions plus the default
           // validators as the context to the validator
           var ctx = _.extend({}, formatFunctions, defaultValidators),
               result = validator.fn.call(ctx, value, attr, validator.val, model, computed);
@@ -199,12 +199,9 @@
               return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
             }
             if(_.isArray(option)){
-              for (var i = 0; i < option.length; i++) {
-                if(validateAttr(this, option[i], flattened[option[i]], _.extend({}, this.attributes))){
-                  return false;
-                }
-              }
-              return true;
+              return _.reduce(option, function(memo, attr) {
+                return memo && !validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+              }, true, this);
             }
             if(option === true) {
               this.validate();
@@ -222,13 +219,14 @@
                 validatedAttrs = getValidatedAttrs(model),
                 allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
                 changedAttrs = flatten(attrs || allAttrs),
+  
                 result = validateModel(model, allAttrs);
   
             model._isValid = result.isValid;
   
             // After validation is performed, loop through all changed attributes
             // and call the valid callbacks so the view is updated.
-            _.each(_.keys(validatedAttrs), function(attr){
+            _.each(validatedAttrs, function(val, attr){
               var invalid = result.invalidAttrs.hasOwnProperty(attr);
               if(!invalid){
                 opt.valid(view, attr, opt.selector);
@@ -237,7 +235,7 @@
   
             // After validation is performed, loop through all changed attributes
             // and call the invalid callback so the view is updated.
-            _.each(_.keys(validatedAttrs), function(attr){
+            _.each(validatedAttrs, function(val, attr){
               var invalid = result.invalidAttrs.hasOwnProperty(attr),
                   changed = changedAttrs.hasOwnProperty(attr);
   
@@ -292,7 +290,7 @@
       return {
   
         // Current version of the library
-        version: '0.7.0',
+        version: '0.7.1',
   
         // Called to configure the default options
         configure: function(options) {
@@ -304,6 +302,7 @@
         bind: function(view, options) {
           var model = view.model,
               collection = view.collection;
+  
           options = _.extend({}, defaultOptions, defaultCallbacks, options);
   
           if(typeof model === 'undefined' && typeof collection === 'undefined'){
@@ -314,7 +313,7 @@
           if(model) {
             bindModel(view, model, options);
           }
-          if(collection) {
+          else if(collection) {
             collection.each(function(model){
               bindModel(view, model, options);
             });
@@ -357,7 +356,7 @@
       // view becomes valid. Removes any error message.
       // Should be overridden with custom functionality.
       valid: function(view, attr, selector) {
-        view.$('[' + selector + '~=' + attr + ']')
+        view.$('[' + selector + '~="' + attr + '"]')
             .removeClass('invalid')
             .removeAttr('data-error');
       },
@@ -366,7 +365,7 @@
       // Adds a error message.
       // Should be overridden with custom functionality.
       invalid: function(view, attr, error, selector) {
-        view.$('[' + selector + '~=' + attr + ']')
+        view.$('[' + selector + '~="' + attr + '"]')
             .addClass('invalid')
             .attr('data-error', error);
       }
@@ -461,15 +460,15 @@
     var defaultValidators = Validation.validators = (function(){
       // Use native trim when defined
       var trim = String.prototype.trim ?
-          function(text) {
-              return text === null ? '' : String.prototype.trim.call(text);
-          } :
-          function(text) {
-              var trimLeft = /^\s+/,
-                  trimRight = /\s+$/;
+        function(text) {
+          return text === null ? '' : String.prototype.trim.call(text);
+        } :
+        function(text) {
+          var trimLeft = /^\s+/,
+              trimRight = /\s+$/;
   
-              return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
-          };
+          return text === null ? '' : text.toString().replace(trimLeft, '').replace(trimRight, '');
+        };
   
       // Determines whether or not a value is a number
       var isNumber = function(value){
