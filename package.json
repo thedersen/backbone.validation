@@ -2,7 +2,7 @@
   "name": "backbone-validation",
   "description": "A validation plugin for Backbone.js that validates both your model as well as form input.",
   "title": "Backbone.Validation",
-  "version": "0.7.0",
+  "version": "0.7.0-1",
   "keywords": [
     "backbone",
     "plugin",
@@ -47,7 +47,7 @@
   },
   "jam":{
     "dependencies": {
-      "backbone": "0.9.2"
+      "backbone": "0.9.9"
     },
     "main": "dist/backbone-validation-amd.js",
     "include": [
