@@ -39,7 +39,7 @@ buster.testCase("Backbone.Validation events", {
         this.model.set({
             age: 1,
             name: 'name'
-        });
+        }, {validate: true});
     },
 
     "when model is valid": {
@@ -53,7 +53,7 @@ buster.testCase("Backbone.Validation events", {
             this.model.set({
                 age: 1,
                 name: 'name'
-            });
+            }, {validate: true});
         },
 
         "validated:valid event is triggered with model": function(done) {
@@ -65,7 +65,7 @@ buster.testCase("Backbone.Validation events", {
             this.model.set({
                 age: 1,
                 name: 'name'
-            });
+            }, {validate: true});
         }
     },
 
@@ -78,7 +78,7 @@ buster.testCase("Backbone.Validation events", {
                 done();
             }, this);
 
-            this.model.set({age:0});
+            this.model.set({age:0}, {validate: true});
         },
 
         "validated:invalid event is triggered with model and name of attributes with error": function(done) {
@@ -88,17 +88,7 @@ buster.testCase("Backbone.Validation events", {
                 done();
             }, this);
 
-            this.model.set({age:0});
-        },
-
-        "error event is triggered with model and error as an array of attribute names with error": function(done) {
-            this.model.bind('error', function(model, error) {
-                assert.same(this.model, model);
-                assert.equals({age: 'age', name: 'name'}, error);
-                done();
-            }, this);
-
-            this.model.set({age:0});
+            this.model.set({age:0}, {validate: true});
         }
     },
 
@@ -113,7 +103,7 @@ buster.testCase("Backbone.Validation events", {
 
             this.model.set({
                 age: 1
-            });
+            }, {validate: true});
         },
 
         "validated:invalid event is triggered with model and an array with the names of the attributes with error": function(done) {
@@ -125,7 +115,7 @@ buster.testCase("Backbone.Validation events", {
 
             this.model.set({
                 age: 1
-            }, this);
+            }, {validate: true});
         }
     }
 });

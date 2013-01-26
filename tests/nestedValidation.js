@@ -28,7 +28,7 @@ buster.testCase('Nested validation', {
           address: {
             street:''
           }
-        });
+        }, {validate: true});
       },
   
       "refutes setting invalid values": function() {
@@ -58,7 +58,7 @@ buster.testCase('Nested validation', {
           address: {
             street: 'name'
           }
-        });
+        }, {validate: true});
       },
   
       "sets the value": function() {
@@ -114,7 +114,7 @@ buster.testCase('Nested validation', {
               baz: ''
             }
           }
-        });
+        }, {validate: true});
       },
   
       "refutes setting invalid values": function() {
@@ -146,7 +146,7 @@ buster.testCase('Nested validation', {
               baz: 'val'
             }
           }
-        });
+        }, {validate: true});
       },
   
       "sets the value": function() {
@@ -207,7 +207,7 @@ buster.testCase('Nested validation', {
               baz: ''
             }
           }
-        });
+        }, {validate: true});
       },
   
       "refutes setting invalid values": function() {
@@ -243,7 +243,7 @@ buster.testCase('Nested validation', {
               baz: 'val'
             }
           }
-        });
+        }, {validate: true});
       },
   
       "sets the value": function() {

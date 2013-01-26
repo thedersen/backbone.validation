@@ -21,42 +21,42 @@ buster.testCase("maxLength validator", {
     },
 
     "has default error message": function(done) {
-        this.model.bind('error', function(model, error){
+        this.model.bind('validated:invalid', function(model, error){
             assert.equals({name: 'Name must be at most 2 characters'}, error);
             done();
         });
-        this.model.set({name:'aaa'});
+        this.model.set({name:'aaa'}, {validate: true});
     },
 
     "string with length longer than maxLenght is invalid": function() {
         refute(this.model.set({
             name: 'aaa'
-        }));
+        }, {validate: true}));
     },
 
     "string with length equal to maxLength is valid": function() {
         assert(this.model.set({
             name: 'aa'
-        }));
+        }, {validate: true}));
     },
 
     "string with length shorter than maxLength is valid": function() {
         assert(this.model.set({
             name: 'a'
-        }));
+        }, {validate: true}));
     },
 
     "when required is not specified": {
         "undefined is invalid": function() {
             refute(this.model.set({
                 name: undefined
-            }));
+            }, {validate: true}));
         },
 
         "null is invalid": function() {
             refute(this.model.set({
                 name: null
-            }));
+            }, {validate: true}));
         }
     },
 
@@ -68,13 +68,13 @@ buster.testCase("maxLength validator", {
         "null is valid": function() {
             assert(this.model.set({
                 name: null
-            }));
+            }, {validate: true}));
         },
 
         "undefined is valid": function() {
             assert(this.model.set({
                 name: undefined
-            }));
+            }, {validate: true}));
         }
     },
 
@@ -86,13 +86,13 @@ buster.testCase("maxLength validator", {
         "undefined is invalid": function() {
             refute(this.model.set({
                 name: undefined
-            }));
+            }, {validate: true}));
         },
 
         "null is invalid": function() {
             refute(this.model.set({
                 name: null
-            }));
+            }, {validate: true}));
         }
     }
 });

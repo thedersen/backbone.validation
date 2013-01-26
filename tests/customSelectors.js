@@ -32,7 +32,7 @@ buster.testCase("Overriding default id selector with class", {
         });
         Backbone.Validation.bind(this.view);
 
-        this.model.set({name:''});
+        this.model.set({name:''}, {validate: true});
 
         assert(this.name.hasClass('invalid'));
 
@@ -45,7 +45,7 @@ buster.testCase("Overriding default id selector with class", {
         Backbone.Validation.bind(this.view, {
             selector: 'class'
         });
-        this.model.set({name:''});
+        this.model.set({name:''}, {validate: true});
 
         assert(this.name.hasClass('invalid'));
     }

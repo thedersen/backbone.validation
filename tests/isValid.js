@@ -29,13 +29,13 @@ buster.testCase("isValid", {
 		},
 
 		"returns true when model is valid": function() {
-			this.model.set({name: 'name'});
+			this.model.set({name: 'name'}, {validate: true});
 
 			assert(this.model.isValid());
 		},
 
 		"returns false when model is invalid": function() {
-			this.model.set({name: ''});
+			this.model.set({name: ''}, {validate: true});
 
 			refute(this.model.isValid());
 		},
@@ -62,7 +62,7 @@ buster.testCase("isValid", {
 			},
 
 			"returns true when attribute is valid": function() {
-				this.model.set({name: 'name'}, { silent:true });
+				this.model.set({name: 'name'});
 
 				assert(this.model.isValid('name'));
 			}
@@ -88,13 +88,13 @@ buster.testCase("isValid", {
 			},
 
 			"returns false when one attribute is invalid": function() {
-				this.model.set({name: 'name'}, { silent:true });
+				this.model.set({name: 'name'});
 
 				refute(this.model.isValid(['name', 'age']));
 			},
 
 			"returns true when all attributes are valid": function() {
-				this.model.set({name: 'name', age: 1 }, { silent:true });
+				this.model.set({name: 'name', age: 1 });
 
 				assert(this.model.isValid(['name', 'age']));
 			}

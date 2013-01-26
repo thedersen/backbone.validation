@@ -21,9 +21,7 @@ buster.testCase("Mixin validation", {
         Backbone.Model.prototype = this.origPrototype;
     },
 
-    // This breaks in v0.9.9 since validation is called from ctor.
-    // Will change i v.next of BB
-    "//isValid is undefined when no validation has occurred": function() {
+    "isValid is undefined when no validation has occurred": function() {
         refute.defined(new this.Model().isValid());
     },
 
@@ -32,21 +30,21 @@ buster.testCase("Mixin validation", {
     },
 
     "isValid is true when model is valid": function() {
-        this.model.set({name: 'name'},{silent:true});
+        this.model.set({name: 'name'});
 
         assert.equals(true, this.model.isValid(true));
     },
 
     "refutes setting invalid value": function() {
-        refute(this.model.set({name: ''}));
+        refute(this.model.set({name: ''}, {validate: true}));
     },
 
     "succeeds setting valid value": function() {
-        assert(this.model.set({name: 'name'}));
+        assert(this.model.set({name: 'name'}, {validate: true}));
     },
 
     "when forcing update succeeds setting invalid value": function() {
-        assert(this.model.set({name:''}, {forceUpdate: true}));
+        assert(this.model.set({name:''}, {forceUpdate: true, validate: true}));
     },
 
     "when forcing update globally": {
@@ -63,7 +61,7 @@ buster.testCase("Mixin validation", {
         },
 
         "succeeds setting invalid value when forcing update globally": function() {
-            assert(this.model.set({name:''}));
+            assert(this.model.set({name:''}, {validate: true}));
         }
     },
 
@@ -73,7 +71,7 @@ buster.testCase("Mixin validation", {
         },
 
         "it should not complain": function() {
-            assert(this.model.set({someAttr: 'someValue'}));
+            assert(this.model.set({someAttr: 'someValue'}, {validate: true}));
         }
     }
 });

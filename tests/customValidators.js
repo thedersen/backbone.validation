@@ -27,10 +27,10 @@ buster.testCase('Extending Backbone.Validation with custom validator', {
     "should execute the custom validator": function() {
         assert(this.model.set({
             age: 1
-        }));
+        }, {validate: true}));
         refute(this.model.set({
             age: 2
-        }));
+        }, {validate: true}));
     }
 });
 
@@ -67,10 +67,10 @@ buster.testCase('Overriding built-in validator in Backbone.Validation', {
     "should execute the overridden validator": function() {
         assert(this.model.set({
             age: 1
-        }));
+        }, {validate: true}));
         refute(this.model.set({
             age: 2
-        }));
+        }, {validate: true}));
     }
 });
 

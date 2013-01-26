@@ -23,13 +23,13 @@ buster.testCase("Specifying error messages", {
         },
 
         "and violating first validator returns msg specified for first validator": function() {
-            this.model.set({email: ''});
+            this.model.set({email: ''}, {validate: true});
 
             assert.calledWith(this.invalid, this.view, 'email', 'required');
         },
 
         "and violating second validator returns msg specified for second validator": function() {
-            this.model.set({email: 'a'});
+            this.model.set({email: 'a'}, {validate: true});
 
             assert.calledWith(this.invalid, this.view, 'email', 'pattern');
         }
@@ -47,13 +47,13 @@ buster.testCase("Specifying error messages", {
         },
 
         "and violating first validator returns msg specified for attribute": function() {
-            this.model.set({email: ''});
+            this.model.set({email: ''}, {validate: true});
 
             assert.calledWith(this.invalid, this.view, 'email', 'error');
         },
 
         "and violating second validator returns msg specified for attribute": function() {
-            this.model.set({email: 'a'});
+            this.model.set({email: 'a'}, {validate: true});
 
             assert.calledWith(this.invalid, this.view, 'email', 'error');
         }

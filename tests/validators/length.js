@@ -21,42 +21,42 @@ buster.testCase("length validator", {
     },
 
     "has default error message": function(done) {
-        this.model.bind('error', function(model, error){
+        this.model.bind('validated:invalid', function(model, error){
             assert.equals({postalCode: 'Postal code must be 2 characters'}, error);
             done();
         });
-        this.model.set({postalCode:''});
+        this.model.set({postalCode:''}, {validate: true});
     },
 
     "string with length shorter than length is invalid": function() {
         refute(this.model.set({
             postalCode: 'a'
-        }));
+        }, {validate: true}));
     },
 
     "string with length longer than length is invalid": function() {
         refute(this.model.set({
             postalCode: 'aaa'
-        }));
+        }, {validate: true}));
     },
 
     "string with length equal to length is valid": function() {
         assert(this.model.set({
             postalCode: 'aa'
-        }));
+        }, {validate: true}));
     },
 
     "when required is not specified": {
         "undefined is invalid": function() {
             refute(this.model.set({
                 postalCode: undefined
-            }));
+            }, {validate: true}));
         },
 
         "null is invalid": function() {
             refute(this.model.set({
                 postalCode: null
-            }));
+            }, {validate: true}));
         }
     },
 
@@ -68,13 +68,13 @@ buster.testCase("length validator", {
         "null is valid": function() {
             assert(this.model.set({
                 postalCode: null
-            }));
+            }, {validate: true}));
         },
 
         "undefined is valid": function() {
             assert(this.model.set({
                 postalCode: undefined
-            }));
+            }, {validate: true}));
         }
     },
 
@@ -86,13 +86,13 @@ buster.testCase("length validator", {
         "undefined is invalid": function() {
             refute(this.model.set({
                 postalCode: undefined
-            }));
+            }, {validate: true}));
         },
 
         "null is invalid": function() {
             refute(this.model.set({
                 postalCode: null
-            }));
+            }, {validate: true}));
         }
     }
 });

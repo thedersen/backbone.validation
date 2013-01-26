@@ -21,10 +21,10 @@ buster.testCase('Extending Backbone.Validation with custom pattern', {
     "should execute the custom pattern validator": function() {
         assert(this.model.set({
             name: 'test'
-        }));
+        }, {validate: true}));
         refute(this.model.set({
             name: 'aa'
-        }));
+        }, {validate: true}));
     }
 });
 
@@ -57,9 +57,9 @@ buster.testCase('Overriding builtin pattern in Backbone.Validation', {
     "should execute the custom pattern validator": function() {
         assert(this.model.set({
             name: 'test'
-        }));
+        }, { validate: true }));
         refute(this.model.set({
             name: 'aa'
-        }));
+        }, { validate: true }));
     }
 });

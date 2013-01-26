@@ -27,36 +27,36 @@ buster.testCase("pattern validator", {
     },
 
     "has default error message": function(done) {
-        this.model.bind('error', function(model, error){
+        this.model.bind('validated:invalid', function(model, error){
             assert.equals({email: 'Email must be a valid email'}, error);
             done();
         });
-        this.model.set({email:''});
+        this.model.set({email:''}, {validate: true});
     },
 
     "value not matching pattern is invalid": function() {
         refute(this.model.set({
             name: 'aaa'
-        }));
+        }, {validate: true}));
     },
 
     "value matching pattern is valid": function() {
         assert(this.model.set({
             name: 'test'
-        }));
+        }, {validate: true}));
     },
 
     "when required is not specified": {
          "undefined is invalid": function() {
              refute(this.model.set({
                  name: undefined
-             }));
+             }, {validate: true}));
          },
 
          "null is invalid": function() {
              refute(this.model.set({
                  name: null
-             }));
+             }, {validate: true}));
          }
      },
 
@@ -68,13 +68,13 @@ buster.testCase("pattern validator", {
          "null is valid": function() {
              assert(this.model.set({
                  name: null
-             }));
+             }, {validate: true}));
          },
 
          "undefined is valid": function() {
              assert(this.model.set({
                  name: undefined
-             }));
+             }, {validate: true}));
          }
      },
 
@@ -86,23 +86,23 @@ buster.testCase("pattern validator", {
          "undefined is invalid": function() {
              refute(this.model.set({
                  name: undefined
-             }));
+             }, {validate: true}));
          },
 
          "null is invalid": function() {
              refute(this.model.set({
                  name: null
-             }));
+             }, {validate: true}));
          }
      },
 
      "can use one of the built-in patterns by specifying the name of it": function(){
          refute(this.model.set({
              email: 'aaa'
-             }));
+             }, {validate: true}));
 
          assert(this.model.set({
              email: 'a@example.com'
-         }));
+         }, {validate: true}));
      }
 });

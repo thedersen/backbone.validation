@@ -20,10 +20,10 @@ buster.testCase("Server validation", {
   },
 
   "Passes validation": function () {
-    assert(this.model.set({name:'Name'}));
+    assert(this.model.set({name:'Name'}, {validate: true}));
   },
 
   "Fails validation": function () {
-    refute(this.model.set({name:''}));
+    refute(this.model.set({name:''}, {validate: true}));
   }
 });

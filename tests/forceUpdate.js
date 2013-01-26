@@ -17,7 +17,7 @@ buster.testCase("forceUpdate", {
 		},
 
 		"invalid values are not set on model": function() {
-			refute(this.model.set({name:''}));
+			refute(this.model.set({name:''}, {validate: true}));
 		}
 	},
 
@@ -29,7 +29,7 @@ buster.testCase("forceUpdate", {
 		},
 
 		"invalid values are set on model": function() {
-			assert(this.model.set({name:''}));
+			assert(this.model.set({name:''}, {validate: true}));
 		}
 	},
 
@@ -39,7 +39,7 @@ buster.testCase("forceUpdate", {
 		},
 
 		"invalid values are set on model": function() {
-      assert(this.model.set({name:''}, {forceUpdate: true}));
+      assert(this.model.set({name:''}, {forceUpdate: true, validate: true}));
 		}
 	},
 
@@ -58,7 +58,7 @@ buster.testCase("forceUpdate", {
 		},
 
 		"invalid values are set on model": function() {
-			assert(this.model.set({name:''}));
+			assert(this.model.set({name:''}, {validate: true}));
 		}
 	}
 });

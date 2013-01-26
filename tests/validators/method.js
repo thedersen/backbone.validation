@@ -29,33 +29,33 @@ buster.testCase("method validator", {
     "is invalid when method returns error message": function() {
         refute(this.model.set({
             name: ''
-        }));
+        }, {validate: true}));
     },
 
     "is valid when method returns undefined": function() {
         refute(this.model.set({
             name: 'backbone'
-        }));
+        }, {validate: true}));
     },
 
     "context is the model": function() {
         this.model.set({
             name: ''
-        });
+        }, {validate: true});
         assert.same(this.ctx, this.model);
     },
 
     "second argument is the name of the attribute being validated": function() {
-        this.model.set({name: ''});
+        this.model.set({name: ''}, {validate: true});
         assert.equals('name', this.attr);
     },
 
     "third argument is a computed model state": function() {
-        this.model.set({attr: 'attr'}, {silent: true});
+        this.model.set({attr: 'attr'});
         this.model.set({
             name: 'name',
             age: 1
-        });
+        }, {validate: true});
 
         assert.equals({attr:'attr', name:'name', age:1}, this.computed);
     }
@@ -90,33 +90,33 @@ buster.testCase("method validator short hand syntax", {
     "is invalid when method returns error message": function() {
         refute(this.model.set({
             name: ''
-        }));
+        }, {validate: true}));
     },
 
     "is valid when method returns undefined": function() {
         refute(this.model.set({
             name: 'backbone'
-        }));
+        }, {validate: true}));
     },
 
     "context is the model": function() {
         this.model.set({
             name: ''
-        });
+        }, {validate: true});
         assert.same(this.ctx, this.model);
     },
 
     "second argument is the name of the attribute being validated": function() {
-        this.model.set({name: ''});
+        this.model.set({name: ''}, {validate: true});
         assert.equals('name', this.attr);
     },
 
     "third argument is a computed model state": function() {
-        this.model.set({attr: 'attr'}, {silent: true});
+        this.model.set({attr: 'attr'});
         this.model.set({
             name: 'name',
             age: 1
-        });
+        }, {validate: true});
 
         assert.equals({attr:'attr', name:'name', age:1}, this.computed);
     }

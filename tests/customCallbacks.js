@@ -35,7 +35,7 @@ buster.testCase("Overriding default callbacks in Backbone.Validation", {
     "should call overridden valid callback": function() {
         this.model.set({
             age: 1
-        });
+        }, {validate: true});
 
         assert.called(this.valid);
     },
@@ -43,7 +43,7 @@ buster.testCase("Overriding default callbacks in Backbone.Validation", {
     "should call overridden invalid callback": function() {
         this.model.set({
             age: 0
-        });
+        }, {validate: true});
 
         assert.called(this.invalid);
     }

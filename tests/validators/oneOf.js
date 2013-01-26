@@ -21,42 +21,42 @@ buster.testCase("oneOf validator", {
     },
 
     "has default error message": function(done) {
-        this.model.bind('error', function(model, error){
+        this.model.bind('validated:invalid', function(model, error){
             assert.equals({country: 'Country must be one of: Norway, Sweeden' }, error);
             done();
         });
-        this.model.set({country:''});
+        this.model.set({country:''}, {validate: true});
     },
 
     "value is one of the values in the array is valid": function(){
         assert(this.model.set({
             country: 'Norway'
-        }));
+        }, {validate: true}));
     },
 
     "value is not one of the values in the arraye is invalid": function(){
         refute(this.model.set({
             country: 'Denmark'
-        }));
+        }, {validate: true}));
     },
 
     "is case sensitive": function(){
         refute(this.model.set({
             country: 'sweeden'
-        }));
+        }, {validate: true}));
     },
 
     "when required is not specified": {
          "undefined is invalid": function() {
              refute(this.model.set({
                  country: undefined
-             }));
+             }, {validate: true}));
          },
 
          "null is invalid": function() {
              refute(this.model.set({
                  country: null
-             }));
+             }, {validate: true}));
          }
      },
 
@@ -68,13 +68,13 @@ buster.testCase("oneOf validator", {
          "null is valid": function() {
              assert(this.model.set({
                  country: null
-             }));
+             }, {validate: true}));
          },
 
          "undefined is valid": function() {
              assert(this.model.set({
                  country: undefined
-             }));
+             }, {validate: true}));
          }
      },
 
@@ -86,13 +86,13 @@ buster.testCase("oneOf validator", {
          "undefined is invalid": function() {
              refute(this.model.set({
                  country: undefined
-             }));
+             }, {validate: true}));
          },
 
          "null is invalid": function() {
              refute(this.model.set({
                  country: null
-             }));
+             }, {validate: true}));
          }
      }
 });
