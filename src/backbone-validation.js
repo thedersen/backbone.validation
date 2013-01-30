@@ -235,8 +235,11 @@ Backbone.Validation = (function(_){
               opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
               // Do we want to focus on the first invalid input?
               if(opt.focus && !focused){
-                // Focus on the correct element
-                document.getElementsByName('' + attr + '')[0].focus();
+                // setTimeout needed due to IE8
+                setTimeout(function () {
+                  // Focus on the correct element
+                  view.$('[' + opt.selector + '="' + attr + '"]').focus();
+                }, 10);
                 // Make sure we don't focus on anything else
                 focused = true;
               }
