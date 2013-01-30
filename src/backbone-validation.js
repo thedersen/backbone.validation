@@ -6,6 +6,7 @@ Backbone.Validation = (function(_){
 
   var defaultOptions = {
     forceUpdate: false,
+    focus: false,
     selector: 'name',
     labelFormatter: 'sentenceCase',
     valid: Function.prototype,
@@ -206,7 +207,8 @@ Backbone.Validation = (function(_){
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
 
-              result = validateModel(model, allAttrs);
+              result = validateModel(model, allAttrs),
+              focused = false;
 
           model._isValid = result.isValid;
 
@@ -228,6 +230,18 @@ Backbone.Validation = (function(_){
             if(invalid && (changed || validateAll)){
               opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
             }
+            
+            if(invalid && (changed || validateAll)){
+              opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+              // Do we want to focus on the first invalid input?
+              if(opt.focus && !focused){
+                // Focus on the correct element
+                document.getElementsByName('' + attr + '')[0].focus();
+                // Make sure we don't focus on anything else
+                focused = true;
+              }
+            }
+            
           });
 
           // Trigger validated events.
