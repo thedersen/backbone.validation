@@ -72,7 +72,7 @@
       _.each(obj, function(val, key) {
         if(obj.hasOwnProperty(key)) {
           if (val && typeof val === 'object' && !(val instanceof Date || val instanceof RegExp)) {
-            flatten(val, into, prefix + key + '.');
+            flatten(val, into, prefix + key + '-');
           }
           else {
             into[prefix + key] = val;

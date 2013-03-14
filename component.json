@@ -1,0 +1,6 @@
+{
+  "name": "backbone.validation",
+  "version": "0.7.1",
+  "main": "./dist/backbone-validation-amd.js",
+  "dependencies": {}
+}
