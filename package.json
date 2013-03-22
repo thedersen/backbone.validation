@@ -47,7 +47,7 @@
   },
   "jam":{
     "dependencies": {
-      "backbone": "0.9.9"
+      "backbone": ">=0.9.9"
     },
     "main": "dist/backbone-validation-amd.js",
     "include": [
