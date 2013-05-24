@@ -159,6 +159,21 @@ When binding to a view with a collection, all models in the collection are bound
 
 Note that if you add/remove models with the silent flag, they will not be bound/unbound since there is no way of knowing the the collection was modified.
 
+### Specifying a custom model
+
+If you'd like to bind to a model that is not the view's default model, you can specify which model to use at binding time. For example:
+
+```js
+// Binding when rendering
+var SomeView = Backbone.View.extend({
+  render: function(){
+    Backbone.Validation.bind(this, {model: this.page});
+  }
+});
+```
+
+This can be useful when you have client-side models that store things like a page's state. Note that you can also bind multiple different models to the same view in this way.
+
 ### Unbinding
 
 If you want to remove the validation binding, this is done with a call to `Backbone.Validation.unbind(view)`. This removes the validation binding on the model, or all models if you view contains a collection, as well as removing all events hooked up on the collection.
