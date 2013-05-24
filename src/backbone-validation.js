@@ -84,6 +84,10 @@ Backbone.Validation = (function(_){
       }, {});
     };
 
+    var getAttrsThatAreValidated = function(model) {
+      return _.pick(model.attributes, _.keys(model.validation || {}))
+    }
+
     // Looks on the model for validations for a specified
     // attribute. Returns an array of any validators defined,
     // or an empty array if none is defined.
@@ -149,7 +153,7 @@ Backbone.Validation = (function(_){
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs),
-          flattened = flatten(attrs);
+          flattened = flatten(getAttrsThatAreValidated(model));
 
       _.each(flattened, function(val, attr) {
         error = validateAttr(model, attr, val, computed);
@@ -179,7 +183,7 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes);
+          var flattened = flatten(getAttrsThatAreValidated(this));
 
           if(_.isString(option)){
             return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
@@ -204,7 +208,7 @@ Backbone.Validation = (function(_){
               opt = _.extend({}, options, setOptions),
               validatedAttrs = getValidatedAttrs(model),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
-              changedAttrs = flatten(attrs || allAttrs),
+              changedAttrs = flatten(getAttrsThatAreValidated(model)),
 
               result = validateModel(model, allAttrs);
 
