@@ -286,10 +286,15 @@ Backbone.Validation = (function(_){
       // Hooks up validation on a view with a model
       // or collection
       bind: function(view, options) {
-        var model = view.model,
+        var model,
             collection = view.collection;
 
         options = _.extend({}, defaultOptions, defaultCallbacks, options);
+
+        model = options.model
+        if (typeof model === 'undefined') {
+          model = view.model 
+        }
 
         if(typeof model === 'undefined' && typeof collection === 'undefined'){
           throw 'Before you execute the binding your view must have a model or a collection.\n' +
