@@ -45,6 +45,20 @@ buster.testCase("isValid", {
 			assert(this.model.isValid(true) === false);
 		},
 
+		"avoids infinite loop and returns true when backbone model is present with attached event bindings": function () {
+			var instance = new Backbone.Model();
+			instance.on('event', function () {});
+			this.model.set('name', instance);
+			assert(this.model.isValid());
+		},
+
+		"avoids infinite loop and returns true when backbone collection is present with attached event bindings": function () {
+			var instance = new Backbone.Collection();
+			instance.on('event', function () {});
+			this.model.set('name', instance);
+			assert(this.model.isValid());
+		},
+
 		"and passing name of attribute": {
 			setUp: function() {
 				this.model.validation = {
