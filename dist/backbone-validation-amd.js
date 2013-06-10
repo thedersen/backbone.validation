@@ -71,7 +71,12 @@
   
       _.each(obj, function(val, key) {
         if(obj.hasOwnProperty(key)) {
-          if (val && typeof val === 'object' && !(val instanceof Date || val instanceof RegExp)) {
+          if (val && typeof val === 'object' && !(
+            val instanceof Date ||
+            val instanceof RegExp ||
+            val instanceof Backbone.Model ||
+            val instanceof Backbone.Collection)
+          ) {
             flatten(val, into, prefix + key + '.');
           }
           else {
