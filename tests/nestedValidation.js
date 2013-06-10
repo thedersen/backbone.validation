@@ -269,5 +269,39 @@ buster.testCase('Nested validation', {
         refute(this.model.preValidate('foo.foo', 'val'));
       }
     }
+  },
+
+  "nested models and collections": {
+    setUp: function () {
+      this.valid = this.spy();
+      this.invalid = this.spy();
+
+      var Model = Backbone.Model.extend({
+      });
+
+      var Collection = Backbone.Collection.extend({
+        model: Model
+      });
+
+      this.model = new Model();
+      this.model.set({
+        model: this.model,
+        collection: new Collection([this.model])
+      });
+      this.view = new Backbone.View({model: this.model});
+
+      Backbone.Validation.bind(this.view, {
+        invalid: this.invalid,
+        valid: this.valid
+      });
+
+      this.result = this.model.set({
+        foo: 'bar'
+      }, {validate: true});
+    },
+
+    "are ignored": function() {
+      assert(this.result);
+    }
   }
 });
