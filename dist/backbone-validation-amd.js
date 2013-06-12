@@ -610,6 +610,5 @@
   
     return Validation;
   }(_));
-  
   return Backbone.Validation;
 }));

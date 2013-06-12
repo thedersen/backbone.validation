@@ -7,10 +7,12 @@
     "url": "http://thedersen.com/"
   },
   "homepage": "http://thedersen.com/projects/backbone-validation",
-  "licenses": [{
-    "type": "MIT",
-    "url": "http://thedersen.mit-license.org/"
-  }],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://thedersen.mit-license.org/"
+    }
+  ],
   "bugs": {
     "url": "http://github.com/thedersen/backbone.validation/issues"
   },
@@ -31,10 +33,13 @@
     "underscore": ">=1.3.1"
   },
   "devDependencies": {
+    "grunt": "~0.4.1",
     "buster": ">=0.6.2",
     "grunt-docco": ">=0.1.2",
     "grunt-shell": ">=0.1.3",
     "grunt-rigger": ">=0.3.0",
-    "grunt-buster": ">=0.1.1"
+    "grunt-buster": ">=0.1.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-uglify": "~0.2.2"
   }
 }
