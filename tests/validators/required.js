@@ -9,6 +9,9 @@ buster.testCase("required validator", {
                 agree: {
                     required: true
                 },
+                posts: {
+                    required: true
+                },
                 dependsOnName: {
                     required: function(val, attr, computed) {
                         that.ctx = this;
@@ -22,9 +25,11 @@ buster.testCase("required validator", {
 
         this.model = new Model({
             name: 'name',
+            posts: ['post'],
             agree: true,
             dependsOnName: 'depends'
         });
+
         this.view = new Backbone.View({
             model: this.model
         });
@@ -41,6 +46,18 @@ buster.testCase("required validator", {
             done();
         });
         this.model.set({name:''}, {validate: true});
+    },
+
+    "empty array is invalid": function() {
+        refute(this.model.set({
+            posts: []
+        }, {validate: true}));
+    },
+
+    "non-empty array is valid": function() {
+        assert(this.model.set({
+            posts: ['post']
+        }, {validate: true}));
     },
 
     "empty string is invalid": function() {
@@ -115,9 +132,10 @@ buster.testCase("required validator", {
         this.model.set({attr: 'attr'});
         this.model.set({
             name: 'name',
+            posts: ['post'],
             dependsOnName: 'value'
         }, {validate: true});
 
-        assert.equals({agree:true, attr:'attr', dependsOnName:'value', name:'name'}, this.computed);
+        assert.equals({agree:true, attr:'attr', dependsOnName:'value', name:'name', posts: ['post']}, this.computed);
     }
 });

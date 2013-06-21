@@ -474,9 +474,9 @@ Backbone.Validation = (function(_){
       return _.isNumber(value) || (_.isString(value) && value.match(defaultPatterns.number));
     };
 
-    // Determines whether or not not a value is empty
+    // Determines whether or not a value is empty
     var hasValue = function(value) {
-      return !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) && trim(value) === ''));
+      return !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) && trim(value) === '') || (_.isArray(value) && _.isEmpty(value)));
     };
 
     return {
