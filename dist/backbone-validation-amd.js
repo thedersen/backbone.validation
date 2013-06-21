@@ -72,6 +72,7 @@
       _.each(obj, function(val, key) {
         if(obj.hasOwnProperty(key)) {
           if (val && typeof val === 'object' && !(
+            val instanceof Array ||
             val instanceof Date ||
             val instanceof RegExp ||
             val instanceof Backbone.Model ||
