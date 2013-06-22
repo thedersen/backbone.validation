@@ -271,6 +271,46 @@ buster.testCase('Nested validation', {
     }
   },
 
+  "nested array": {
+    setUp: function() {
+      this.valid = this.spy();
+      this.invalid = this.spy();
+      this.validateArray = this.spy(function(value, attribute, model){
+        return "error";
+      });
+
+      var Model = Backbone.Model.extend({
+        validation: {
+          items: this.validateArray
+        }
+      });
+
+      this.model = new Model();
+      this.view = new Backbone.View({model: this.model});
+
+      Backbone.Validation.bind(this.view, {
+        invalid: this.invalid,
+        valid: this.valid
+      });
+    },
+
+    "invalid": {
+      setUp: function () {
+        this.result = this.model.set({
+          items: [1],
+        }, {validate: true});
+      },
+
+      "calls validation passing array as value": function() {
+        assert.calledWith(this.validateArray, [1], 'items');
+      },
+
+      "calls the invalid callback": function() {
+        assert.calledWith(this.invalid, this.view, 'items', 'error');
+      },
+    },
+  },
+
   "nested models and collections": {
     setUp: function () {
       this.valid = this.spy();
