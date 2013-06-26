@@ -219,8 +219,11 @@ Backbone.Validation = (function(_){
           // and call the valid callbacks so the view is updated.
           _.each(validatedAttrs, function(val, attr){
             var invalid = result.invalidAttrs.hasOwnProperty(attr);
-            if(!invalid){
-              opt.valid(view, attr, opt.selector);
+            if(!invalid && model.viewBindings){
+				model.viewBindings.each(function(boundView) {
+					var opt = _.extend({}, options, setOptions, boundView.get("options"));
+					opt.valid(boundView.get("view"), attr, opt.selector, model);
+				}, this);
             }
           });
 
@@ -230,8 +233,11 @@ Backbone.Validation = (function(_){
             var invalid = result.invalidAttrs.hasOwnProperty(attr),
                 changed = changedAttrs.hasOwnProperty(attr);
 
-            if(invalid && (changed || validateAll)){
-              opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+            if(invalid && (changed || validateAll) && model.viewBindings){
+				model.viewBindings.each(function(boundView) {
+					var opt = _.extend({}, options, setOptions, boundView.get("options"));
+					opt.invalid(boundView.get("view"), attr, result.invalidAttrs[attr], opt.selector, model);
+				}, this);
             }
           });
 
@@ -242,6 +248,7 @@ Backbone.Validation = (function(_){
             model.trigger('validated', model._isValid, model, result.invalidAttrs);
             model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
           });
+
 
           // Return any error messages to Backbone, unless the forceUpdate flag is set.
           // Then we do not return anything and fools Backbone to believe the validation was
@@ -255,14 +262,48 @@ Backbone.Validation = (function(_){
 
     // Helper to mix in validation on a model
     var bindModel = function(view, model, options) {
-      _.extend(model, mixin(view, options));
+        // Start a collection of views if one does not exist.
+        if(!model.viewBindings) 
+          model.viewBindings = new Backbone.Collection();
+      
+        if(options.forceUpdate && model.viewBindings.any(function(boundView) {
+          return (boundView.get("options").forceUpdate && 
+                  boundView.get("options").forceUpdate != options.forceUpdate);
+        }))
+          throw 'The ForceUpdate option must not vary between views.';
+
+		// Add this view to the collection of views
+        model.viewBindings.add({view: view, options: options});
+
+		_.extend(model, mixin(view, options));
     };
 
+    // Remove a given view from
     // Removes the methods added to a model
-    var unbindModel = function(model) {
-      delete model.validate;
-      delete model.preValidate;
-      delete model.isValid;
+    var unbindModel = function(model, view) {
+		
+		if(!model)
+			return;
+		
+		if(model.viewBindings) {
+
+			var found_view = model.viewBindings.where({view: view});
+
+			// Remove all instances of that view from the Model's "bound views"
+			model.viewBindings.remove(found_view);
+
+			// If there are no more views, lets remove the validation methods.
+			if(!model.viewBindings.size()) {
+				delete model.validate;
+				delete model.preValidate;
+				delete model.isValid;
+			}
+
+		} else {
+			delete model.validate;
+			delete model.preValidate;
+			delete model.isValid;
+		}
     };
 
     // Mix in validation on a model whenever a model is
@@ -273,8 +314,8 @@ Backbone.Validation = (function(_){
 
     // Remove validation from a model whenever a model is
     // removed from a collection
-    var collectionRemove = function(model) {
-      unbindModel(model);
+    var collectionRemove = function(model, view) {
+      unbindModel(model, view);
     };
 
     // Returns the public methods on Backbone.Validation
@@ -309,7 +350,7 @@ Backbone.Validation = (function(_){
             bindModel(view, model, options);
           });
           collection.bind('add', collectionAdd, {view: view, options: options});
-          collection.bind('remove', collectionRemove);
+          collection.bind('remove', function(model) { collectionRemove(model, view); });
         }
       },
 
@@ -320,14 +361,14 @@ Backbone.Validation = (function(_){
             collection = view.collection;
 
         if(model) {
-          unbindModel(view.model);
+          unbindModel(view.model, view);
         }
         if(collection) {
           collection.each(function(model){
-            unbindModel(model);
+            unbindModel(model, view);
           });
           collection.unbind('add', collectionAdd);
-          collection.unbind('remove', collectionRemove);
+          collection.unbind('remove', function(model) { collectionRemove(model, view); });
         }
       },
 
