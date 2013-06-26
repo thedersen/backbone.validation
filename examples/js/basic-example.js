@@ -34,7 +34,7 @@ var BasicView = Backbone.View.extend({
     this.$('.alert').hide();
 
     var data = this.$('form').serializeObject();
-    if(this.model.set(data)){
+    if(this.model.set(data, {validate:true})){
       this.$('.alert-success').fadeIn();
     }
     else {
@@ -62,7 +62,7 @@ var OnBlurView = Backbone.View.extend({
 
   updateModel: function(el){
     var $el = $(el.target);
-    this.model.set($el.attr('name'), $el.val());
+    this.model.set($el.attr('name'), $el.val(), {validate:true});
   },
 
   valid: function(){
