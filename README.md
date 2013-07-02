@@ -708,6 +708,17 @@ var Model = Backbone.Model.extend({
 });
 ```
 
+Patterns can also be a hash with pattern and custom message
+
+```js
+_.extend(Backbone.Validation.patterns, {
+  myPattern: {
+    pattern : /my-pattern/,
+    msg : 'attr: {0} didn't match pattern: {1}'
+  }
+});
+```
+
 ### Overriding the default error messages
 
 If you don't like the default error messages you can easilly customize them by override the default ones globally:

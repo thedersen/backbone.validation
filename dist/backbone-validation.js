@@ -635,8 +635,14 @@ Backbone.Validation = (function(_){
       // Validates that the value has to match the pattern specified.
       // Can be a regular expression or the name of one of the built in patterns
       pattern: function(value, attr, pattern, model) {
-        if (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
-          return this.format(defaultMessages.pattern, this.formatLabel(attr, model), pattern);
+        var message = defaultMessages.pattern;
+        var regexp = defaultPatterns[pattern] || pattern;
+        if (_.isObject(defaultPatterns[pattern]) && defaultPatterns[pattern].pattern) {
+            regexp = defaultPatterns[pattern].pattern;
+            message = defaultPatterns[pattern].msg || defaultMessages.pattern;
+        }
+        if (!hasValue(value) || !value.toString().match(regexp)) {
+          return this.format(message, this.formatLabel(attr, model), pattern);
         }
       }
     };

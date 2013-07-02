@@ -63,3 +63,42 @@ buster.testCase('Overriding builtin pattern in Backbone.Validation', {
         }, { validate: true }));
     }
 });
+
+buster.testCase('Custom message for custom pattern', {
+    setUp: function() {
+
+        _.extend(Backbone.Validation.patterns, {
+            test: {
+                pattern: /^test/,
+                msg: 'msg {0} {1}'
+            }
+        });
+
+        var Model = Backbone.Model.extend({
+            validation: {
+                name: {
+                    pattern: 'test'
+                }
+            }
+        });
+
+        this.model = new Model();
+        Backbone.Validation.bind(new Backbone.View({
+            model: this.model
+        }));
+    },
+
+    tearDown: function(){
+        delete(Backbone.Validation.patterns.test);
+    },
+
+    "should fail with custom message": function() {
+        assert.equals(this.model.validate({name : 'invalid'}), {name:'msg Name test'});
+    },
+
+    "should pass": function() {
+        assert(this.model.set({
+            name: 'test'
+        }, { validate: true }));
+    }
+});
