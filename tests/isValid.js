@@ -100,11 +100,19 @@ buster.testCase("isValid", {
 			}
 		},
 
-                "and when attribute has an array value": function() {
+                "and when attribute has an array value": {
+                        setUp: function() {
                                 this.model.set('email', ['1@test.tld', '2@test.tld', '3@test.tld']);
-                                this.model.validation.email = { required: true};
+                                this.model.validation.email = {required:true};
+                        },
+                
+                        "returns true when value is present and input param is array": function() {
+                                assert(this.model.isValid(['email']));
+                        },
 
+                        "returns true when value is present and input param is string": function() { 
                                 assert(this.model.isValid('email')); 
+                        }
                 }        
 
 	}
