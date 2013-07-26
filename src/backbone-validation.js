@@ -186,12 +186,26 @@ Backbone.Validation = (function(_){
         isValid: function(option) {
           var flattened = flatten(this.attributes);
 
-          if(_.isString(option)){
-            return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
+          var checkFlatArray = function(attr, flattened) {
+            if(flattened[attr] == undefined) {
+              var match;
+              var regex = new RegExp(attr + "\.[0-9]+", "g");
+              _.some(_.keys(flattened), function(el, idx) {
+                if(match = regex.exec(el)) {
+                  return true; //flattened[match];
+                }
+              });
+              if(match) return flattened[match];
+            }
+            return flattened[attr];
+          };
+
+           if(_.isString(option)){
+            return !validateAttr(this, option, checkFlatArray(option, flattened), _.extend({}, this.attributes));
           }
           if(_.isArray(option)){
             return _.reduce(option, function(memo, attr) {
-              return memo && !validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+              return memo && !validateAttr(this, attr, checkFlatArray(attr, flattened), _.extend({}, this.attributes));
             }, true, this);
           }
           if(option === true) {
