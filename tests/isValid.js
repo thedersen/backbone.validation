@@ -98,6 +98,14 @@ buster.testCase("isValid", {
 
 				assert(this.model.isValid(['name', 'age']));
 			}
-		}
+		},
+
+                "and when attribute has an array value": function() {
+                                this.model.set('email', ['1@test.tld', '2@test.tld', '3@test.tld']);
+                                this.model.validation.email = { required: true};
+
+                                assert(this.model.isValid('email')); 
+                }        
+
 	}
 });
