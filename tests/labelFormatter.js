@@ -8,6 +8,9 @@ buster.testCase('Label formatters', {
           },
           some_attribute: {
             required: true
+          },
+          some_other_attribute: {
+            required: true
           }
         },
 
@@ -83,6 +86,10 @@ buster.testCase('Label formatters', {
 
       "sentence cases underscore named attribute name": function(){
         assert.equals('Some attribute is required', this.model.preValidate('some_attribute', ''));
+      },
+
+      "sentence cases underscore named attribute name with multiple underscores": function(){
+        assert.equals('Some other attribute is required', this.model.preValidate('some_other_attribute', ''));
       }
     }
   }
