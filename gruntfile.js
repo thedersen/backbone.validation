@@ -61,7 +61,8 @@ module.exports = function(grunt) {
       app: {
         src: ['dist/backbone-validation.js'],
         options: {
-          template: 'docco.jst'
+          template: 'docco.jst',
+          output: 'docs/'
         }
       }
     },
@@ -109,7 +110,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['rig', 'jshint', 'buster', 'uglify']);
-  grunt.registerTask('publish', 'docco shell');
+  grunt.registerTask('publish', ['docco', 'shell']);
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
