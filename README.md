@@ -626,6 +626,23 @@ var SomeModel = Backbone.Model.extend({
 });
 ```
 
+### notEqualTo
+
+Validates that the value cannot be equal to the value of the attribute with the name specified.
+
+```js
+var SomeModel = Backbone.Model.extend({
+  validation: {
+    start: {
+      required: true
+    },
+    end: {
+      notEqualTo: 'start'
+    }
+  }
+});
+```
+
 ### pattern
 
 Validates that the value has to match the pattern specified. Can be a regular expression or the name of one of the built in patterns.

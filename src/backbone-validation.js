@@ -6,6 +6,7 @@ Backbone.Validation = (function(_){
 
   var defaultOptions = {
     forceUpdate: false,
+    focus: false,
     selector: 'name',
     labelFormatter: 'sentenceCase',
     valid: Function.prototype,
@@ -211,7 +212,8 @@ Backbone.Validation = (function(_){
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
 
-              result = validateModel(model, allAttrs);
+              result = validateModel(model, allAttrs),
+              focused = false;
 
           model._isValid = result.isValid;
 
@@ -233,6 +235,21 @@ Backbone.Validation = (function(_){
             if(invalid && (changed || validateAll)){
               opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
             }
+            
+            if(invalid && (changed || validateAll)){
+              opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+              // Do we want to focus on the first invalid input?
+              if(opt.focus && !focused){
+                // setTimeout needed due to IE8
+                setTimeout(function () {
+                  // Focus on the correct element
+                  view.$('[' + opt.selector + '="' + attr + '"]').focus();
+                }, 10);
+                // Make sure we don't focus on anything else
+                focused = true;
+              }
+            }
+            
           });
 
           // Trigger validated events.
@@ -398,6 +415,7 @@ Backbone.Validation = (function(_){
     rangeLength: '{0} must be between {1} and {2} characters',
     oneOf: '{0} must be one of: {1}',
     equalTo: '{0} must be the same as {1}',
+    notEqualTo: '{0} cannot be the same as {1}',
     pattern: '{0} must be a valid {1}'
   };
 
@@ -580,6 +598,15 @@ Backbone.Validation = (function(_){
       equalTo: function(value, attr, equalTo, model, computed) {
         if(value !== computed[equalTo]) {
           return this.format(defaultMessages.equalTo, this.formatLabel(attr, model), this.formatLabel(equalTo, model));
+        }
+      },
+      
+      // Not equal to validator
+      // Validates that the value cannot be equal to the value of the attribute
+      // with the name specified
+      notEqualTo: function(value, attr, notEqualTo, model, computed) {
+        if(value === computed[notEqualTo]) {
+          return this.format(defaultMessages.notEqualTo, this.formatLabel(attr, model), this.formatLabel(notEqualTo, model));
         }
       },
 
