@@ -36,54 +36,6 @@ buster.testCase("Backbone.Validation", {
         this.view.remove();
     },
 
-    "when binding": {
-        setUp: function() {
-            Backbone.Validation.bind(this.view);
-        },
-
-        "the model's validate function is defined": function() {
-            assert.defined(this.model.validate);
-        },
-
-        "the model's isValid function is overridden": function() {
-            refute.same(this.model.isValid, Backbone.Model.prototype.isValid);
-        },
-
-        "and passing custom callbacks with the options": {
-            setUp: function(){
-                this.valid = this.spy();
-                this.invalid = this.spy();
-
-                Backbone.Validation.bind(this.view, {
-                    valid: this.valid,
-                    invalid: this.invalid
-                });
-            },
-
-            "should call valid callback passed with options": function() {
-                this.model.set({
-                    age: 1
-                }, {validate: true});
-
-                assert.called(this.valid);
-            },
-
-            "should call invalid callback passed with options": function() {
-                this.model.set({
-                    age: 0
-                }, {validate: true});
-
-                assert.called(this.invalid);
-            }
-        }
-    },
-
-    "when binding to view without model or collection": function(){
-      assert.exception(function(){
-        Backbone.Validation.bind(new Backbone.View());
-      });
-    },
-
     "when unbinding":{
         setUp: function(){
             Backbone.Validation.bind(this.view);
