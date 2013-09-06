@@ -208,7 +208,7 @@ Backbone.Validation = (function(_){
           var model = this,
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
-              validatedAttrs = getValidatedAttrs(model),
+              validatedAttrs = attrs || getValidatedAttrs(model),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
 
