@@ -308,10 +308,10 @@ Backbone.Validation = (function(_){
       // Hooks up validation on a view with a model
       // or collection
       bind: function(view, options) {
-        var model = view.model,
-            collection = view.collection;
-
         options = _.extend({}, defaultOptions, defaultCallbacks, options);
+
+        var model = options.model || view.model,
+            collection = options.collection || view.collection;
 
         if(typeof model === 'undefined' && typeof collection === 'undefined'){
           throw 'Before you execute the binding your view must have a model or a collection.\n' +
@@ -332,12 +332,13 @@ Backbone.Validation = (function(_){
 
       // Removes validation from a view with a model
       // or collection
-      unbind: function(view) {
-        var model = view.model,
-            collection = view.collection;
+      unbind: function(view, options) {
+        options = _.extend({}, options);
+        var model = options.model || view.model,
+            collection = options.collection || view.collection;
 
         if(model) {
-          unbindModel(view.model);
+          unbindModel(model);
         }
         if(collection) {
           collection.each(function(model){

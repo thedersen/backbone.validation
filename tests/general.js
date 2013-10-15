@@ -36,25 +36,6 @@ buster.testCase("Backbone.Validation", {
         this.view.remove();
     },
 
-    "when unbinding":{
-        setUp: function(){
-            Backbone.Validation.bind(this.view);
-            Backbone.Validation.unbind(this.view);
-        },
-
-        "the model's validate function is undefined": function() {
-            refute.defined(this.model.validate);
-        },
-
-        "the model's preValidate function is undefined": function() {
-            refute.defined(this.model.preValidate);
-        },
-
-        "the model's isValid function is restored": function() {
-            assert.same(this.model.isValid, Backbone.Model.prototype.isValid);
-        }
-    },
-
     "when unbinding view without model": {
         setUp: function(){
             Backbone.Validation.bind(this.view);

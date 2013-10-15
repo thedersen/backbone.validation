@@ -154,17 +154,37 @@ var SomeView = Backbone.View.extend({
 });
 var someView = new SomeView({model: new SomeModel()});
 Backbone.Validation.bind(someView);
+
+// Binding to a view with an optional model
+var myModel = new Backbone.Model();
+var SomeView = Backbone.View.extend({
+  initialize: function(){
+    Backbone.Validation.bind(this, {
+      model: myModel
+    });
+  }
+});
+
+// Binding to a view with an optional collection
+var myCollection = new Backbone.Collection();
+var SomeView = Backbone.View.extend({
+  initialize: function(){
+    Backbone.Validation.bind(this, {
+      collection: myCollection
+    });
+  }
+});
 ```
 
 ### Binding to view with a model
 
-For this to work, your view must have an instance property named *model* that holds your model before you perform the binding.
+For this to work, your view must have an instance property named *model* that holds your model before you perform the binding, or you can pass an optional model in the options as shown in the example above.
 
 When binding to a view with a model, Backbone's [validate](http://documentcloud.github.com/backbone/#Model-validate) method on the model is overridden to perform the validation. In addition, the model's [isValid](http://backbonejs.org/#Model-isValid) method is also overridden to provide some extra functionality.
 
 ### Binding to view with a collection
 
-For this to work, your view must have an instance property named *collection* that holds your collection before you perform the binding.
+For this to work, your view must have an instance property named *collection* that holds your collection before you perform the binding, or you can pass an optional collection in the options as shown in the example above.
 
 When binding to a view with a collection, all models in the collection are bound as described previously. When you are adding or removing models from your collection, they are bound/unbound accordingly.
 
@@ -173,6 +193,8 @@ Note that if you add/remove models with the silent flag, they will not be bound/
 ### Unbinding
 
 If you want to remove the validation binding, this is done with a call to `Backbone.Validation.unbind(view)`. This removes the validation binding on the model, or all models if you view contains a collection, as well as removing all events hooked up on the collection.
+
+Note that if you are binding to an optional model or collection, you must also specify this when unbinding: `Backbone.Validation.unbind(view, {model: boundModel})`.
 
 ## Using model validation
 
@@ -802,6 +824,7 @@ Basic behaviour:
 * `preValidate` now accepts a hash of attributes in addition to a key/value
 * `msg` attribute can be defined as both a function or a string
 * `validation` attribute can be defined as both a function or a hash
+* You can pass an optional model/collectionto bind to use instead of view.model/view.collection
 
 #### v0.8.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.0...v0.8.1)
 
