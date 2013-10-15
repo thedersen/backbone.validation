@@ -71,6 +71,17 @@ var SomeModel = Backbone.Model.extend({
     }
   }
 });
+
+// validation attribute can also be defined as a function returning a hash
+var SomeModel = Backbone.Model.extend({
+  validation: function() {
+    return {
+      name: {
+        required: true
+      };
+    }
+  }
+});
 ```
 
 See the **[built-in validators](#built-in-validators)** section for a list of the validators and patterns that you can use.
@@ -790,6 +801,7 @@ Basic behaviour:
 
 * `preValidate` now accepts a hash of attributes in addition to a key/value
 * `msg` attribute can be defined as both a function or a string
+* `validation` attribute can be defined as both a function or a hash
 
 #### v0.8.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.0...v0.8.1)
 
