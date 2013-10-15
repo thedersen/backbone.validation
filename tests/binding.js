@@ -176,7 +176,7 @@ buster.testCase('Binding to view with collection', {
     }
 });
 
-buster.testCase('Binding to view with model or collection', {
+buster.testCase('Binding to view with no model or collection', {
     "throws exception": function(){
       assert.exception(function(){
         Backbone.Validation.bind(new Backbone.View());
