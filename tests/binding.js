@@ -60,6 +60,35 @@ buster.testCase('Binding to view with model', {
 
             assert.called(this.invalid);
         }
+    },
+
+    "and passing custom callbacks and selector with the options": {
+        setUp: function(){
+            this.valid = this.spy();
+            this.invalid = this.spy();
+
+            Backbone.Validation.bind(this.view, {
+                selector: 'some-selector',
+                valid: this.valid,
+                invalid: this.invalid
+            });
+        },
+
+        "should call valid callback with correct selector": function() {
+            this.model.set({
+                name: 'Ben'
+            }, {validate: true});
+
+            assert.calledWith(this.valid, this.view, 'name', 'some-selector');
+        },
+
+        "should call invalid callback with correct selector": function() {
+            this.model.set({
+                name: ''
+            }, {validate: true});
+
+            assert.calledWith(this.invalid, this.view, 'name', 'Name is invalid', 'some-selector');
+        }
     }
 });
 
