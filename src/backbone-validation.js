@@ -141,7 +141,7 @@ Backbone.Validation = (function(_){
           return false;
         }
         if (result && !memo) {
-          return validator.msg || result;
+          return _.result(validator, 'msg') || result;
         }
         return memo;
       }, '');

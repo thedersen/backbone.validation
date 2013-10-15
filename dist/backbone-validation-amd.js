@@ -155,7 +155,7 @@
             return false;
           }
           if (result && !memo) {
-            return validator.msg || result;
+            return _.result(validator, 'msg') || result;
           }
           return memo;
         }, '');
@@ -189,8 +189,8 @@
       var mixin = function(view, options) {
         return {
   
-          // Check whether or not a value passes validation
-          // without updating the model
+          // Check whether or not a value, or a hash of values
+          // passes validation without updating the model
           preValidate: function(attr, value) {
             var self = this,
                 result = {},

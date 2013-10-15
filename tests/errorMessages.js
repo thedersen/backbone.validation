@@ -8,7 +8,7 @@ buster.testCase("Specifying error messages", {
             invalid: this.invalid
         });
     },
-    
+
     "per validator": {
         setUp: function() {
             this.model.validation = {
@@ -17,7 +17,9 @@ buster.testCase("Specifying error messages", {
                     msg: 'required'
                 },{
                     pattern: 'email',
-                    msg: 'pattern'
+                    msg: function() {
+                        return 'pattern';
+                    }
                 }]
             };
         },

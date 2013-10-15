@@ -109,6 +109,8 @@ MyModel = Backbone.Model.extend({
 });
 ```
 
+The `msg` property can also be a function returning a string.
+
 ## Using form+model validation
 
 The philosophy behind this way of using the plugin, is that you should be able to reuse your validation rules both to validate your model and to validate form input, as well as providing a simple way of notifying users about errors when they are populating forms.
@@ -787,6 +789,7 @@ Basic behaviour:
 #### v0.8.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.1...v0.8.2)
 
 * `preValidate` now accepts a hash of attributes in addition to a key/value
+* `msg` attribute can be defined as both a function or a string
 
 #### v0.8.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.0...v0.8.1)
 
