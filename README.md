@@ -215,12 +215,22 @@ var isValid = model.isValid(['name', 'age']);
 
 ### preValidate
 
-Sometimes it can be useful to check (on each key press) if the input is valid - without changing the model - to perform some sort of live validation. You can execute the set of validators for an attribute by calling the `preValidate` method and pass it the name of the attribute and the value to validate.
+Sometimes it can be useful to check (for instance on each key press) if the input is valid - without changing the model - to perform some sort of live validation. You can execute the set of validators for an attribute, or a hash of attributes, by calling the `preValidate` method and pass it the name of the attribute and the value to validate, or a hash of attributes.
 
 If the value is not valid, the error message is returned (truthy), otherwise it returns a falsy value.
 
 ```js
+// Validate one attribute
+// The `errorsMessage` returned is a string
 var errorMessage = model.preValidate('attributeName', 'Value');
+
+// Validate a hash of attributes
+// The errors object returned is a key/value pair of attribute name/error, e.g
+// {
+//   name: 'Name is required',
+//   email: 'Email must be a valid email'
+// }
+var errors = model.preValidate({name: 'value', email: 'foo@example.com');
 ```
 
 ## Configuration
@@ -773,6 +783,10 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.8.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.1...v0.8.2)
+
+* `preValidate` now accepts a hash of attributes in addition to a key/value
 
 #### v0.8.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.0...v0.8.1)
 

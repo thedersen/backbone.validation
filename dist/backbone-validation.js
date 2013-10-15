@@ -185,7 +185,23 @@ Backbone.Validation = (function(_){
         // Check whether or not a value passes validation
         // without updating the model
         preValidate: function(attr, value) {
-          return validateAttr(this, attr, value, _.extend({}, this.attributes));
+          var self = this,
+              result = {},
+              error;
+
+          if(_.isObject(attr)){
+            _.each(attr, function(value, key) {
+              error = self.preValidate(key, value);
+              if(error){
+                result[key] = error;
+              }
+            });
+
+            return _.isEmpty(result) ? undefined : result;
+          }
+          else {
+            return validateAttr(this, attr, value, _.extend({}, this.attributes));
+          }
         },
 
         // Check to see if an attribute, an array of attributes or the
