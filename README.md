@@ -507,6 +507,7 @@ var SomeModel = Backbone.Model.extend({
 ### required
 
 Validates if the attribute is required or not.
+This can be specified as either a boolean value or a function that returns a boolean value.
 
 ```js
 var SomeModel = Backbone.Model.extend({
@@ -520,7 +521,7 @@ var SomeModel = Backbone.Model.extend({
 var SomeModel = Backbone.Model.extend({
   validation: {
     name: {
-      required: function() {
+      required: function(value, attr, computedState) {
         return true | false;
       }
     }
@@ -784,6 +785,37 @@ This is very useful when validating forms as they are populated, since you don't
 
 If you need to validate entire model (both attributes that has been set or not) you can call `validate()` or `isValid(true)` on the model.
 
+### Can I call one of the built in validators from a method validator?
+
+Yes you can!
+
+```js
+var Model = Backbone.Model.extend({
+  validation: {
+    name: function(val, attr, computed) {
+      return Backbone.Validation.validators.length(val, attr, 4, this);
+    }
+  }
+});
+```
+
+### Can I call one of the built in validators from a custom validator?
+
+Yes you can!
+
+```js
+_.extend(Backbone.Validation.validators, {
+  custom: function(value, attr, customValue, model) {
+    return this.length(value, attr, 4, model) || this.custom2(value, attr, customValue, model);
+  },
+  custom2: function(value, attr, customValue, model) {
+    if (value !== customValue) {
+      return 'error';
+    }
+  }
+});
+```
+
 ### How can I allow empty values but still validate if the user enters something?
 
 By default, if you configure a validator for an attribute, it is considered required. However, if you want to allow empty values and still validate when something is entered, add required: false in addition to other validators.
@@ -796,6 +828,23 @@ validation: {
   }
 }
 ```
+
+### Do you support conditional validation?
+
+Yes, well, sort of. You can have conditional validation by specifying the required validator as a function.
+
+```js
+validation: {
+  attribute: {
+    required: function(val, attr, computed) {
+      return computed.someOtherAttribute === 'foo';
+    },
+    length: 10
+  }
+}
+```
+
+In the example above, `attribute` is required and must have 10 characters only if `someOtherAttribute` has the value of foo. However, when `attribute` has any value it must be 10 characters, regardless of the value of `someOtherAttribute`.
 
 ### I there an elegant way to display the error message that is put into the data-error attribute?
 

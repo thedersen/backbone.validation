@@ -402,7 +402,7 @@
       // Matches any digit(s) (i.e. 0-9)
       digits: /^\d+$/,
   
-      // Matched any number (e.g. 100.000)
+      // Matches any number (e.g. 100.000)
       number: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/,
   
       // Matches a valid email address (e.g. mail@example.com)
@@ -515,6 +515,7 @@
   
         // Required validator
         // Validates if the attribute is required or not
+        // This can be specified as either a boolean value or a function that returns a boolean value
         required: function(value, attr, required, model, computed) {
           var isRequired = _.isFunction(required) ? required.call(model, value, attr, computed) : required;
           if(!isRequired && !hasValue(value)) {
@@ -626,6 +627,8 @@
       };
     }());
   
+    // Set the correct context for all validators
+    // when used form within a method validator
     _.each(defaultValidators, function(validator, key){
       defaultValidators[key] = _.bind(defaultValidators[key], _.extend({}, formatFunctions, defaultValidators));
     });
