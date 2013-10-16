@@ -819,6 +819,10 @@ Basic behaviour:
 
 ## Release notes
 
+#### Master
+
+* Fixed undefined format function when calling one of the built in validators form within a method validator. Fixes #98
+
 #### v0.8.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.1...v0.8.2)
 
 * `preValidate` now accepts a hash of attributes in addition to a key/value

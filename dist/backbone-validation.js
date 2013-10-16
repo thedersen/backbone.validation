@@ -619,5 +619,9 @@ Backbone.Validation = (function(_){
     };
   }());
 
+  _.each(defaultValidators, function(validator, key){
+    defaultValidators[key] = _.bind(defaultValidators[key], _.extend({}, formatFunctions, defaultValidators));
+  });
+
   return Validation;
 }(_));

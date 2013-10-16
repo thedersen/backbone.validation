@@ -121,3 +121,22 @@ buster.testCase("method validator short hand syntax", {
         assert.equals({attr:'attr', name:'name', age:1}, this.computed);
     }
 });
+
+buster.testCase("method validator using other built in validator(s)", {
+    setUp: function() {
+        var Model = Backbone.Model.extend({
+            validation: {
+                name: function(val, attr, computed) {
+                    return Backbone.Validation.validators.length(val, attr, 4, this);
+                }
+            }
+        });
+
+        _.extend(Model.prototype, Backbone.Validation.mixin);
+        this.model = new Model();
+    },
+
+    "it should format the error message returned from the built in validator": function(){
+        assert.equals('Name must be 4 characters', this.model.preValidate('name', ''));
+    }
+});
