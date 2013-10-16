@@ -628,7 +628,7 @@
     }());
   
     // Set the correct context for all validators
-    // when used form within a method validator
+    // when used from within a method validator
     _.each(defaultValidators, function(validator, key){
       defaultValidators[key] = _.bind(defaultValidators[key], _.extend({}, formatFunctions, defaultValidators));
     });
