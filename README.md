@@ -773,7 +773,10 @@ The message can contain placeholders for arguments that will be replaced:
 
 ## Examples
 
-Some examples can be found [here](http://thedersen.com/projects/backbone-validation/examples/). This is by far not complete, but I hope you get the idea. View source to see how it's made.
+[Example 1:](http://jsfiddle.net/thedersen/udXL5/) Uses jQuery.serializeObject to serialize the form and set all data on submit
+[Example 2:](http://jsfiddle.net/thedersen/c3kK2/) Uses [StickIt](https://github.com/NYTimes/backbone.stickit) to perform binding between the model and the view
+
+*If you have other cool examples, feel free to fork the fiddle, add a link here, and send me a pull request.*
 
 ## FAQ
 
