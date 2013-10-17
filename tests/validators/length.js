@@ -20,7 +20,7 @@ buster.testCase("length validator", {
         });
     },
 
-    "has default error message": function(done) {
+    "has default error message for string": function(done) {
         this.model.bind('validated:invalid', function(model, error){
             assert.equals({postalCode: 'Postal code must be 2 characters'}, error);
             done();
@@ -43,6 +43,18 @@ buster.testCase("length validator", {
     "string with length equal to length is valid": function() {
         assert(this.model.set({
             postalCode: 'aa'
+        }, {validate: true}));
+    },
+
+    "spaces are treated as part of the string (no trimming)": function() {
+        refute(this.model.set({
+            postalCode: 'aa  '
+        }, {validate: true}));
+    },
+
+    "non strings are treated as an error": function() {
+        refute(this.model.set({
+            postalCode: 123
         }, {validate: true}));
     },
 

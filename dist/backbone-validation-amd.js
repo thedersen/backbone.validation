@@ -570,7 +570,7 @@
         // Validates that the value has to be a string with length equal to
         // the length value specified
         length: function(value, attr, length, model) {
-          if (!hasValue(value) || trim(value).length !== length) {
+          if (!_.isString(value) || value.length !== length) {
             return this.format(defaultMessages.length, this.formatLabel(attr, model), length);
           }
         },
@@ -579,7 +579,7 @@
         // Validates that the value has to be a string with length equal to or greater than
         // the min length value specified
         minLength: function(value, attr, minLength, model) {
-          if (!hasValue(value) || trim(value).length < minLength) {
+          if (!_.isString(value) || value.length < minLength) {
             return this.format(defaultMessages.minLength, this.formatLabel(attr, model), minLength);
           }
         },
@@ -588,7 +588,7 @@
         // Validates that the value has to be a string with length equal to or less than
         // the max length value specified
         maxLength: function(value, attr, maxLength, model) {
-          if (!hasValue(value) || trim(value).length > maxLength) {
+          if (!_.isString(value) || value.length > maxLength) {
             return this.format(defaultMessages.maxLength, this.formatLabel(attr, model), maxLength);
           }
         },
@@ -597,7 +597,7 @@
         // Validates that the value has to be a string and equal to or between
         // the two numbers specified
         rangeLength: function(value, attr, range, model) {
-          if(!hasValue(value) || trim(value).length < range[0] || trim(value).length > range[1]) {
+          if (!_.isString(value) || value.length < range[0] || value.length > range[1]) {
             return this.format(defaultMessages.rangeLength, this.formatLabel(attr, model), range[0], range[1]);
           }
         },

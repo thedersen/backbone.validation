@@ -880,7 +880,8 @@ Basic behaviour:
 #### Master
 
 * Fixed undefined format function when calling one of the built in validators form within a method validator. Fixes #98
-* BREAKING: Added ability to set error message per pattern. This means that if you have custom patterns, or have change the default one, you need to [add/change a default message](http://thedersen.com/projects/backbone-validation/#extending-backbone-validation/adding-custom-patterns) for it.
+* BREAKING: Added ability to set error message per pattern. This means that if you have custom patterns, or have change the default one, you need to [add/change a default message](http://thedersen.com/projects/backbone-validation/#extending-backbone-validation/adding-custom-patterns) for it. Fixes #174
+* BREAKING: length, maxLength, minLength and rangeLength validators no longer secretly trims the string. Fixes #134
 
 #### v0.8.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.1...v0.8.2)
 

@@ -20,7 +20,7 @@ buster.testCase("rangeLength validator", {
         });
     },
 
-    "has default error message": function(done) {
+    "has default error message for strings": function(done) {
         this.model.bind('validated:invalid', function(model, error){
             assert.equals({name: 'Name must be between 2 and 4 characters'}, error);
             done();
@@ -55,6 +55,18 @@ buster.testCase("rangeLength validator", {
     "string with length within range is valid": function() {
         assert(this.model.set({
             name: 'aaa'
+        }, {validate: true}));
+    },
+
+    "spaces are treated as part of the string (no trimming)": function() {
+        refute(this.model.set({
+            name: 'aaaa '
+        }, {validate: true}));
+    },
+
+    "non strings are treated as an error": function() {
+        refute(this.model.set({
+            name: 123
         }, {validate: true}));
     },
 
