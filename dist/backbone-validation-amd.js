@@ -430,7 +430,11 @@
       rangeLength: '{0} must be between {1} and {2} characters',
       oneOf: '{0} must be one of: {1}',
       equalTo: '{0} must be the same as {1}',
-      pattern: '{0} must be a valid {1}'
+      digits: '{0} must only contain digits',
+      number: '{0} must be a number',
+      email: '{0} must be a valid email',
+      url: '{0} must be a valid url',
+      inlinePattern: '{0} is invalid'
     };
   
     // Label formatters
@@ -621,7 +625,7 @@
         // Can be a regular expression or the name of one of the built in patterns
         pattern: function(value, attr, pattern, model) {
           if (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
-            return this.format(defaultMessages.pattern, this.formatLabel(attr, model), pattern);
+            return this.format(defaultMessages[pattern] || defaultMessages.inlinePattern, this.formatLabel(attr, model), pattern);
           }
         }
       };

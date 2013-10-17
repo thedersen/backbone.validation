@@ -34,6 +34,14 @@ buster.testCase("pattern validator", {
         this.model.set({email:''}, {validate: true});
     },
 
+    "has default error message for inline pattern": function(done) {
+        this.model.bind('validated:invalid', function(model, error){
+            assert.equals({name: 'Name is invalid'}, error);
+            done();
+        });
+        this.model.set({name:''}, {validate: true});
+    },
+
     "value not matching pattern is invalid": function() {
         refute(this.model.set({
             name: 'aaa'

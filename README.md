@@ -739,10 +739,16 @@ The validator should return an error message when the value is invalid, and noth
 
 If you have custom patterns that are used several places in your code, you can extend the patterns with your own. And if you don't like the default implementation of one of the built-ins, you can override it.
 
+Remember to also provide a default error message for it.
+
 ```js
 _.extend(Backbone.Validation.patterns, {
   myPattern: /my-pattern/,
   email: /my-much-better-email-regex/
+});
+
+_.extend(Backbone.Validation.messages, {
+  myPattern: 'This is an error message'
 });
 
 var Model = Backbone.Model.extend({
@@ -874,6 +880,7 @@ Basic behaviour:
 #### Master
 
 * Fixed undefined format function when calling one of the built in validators form within a method validator. Fixes #98
+* BREAKING: Added ability to set error message per pattern. This means that if you have custom patterns, or have change the default one, you need to [add/change a default message](http://thedersen.com/projects/backbone-validation/#extending-backbone-validation/adding-custom-patterns) for it.
 
 #### v0.8.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.1...v0.8.2)
 
