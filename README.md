@@ -1,4 +1,4 @@
-# Backbone.Validation v0.8.2
+# Backbone.Validation v0.9.0
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
@@ -878,7 +878,7 @@ Basic behaviour:
 
 ## Release notes
 
-#### Master
+#### v0.9.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.2...v0.9.0)
 
 * Fixed undefined format function when calling one of the built in validators form within a method validator. Fixes #98
 * BREAKING: Added ability to set error message per pattern. This means that if you have custom patterns, or have change the default one, you need to [add/change a default message](http://thedersen.com/projects/backbone-validation/#extending-backbone-validation/adding-custom-patterns) for it. Fixes #174
