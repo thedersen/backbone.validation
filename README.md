@@ -780,8 +780,8 @@ The message can contain placeholders for arguments that will be replaced:
 
 ## Examples
 
-[Example 1:](http://jsfiddle.net/thedersen/udXL5/) Uses jQuery.serializeObject to serialize the form and set all data on submit
-[Example 2:](http://jsfiddle.net/thedersen/c3kK2/) Uses [StickIt](https://github.com/NYTimes/backbone.stickit) to perform binding between the model and the view
+* [Example 1:](http://jsfiddle.net/thedersen/udXL5/) Uses jQuery.serializeObject to serialize the form and set all data on submit
+* [Example 2:](http://jsfiddle.net/thedersen/c3kK2/) Uses [StickIt](https://github.com/NYTimes/backbone.stickit) to perform binding between the model and the view
 
 *If you have other cool examples, feel free to fork the fiddle, add a link here, and send me a pull request.*
 
@@ -880,9 +880,10 @@ Basic behaviour:
 
 #### v0.9.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.2...v0.9.0)
 
-* Fixed undefined format function when calling one of the built in validators form within a method validator. Fixes #98
-* BREAKING: Added ability to set error message per pattern. This means that if you have custom patterns, or have change the default one, you need to [add/change a default message](http://thedersen.com/projects/backbone-validation/#extending-backbone-validation/adding-custom-patterns) for it. Fixes #174
-* BREAKING: length, maxLength, minLength and rangeLength validators no longer secretly trims the string. Fixes #134
+* Fixed undefined format function when calling one of the built in validators form within a method validator. Fixes [#98](https://github.com/thedersen/backbone.validation/issues/98) and [#111](https://github.com/thedersen/backbone.validation/issues/111)
+* BREAKING: Added ability to set error message per pattern. This means that if you have custom patterns, or have changed the message for one of the built in patterns, you need to [add/change a default message](http://thedersen.com/projects/backbone-validation/#extending-backbone-validation/adding-custom-patterns) for it. Fixes [#174](https://github.com/thedersen/backbone.validation/issues/174)
+* BREAKING: length, maxLength, minLength and rangeLength validators no longer secretly trims the string. Fixes [#134](https://github.com/thedersen/backbone.validation/issues/134)
+* Added new examples
 
 #### v0.8.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.1...v0.8.2)
 
