@@ -340,7 +340,7 @@ Backbone.Validation = (function(_){
         if(model) {
           unbindModel(model);
         }
-        if(collection) {
+        else if(collection) {
           collection.each(function(model){
             unbindModel(model);
           });
