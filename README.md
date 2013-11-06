@@ -856,7 +856,7 @@ validation: {
 
 In the example above, `attribute` is required and must have 10 characters only if `someOtherAttribute` has the value of foo. However, when `attribute` has any value it must be 10 characters, regardless of the value of `someOtherAttribute`.
 
-### I there an elegant way to display the error message that is put into the data-error attribute?
+### Is there an elegant way to display the error message that is put into the data-error attribute?
 
 The default implementation of the callbacks are a bit naïve, since it is very difficult to make a general implementation that suits everybody.
 
