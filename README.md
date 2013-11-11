@@ -692,6 +692,9 @@ The built-in patterns are:
 * email - Matches a valid email address (e.g. mail@example.com)
 * url - Matches any valid url (e.g. http://www.example.com)
 * digits - Matches any digit(s) (i.e. 0-9)
+* alpha - Matches any sequence of letters (e.g. HelloWorld)
+* alphanum - Matches any sequence of letters and numbers (e.g. Hello123)
+* alphadash - Matches any sequence of letters, numbers, underscores, and dashes (e.g. Hello_Wor-ld)
 
 Specify any regular expression you like:
 
