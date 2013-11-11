@@ -400,10 +400,10 @@ Backbone.Validation = (function(_){
     // Matches any sequence of letters (e.g. HelloWorld)
     alpha: /^[a-z]+$/i,
 
-    // Matches any sequence of letters with dashes and underscores (e.g. Hello123)
+    // Matches any sequence of letters with dashes and underscores (e.g.Hello_Wor-ld)
     alphadash: /^[a-z_\-]+$/i,
 
-    // Matches any sequence of letters and/or numbers (e.g. Hello_Wor-ld)
+    // Matches any sequence of letters and/or numbers (e.g.  Hello123)
     alphanum: /^[a-z\d]+$/i,
   };
 
