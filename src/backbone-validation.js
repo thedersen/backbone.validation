@@ -51,20 +51,22 @@ Backbone.Validation = (function(_){
   //       'address.street': 'Street',
   //       'address.zip': 1234
   //     };
-  var flatten = function (obj, into, prefix) {
+  var flatten = function (obj, attr, into, prefix) {
+    attr = attr || {};
     into = into || {};
     prefix = prefix || '';
 
     _.each(obj, function(val, key) {
       if(obj.hasOwnProperty(key)) {
-        if (val && typeof val === 'object' && !(
+        if (val && typeof val === 'object' && !_.contains(attr, prefix + key) && !(
+          _.isEmpty(val) ||
           val instanceof Array ||
           val instanceof Date ||
           val instanceof RegExp ||
           val instanceof Backbone.Model ||
           val instanceof Backbone.Collection)
         ) {
-          flatten(val, into, prefix + key + '.');
+          flatten(val, attr, into, prefix + key + '.');
         }
         else {
           into[prefix + key] = val;
@@ -88,6 +90,10 @@ Backbone.Validation = (function(_){
         memo[key] = void 0;
         return memo;
       }, {});
+    };
+
+    var flattenData = function(model, data) {
+      return flatten(data, _.keys(getValidatedAttrs(model)));
     };
 
     // Looks on the model for validations for a specified
@@ -155,7 +161,7 @@ Backbone.Validation = (function(_){
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs),
-          flattened = flatten(attrs);
+          flattened = flattenData(model, attrs);
 
       _.each(flattened, function(val, attr) {
         error = validateAttr(model, attr, val, computed);
@@ -201,7 +207,7 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes);
+          var flattened = flattenData(this, this.attributes);
 
           if(_.isString(option)){
             return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
@@ -225,9 +231,9 @@ Backbone.Validation = (function(_){
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
               validatedAttrs = getValidatedAttrs(model),
-              allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
-              changedAttrs = flatten(attrs || allAttrs),
 
+              allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
+              changedAttrs = flattenData(model, attrs || allAttrs),
               result = validateModel(model, allAttrs);
 
           model._isValid = result.isValid;
