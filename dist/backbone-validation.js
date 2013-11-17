@@ -71,6 +71,7 @@ Backbone.Validation = (function(_){
           val instanceof Backbone.Model ||
           val instanceof Backbone.Collection)
         ) {
+          into[prefix + key] = val;
           flatten(val, into, prefix + key + '.');
         }
         else {
