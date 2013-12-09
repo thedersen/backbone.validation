@@ -321,8 +321,8 @@ Backbone.Validation = (function(_){
         if(model) {
           bindModel(view, model, options);
         }
-        else if(collection) {
-          collection.each(function(model){
+        if(collection) {
+          collection.models.each(function(model){
             bindModel(view, model, options);
           });
           collection.bind('add', collectionAdd, {view: view, options: options});
