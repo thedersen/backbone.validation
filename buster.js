@@ -11,7 +11,8 @@ config['Browser'] = {
   tests: [
     'tests/*.js',
     'tests/validators/*.js'
-  ]
+  ],
+  testHelpers: ['tests/helper.js']
 };
 
 config['Node'] = {
