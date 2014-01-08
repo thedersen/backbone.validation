@@ -1036,7 +1036,20 @@ Basic behaviour:
 
 ## Contribute
 
-In lieu of a formal styleguide, use two spaces for tabs and take care to maintain the existing coding style. Oh, and please add some tests:)
+In lieu of a formal styleguide, use two spaces for tabs and take care to maintain the existing coding style.
+
+For a pull request to be accepted it must contain:
+
+* Only *one change* per request
+* Unit test(s)
+
+Make sure that all tests passes before submitting your pull request.
+
+```
+npm install -g grunt-cli
+npm install
+grunt
+```
 
 ## Inspiration
 
