@@ -1,4 +1,4 @@
-# Backbone.Validation v0.9.0
+# Backbone.Validation
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
@@ -877,6 +877,13 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.9.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.0...v0.9.1)
+
+* Upgraded buster.js to v0.7.8
+* Updated contribute section in readme
+* Update README.md typo: `i` => `is`. Fixes [#183](https://github.com/thedersen/backbone.validation/issues/183)
+* Fixed model unbind when model is also part of a collection of which other models have binding. Fixes [#182](https://github.com/thedersen/backbone.validation/issues/182)
 
 #### v0.9.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.8.2...v0.9.0)
 
