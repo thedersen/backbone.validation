@@ -46,7 +46,7 @@ Distributed under MIT License</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Backbone.Validation = (<span class="keyword">function</span>(_){
+            <div class="content"><div class='highlight'><pre>Backbone.Validation = (<span class="function"><span class="keyword">function</span><span class="params">(_)</span>{</span>
   <span class="string">'use strict'</span>;</pre></div></div>
             
         </li>
@@ -124,7 +124,7 @@ to make it more readable for the user</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    formatLabel: <span class="keyword">function</span>(attrName, model) {
+            <div class="content"><div class='highlight'><pre>    formatLabel: <span class="function"><span class="keyword">function</span><span class="params">(attrName, model)</span> {</span>
       <span class="keyword">return</span> defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
     },</pre></div></div>
             
@@ -142,10 +142,10 @@ passed to the function</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    format: <span class="keyword">function</span>() {
+            <div class="content"><div class='highlight'><pre>    format: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
       <span class="keyword">var</span> args = Array.prototype.slice.call(arguments),
           text = args.shift();
-      <span class="keyword">return</span> text.replace(<span class="regexp">/\{(\d+)\}/g</span>, <span class="keyword">function</span>(match, number) {
+      <span class="keyword">return</span> text.replace(<span class="regexp">/\{(\d+)\}/g</span>, <span class="function"><span class="keyword">function</span><span class="params">(match, number)</span> {</span>
         <span class="keyword">return</span> <span class="keyword">typeof</span> args[number] !== <span class="string">'undefined'</span> ? args[number] : match;
       });
     }
@@ -180,7 +180,7 @@ eg:</p>
     into = into || {};
     prefix = prefix || <span class="string">''</span>;
 
-    _.each(obj, <span class="keyword">function</span>(val, key) {
+    _.each(obj, <span class="function"><span class="keyword">function</span><span class="params">(val, key)</span> {</span>
       <span class="keyword">if</span>(obj.hasOwnProperty(key)) {
         <span class="keyword">if</span> (val &amp;&amp; <span class="keyword">typeof</span> val === <span class="string">'object'</span> &amp;&amp; !(
           val <span class="keyword">instanceof</span> Array ||
@@ -225,7 +225,7 @@ eg:</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> Validation = (<span class="keyword">function</span>(){</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> Validation = (<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span></pre></div></div>
             
         </li>
         
@@ -242,8 +242,8 @@ validation rules.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> getValidatedAttrs = <span class="keyword">function</span>(model) {
-      <span class="keyword">return</span> _.reduce(_.keys(_.result(model, <span class="string">'validation'</span>) || {}), <span class="keyword">function</span>(memo, key) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> getValidatedAttrs = <span class="function"><span class="keyword">function</span><span class="params">(model)</span> {</span>
+      <span class="keyword">return</span> _.reduce(_.keys(_.result(model, <span class="string">'validation'</span>) || {}), <span class="function"><span class="keyword">function</span><span class="params">(memo, key)</span> {</span>
         memo[key] = <span class="keyword">void</span> <span class="number">0</span>;
         <span class="keyword">return</span> memo;
       }, {});
@@ -264,7 +264,7 @@ or an empty array if none is defined.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> getValidators = <span class="keyword">function</span>(model, attr) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> getValidators = <span class="function"><span class="keyword">function</span><span class="params">(model, attr)</span> {</span>
       <span class="keyword">var</span> attrValidationSet = model.validation ? _.result(model, <span class="string">'validation'</span>)[attr] || {} : {};</pre></div></div>
             
         </li>
@@ -318,8 +318,8 @@ and the specified error message, if any</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> _.reduce(attrValidationSet, <span class="keyword">function</span>(memo, attrValidation) {
-        _.each(_.without(_.keys(attrValidation), <span class="string">'msg'</span>), <span class="keyword">function</span>(validator) {
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> _.reduce(attrValidationSet, <span class="function"><span class="keyword">function</span><span class="params">(memo, attrValidation)</span> {</span>
+        _.each(_.without(_.keys(attrValidation), <span class="string">'msg'</span>), <span class="function"><span class="keyword">function</span><span class="params">(validator)</span> {</span>
           memo.push({
             fn: defaultValidators[validator],
             val: attrValidation[validator],
@@ -346,7 +346,7 @@ If the attribute is valid, an empty string is returned.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> validateAttr = <span class="keyword">function</span>(model, attr, value, computed) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> validateAttr = <span class="function"><span class="keyword">function</span><span class="params">(model, attr, value, computed)</span> {</span></pre></div></div>
             
         </li>
         
@@ -363,7 +363,7 @@ message, if any.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> _.reduce(getValidators(model, attr), <span class="keyword">function</span>(memo, validator){</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> _.reduce(getValidators(model, attr), <span class="function"><span class="keyword">function</span><span class="params">(memo, validator)</span>{</span></pre></div></div>
             
         </li>
         
@@ -407,14 +407,14 @@ as well as error messages.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> validateModel = <span class="keyword">function</span>(model, attrs) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> validateModel = <span class="function"><span class="keyword">function</span><span class="params">(model, attrs)</span> {</span>
       <span class="keyword">var</span> error,
           invalidAttrs = {},
           isValid = <span class="literal">true</span>,
           computed = _.clone(attrs),
           flattened = flatten(attrs);
 
-      _.each(flattened, <span class="keyword">function</span>(val, attr) {
+      _.each(flattened, <span class="function"><span class="keyword">function</span><span class="params">(val, attr)</span> {</span>
         error = validateAttr(model, attr, val, computed);
         <span class="keyword">if</span> (error) {
           invalidAttrs[attr] = error;
@@ -441,7 +441,7 @@ as well as error messages.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> mixin = <span class="keyword">function</span>(view, options) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> mixin = <span class="function"><span class="keyword">function</span><span class="params">(view, options)</span> {</span>
       <span class="keyword">return</span> {</pre></div></div>
             
         </li>
@@ -458,13 +458,13 @@ passes validation without updating the model</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        preValidate: <span class="keyword">function</span>(attr, value) {
+            <div class="content"><div class='highlight'><pre>        preValidate: <span class="function"><span class="keyword">function</span><span class="params">(attr, value)</span> {</span>
           <span class="keyword">var</span> self = <span class="keyword">this</span>,
               result = {},
               error;
 
           <span class="keyword">if</span>(_.isObject(attr)){
-            _.each(attr, <span class="keyword">function</span>(value, key) {
+            _.each(attr, <span class="function"><span class="keyword">function</span><span class="params">(value, key)</span> {</span>
               error = self.preValidate(key, value);
               <span class="keyword">if</span>(error){
                 result[key] = error;
@@ -493,14 +493,14 @@ of the model.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        isValid: <span class="keyword">function</span>(option) {
+            <div class="content"><div class='highlight'><pre>        isValid: <span class="function"><span class="keyword">function</span><span class="params">(option)</span> {</span>
           <span class="keyword">var</span> flattened = flatten(<span class="keyword">this</span>.attributes);
 
           <span class="keyword">if</span>(_.isString(option)){
             <span class="keyword">return</span> !validateAttr(<span class="keyword">this</span>, option, flattened[option], _.extend({}, <span class="keyword">this</span>.attributes));
           }
           <span class="keyword">if</span>(_.isArray(option)){
-            <span class="keyword">return</span> _.reduce(option, <span class="keyword">function</span>(memo, attr) {
+            <span class="keyword">return</span> _.reduce(option, <span class="function"><span class="keyword">function</span><span class="params">(memo, attr)</span> {</span>
               <span class="keyword">return</span> memo &amp;&amp; !validateAttr(<span class="keyword">this</span>, attr, flattened[attr], _.extend({}, <span class="keyword">this</span>.attributes));
             }, <span class="literal">true</span>, <span class="keyword">this</span>);
           }
@@ -525,7 +525,7 @@ entire model.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        validate: <span class="keyword">function</span>(attrs, setOptions){
+            <div class="content"><div class='highlight'><pre>        validate: <span class="function"><span class="keyword">function</span><span class="params">(attrs, setOptions)</span>{</span>
           <span class="keyword">var</span> model = <span class="keyword">this</span>,
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
@@ -551,7 +551,7 @@ and call the valid callbacks so the view is updated.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          _.each(validatedAttrs, <span class="keyword">function</span>(val, attr){
+            <div class="content"><div class='highlight'><pre>          _.each(validatedAttrs, <span class="function"><span class="keyword">function</span><span class="params">(val, attr)</span>{</span>
             <span class="keyword">var</span> invalid = result.invalidAttrs.hasOwnProperty(attr);
             <span class="keyword">if</span>(!invalid){
               opt.valid(view, attr, opt.selector);
@@ -572,7 +572,7 @@ and call the invalid callback so the view is updated.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          _.each(validatedAttrs, <span class="keyword">function</span>(val, attr){
+            <div class="content"><div class='highlight'><pre>          _.each(validatedAttrs, <span class="function"><span class="keyword">function</span><span class="params">(val, attr)</span>{</span>
             <span class="keyword">var</span> invalid = result.invalidAttrs.hasOwnProperty(attr),
                 changed = changedAttrs.hasOwnProperty(attr);
 
@@ -596,7 +596,7 @@ the event is triggered.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          _.defer(<span class="keyword">function</span>() {
+            <div class="content"><div class='highlight'><pre>          _.defer(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
             model.trigger(<span class="string">'validated'</span>, model._isValid, model, result.invalidAttrs);
             model.trigger(<span class="string">'validated:'</span> + (model._isValid ? <span class="string">'valid'</span> : <span class="string">'invalid'</span>), model, result.invalidAttrs);
           });</pre></div></div>
@@ -636,7 +636,7 @@ a success. That way Backbone will update the model regardless.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> bindModel = <span class="keyword">function</span>(view, model, options) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> bindModel = <span class="function"><span class="keyword">function</span><span class="params">(view, model, options)</span> {</span>
       _.extend(model, mixin(view, options));
     };</pre></div></div>
             
@@ -653,7 +653,7 @@ a success. That way Backbone will update the model regardless.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> unbindModel = <span class="keyword">function</span>(model) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> unbindModel = <span class="function"><span class="keyword">function</span><span class="params">(model)</span> {</span>
       <span class="keyword">delete</span> model.validate;
       <span class="keyword">delete</span> model.preValidate;
       <span class="keyword">delete</span> model.isValid;
@@ -673,7 +673,7 @@ added to a collection</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> collectionAdd = <span class="keyword">function</span>(model) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> collectionAdd = <span class="function"><span class="keyword">function</span><span class="params">(model)</span> {</span>
       bindModel(<span class="keyword">this</span>.view, model, <span class="keyword">this</span>.options);
     };</pre></div></div>
             
@@ -691,7 +691,7 @@ removed from a collection</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> collectionRemove = <span class="keyword">function</span>(model) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> collectionRemove = <span class="function"><span class="keyword">function</span><span class="params">(model)</span> {</span>
       unbindModel(model);
     };</pre></div></div>
             
@@ -738,7 +738,7 @@ removed from a collection</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      configure: <span class="keyword">function</span>(options) {
+            <div class="content"><div class='highlight'><pre>      configure: <span class="function"><span class="keyword">function</span><span class="params">(options)</span> {</span>
         _.extend(defaultOptions, options);
       },</pre></div></div>
             
@@ -756,7 +756,7 @@ or collection</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      bind: <span class="keyword">function</span>(view, options) {
+            <div class="content"><div class='highlight'><pre>      bind: <span class="function"><span class="keyword">function</span><span class="params">(view, options)</span> {</span>
         options = _.extend({}, defaultOptions, defaultCallbacks, options);
 
         <span class="keyword">var</span> model = options.model || view.model,
@@ -771,7 +771,7 @@ or collection</p>
           bindModel(view, model, options);
         }
         <span class="keyword">else</span> <span class="keyword">if</span>(collection) {
-          collection.each(<span class="keyword">function</span>(model){
+          collection.each(<span class="function"><span class="keyword">function</span><span class="params">(model)</span>{</span>
             bindModel(view, model, options);
           });
           collection.bind(<span class="string">'add'</span>, collectionAdd, {view: view, options: options});
@@ -793,7 +793,7 @@ or collection</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      unbind: <span class="keyword">function</span>(view, options) {
+            <div class="content"><div class='highlight'><pre>      unbind: <span class="function"><span class="keyword">function</span><span class="params">(view, options)</span> {</span>
         options = _.extend({}, options);
         <span class="keyword">var</span> model = options.model || view.model,
             collection = options.collection || view.collection;
@@ -802,7 +802,7 @@ or collection</p>
           unbindModel(model);
         }
         <span class="keyword">if</span>(collection) {
-          collection.each(<span class="keyword">function</span>(model){
+          collection.each(<span class="function"><span class="keyword">function</span><span class="params">(model)</span>{</span>
             unbindModel(model);
           });
           collection.unbind(<span class="string">'add'</span>, collectionAdd);
@@ -870,7 +870,7 @@ Should be overridden with custom functionality.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    valid: <span class="keyword">function</span>(view, attr, selector) {
+            <div class="content"><div class='highlight'><pre>    valid: <span class="function"><span class="keyword">function</span><span class="params">(view, attr, selector)</span> {</span>
       view.$(<span class="string">'['</span> + selector + <span class="string">'~="'</span> + attr + <span class="string">'"]'</span>)
           .removeClass(<span class="string">'invalid'</span>)
           .removeAttr(<span class="string">'data-error'</span>);
@@ -891,7 +891,7 @@ Should be overridden with custom functionality.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    invalid: <span class="keyword">function</span>(view, attr, error, selector) {
+            <div class="content"><div class='highlight'><pre>    invalid: <span class="function"><span class="keyword">function</span><span class="params">(view, attr, error, selector)</span> {</span>
       view.$(<span class="string">'['</span> + selector + <span class="string">'~="'</span> + attr + <span class="string">'"]'</span>)
           .addClass(<span class="string">'invalid'</span>)
           .attr(<span class="string">'data-error'</span>, error);
@@ -1079,7 +1079,7 @@ Configure which one to use with a call to</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    none: <span class="keyword">function</span>(attrName) {
+            <div class="content"><div class='highlight'><pre>    none: <span class="function"><span class="keyword">function</span><span class="params">(attrName)</span> {</span>
       <span class="keyword">return</span> attrName;
     },</pre></div></div>
             
@@ -1096,8 +1096,8 @@ Configure which one to use with a call to</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    sentenceCase: <span class="keyword">function</span>(attrName) {
-      <span class="keyword">return</span> attrName.replace(<span class="regexp">/(?:^\w|[A-Z]|\b\w)/g</span>, <span class="keyword">function</span>(match, index) {
+            <div class="content"><div class='highlight'><pre>    sentenceCase: <span class="function"><span class="keyword">function</span><span class="params">(attrName)</span> {</span>
+      <span class="keyword">return</span> attrName.replace(<span class="regexp">/(?:^\w|[A-Z]|\b\w)/g</span>, <span class="function"><span class="keyword">function</span><span class="params">(match, index)</span> {</span>
         <span class="keyword">return</span> index === <span class="number">0</span> ? match.toUpperCase() : <span class="string">' '</span> + match.toLowerCase();
       }).replace(<span class="regexp">/_/g</span>, <span class="string">' '</span>);
     },</pre></div></div>
@@ -1126,7 +1126,7 @@ Configure which one to use with a call to</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    label: <span class="keyword">function</span>(attrName, model) {
+            <div class="content"><div class='highlight'><pre>    label: <span class="function"><span class="keyword">function</span><span class="params">(attrName, model)</span> {</span>
       <span class="keyword">return</span> (model.labels &amp;&amp; model.labels[attrName]) || defaultLabelFormatters.sentenceCase(attrName, model);
     }
   };</pre></div></div>
@@ -1156,7 +1156,7 @@ Configure which one to use with a call to</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> defaultValidators = Validation.validators = (<span class="keyword">function</span>(){</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> defaultValidators = Validation.validators = (<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span></pre></div></div>
             
         </li>
         
@@ -1172,10 +1172,10 @@ Configure which one to use with a call to</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> trim = String.prototype.trim ?
-      <span class="keyword">function</span>(text) {
+      <span class="function"><span class="keyword">function</span><span class="params">(text)</span> {</span>
         <span class="keyword">return</span> text === <span class="literal">null</span> ? <span class="string">''</span> : String.prototype.trim.call(text);
       } :
-      <span class="keyword">function</span>(text) {
+      <span class="function"><span class="keyword">function</span><span class="params">(text)</span> {</span>
         <span class="keyword">var</span> trimLeft = <span class="regexp">/^\s+/</span>,
             trimRight = <span class="regexp">/\s+$/</span>;
 
@@ -1195,7 +1195,7 @@ Configure which one to use with a call to</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> isNumber = <span class="keyword">function</span>(value){
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> isNumber = <span class="function"><span class="keyword">function</span><span class="params">(value)</span>{</span>
       <span class="keyword">return</span> _.isNumber(value) || (_.isString(value) &amp;&amp; value.match(defaultPatterns.number));
     };</pre></div></div>
             
@@ -1212,7 +1212,7 @@ Configure which one to use with a call to</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> hasValue = <span class="keyword">function</span>(value) {
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> hasValue = <span class="function"><span class="keyword">function</span><span class="params">(value)</span> {</span>
       <span class="keyword">return</span> !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) &amp;&amp; trim(value) === <span class="string">''</span>) || (_.isArray(value) &amp;&amp; _.isEmpty(value)));
     };
 
@@ -1232,7 +1232,7 @@ Lets you implement a custom function used for validation</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      fn: <span class="keyword">function</span>(value, attr, fn, model, computed) {
+            <div class="content"><div class='highlight'><pre>      fn: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, fn, model, computed)</span> {</span>
         <span class="keyword">if</span>(_.isString(fn)){
           fn = model[fn];
         }
@@ -1254,7 +1254,7 @@ This can be specified as either a boolean value or a function that returns a boo
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      required: <span class="keyword">function</span>(value, attr, required, model, computed) {
+            <div class="content"><div class='highlight'><pre>      required: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, required, model, computed)</span> {</span>
         <span class="keyword">var</span> isRequired = _.isFunction(required) ? required.call(model, value, attr, computed) : required;
         <span class="keyword">if</span>(!isRequired &amp;&amp; !hasValue(value)) {
           <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// overrides all other validators</span>
@@ -1279,7 +1279,7 @@ Validates that something has to be accepted, e.g. terms of use
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      acceptance: <span class="keyword">function</span>(value, attr, accept, model) {
+            <div class="content"><div class='highlight'><pre>      acceptance: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, accept, model)</span> {</span>
         <span class="keyword">if</span>(value !== <span class="string">'true'</span> &amp;&amp; (!_.isBoolean(value) || value === <span class="literal">false</span>)) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.acceptance, <span class="keyword">this</span>.formatLabel(attr, model));
         }
@@ -1300,7 +1300,7 @@ the min value specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      min: <span class="keyword">function</span>(value, attr, minValue, model) {
+            <div class="content"><div class='highlight'><pre>      min: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, minValue, model)</span> {</span>
         <span class="keyword">if</span> (!isNumber(value) || value &lt; minValue) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.min, <span class="keyword">this</span>.formatLabel(attr, model), minValue);
         }
@@ -1321,7 +1321,7 @@ the max value specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      max: <span class="keyword">function</span>(value, attr, maxValue, model) {
+            <div class="content"><div class='highlight'><pre>      max: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, maxValue, model)</span> {</span>
         <span class="keyword">if</span> (!isNumber(value) || value &gt; maxValue) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.max, <span class="keyword">this</span>.formatLabel(attr, model), maxValue);
         }
@@ -1342,7 +1342,7 @@ the two numbers specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      range: <span class="keyword">function</span>(value, attr, range, model) {
+            <div class="content"><div class='highlight'><pre>      range: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, range, model)</span> {</span>
         <span class="keyword">if</span>(!isNumber(value) || value &lt; range[<span class="number">0</span>] || value &gt; range[<span class="number">1</span>]) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.range, <span class="keyword">this</span>.formatLabel(attr, model), range[<span class="number">0</span>], range[<span class="number">1</span>]);
         }
@@ -1363,7 +1363,7 @@ the length value specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      length: <span class="keyword">function</span>(value, attr, length, model) {
+            <div class="content"><div class='highlight'><pre>      length: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, length, model)</span> {</span>
         <span class="keyword">if</span> (!_.isString(value) || value.length !== length) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.length, <span class="keyword">this</span>.formatLabel(attr, model), length);
         }
@@ -1384,7 +1384,7 @@ the min length value specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      minLength: <span class="keyword">function</span>(value, attr, minLength, model) {
+            <div class="content"><div class='highlight'><pre>      minLength: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, minLength, model)</span> {</span>
         <span class="keyword">if</span> (!_.isString(value) || value.length &lt; minLength) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.minLength, <span class="keyword">this</span>.formatLabel(attr, model), minLength);
         }
@@ -1405,7 +1405,7 @@ the max length value specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      maxLength: <span class="keyword">function</span>(value, attr, maxLength, model) {
+            <div class="content"><div class='highlight'><pre>      maxLength: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, maxLength, model)</span> {</span>
         <span class="keyword">if</span> (!_.isString(value) || value.length &gt; maxLength) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.maxLength, <span class="keyword">this</span>.formatLabel(attr, model), maxLength);
         }
@@ -1426,7 +1426,7 @@ the two numbers specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      rangeLength: <span class="keyword">function</span>(value, attr, range, model) {
+            <div class="content"><div class='highlight'><pre>      rangeLength: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, range, model)</span> {</span>
         <span class="keyword">if</span> (!_.isString(value) || value.length &lt; range[<span class="number">0</span>] || value.length &gt; range[<span class="number">1</span>]) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.rangeLength, <span class="keyword">this</span>.formatLabel(attr, model), range[<span class="number">0</span>], range[<span class="number">1</span>]);
         }
@@ -1447,7 +1447,7 @@ the specified array. Case sensitive matching</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      oneOf: <span class="keyword">function</span>(value, attr, values, model) {
+            <div class="content"><div class='highlight'><pre>      oneOf: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, values, model)</span> {</span>
         <span class="keyword">if</span>(!_.include(values, value)){
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.oneOf, <span class="keyword">this</span>.formatLabel(attr, model), values.join(<span class="string">', '</span>));
         }
@@ -1468,7 +1468,7 @@ with the name specified</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      equalTo: <span class="keyword">function</span>(value, attr, equalTo, model, computed) {
+            <div class="content"><div class='highlight'><pre>      equalTo: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, equalTo, model, computed)</span> {</span>
         <span class="keyword">if</span>(value !== computed[equalTo]) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages.equalTo, <span class="keyword">this</span>.formatLabel(attr, model), <span class="keyword">this</span>.formatLabel(equalTo, model));
         }
@@ -1489,7 +1489,7 @@ Can be a regular expression or the name of one of the built in patterns</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      pattern: <span class="keyword">function</span>(value, attr, pattern, model) {
+            <div class="content"><div class='highlight'><pre>      pattern: <span class="function"><span class="keyword">function</span><span class="params">(value, attr, pattern, model)</span> {</span>
         <span class="keyword">if</span> (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
           <span class="keyword">return</span> <span class="keyword">this</span>.format(defaultMessages[pattern] || defaultMessages.inlinePattern, <span class="keyword">this</span>.formatLabel(attr, model), pattern);
         }
@@ -1511,7 +1511,7 @@ when used from within a method validator</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _.each(defaultValidators, <span class="keyword">function</span>(validator, key){
+            <div class="content"><div class='highlight'><pre>  _.each(defaultValidators, <span class="function"><span class="keyword">function</span><span class="params">(validator, key)</span>{</span>
     defaultValidators[key] = _.bind(defaultValidators[key], _.extend({}, formatFunctions, defaultValidators));
   });
 
