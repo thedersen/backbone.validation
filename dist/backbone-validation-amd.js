@@ -242,7 +242,10 @@
                 allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
                 changedAttrs = flatten(attrs || allAttrs),
   
-                result = validateModel(model, allAttrs);
+                // Only validate the changed attributes on change (set),
+                // when save is being called, all attriubutes will be present
+                // in the changedAttrs property. (original: allAttrs)
+                result = validateModel(model, changedAttrs);
   
             model._isValid = result.isValid;
   
@@ -434,7 +437,9 @@
       number: '{0} must be a number',
       email: '{0} must be a valid email',
       url: '{0} must be a valid url',
-      inlinePattern: '{0} is invalid'
+      inlinePattern: '{0} is invalid',
+      validModel: '{0} must be a validated model',
+      validCollection: '{0} must be a validated collection'
     };
   
     // Label formatters
@@ -627,6 +632,26 @@
           if (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
             return this.format(defaultMessages[pattern] || defaultMessages.inlinePattern, this.formatLabel(attr, model), pattern);
           }
+        },
+  
+        // Model validator
+        // Validates that a (nested) model is valid as defined by it's own validations
+        validModel: function (value, attr, customValue, model) {
+            if (value && !value.isValid(true)) {
+                return this.format(defaultMessages.validModel, this.formatLabel(attr, model));
+            }
+        },
+  
+        // Collection validator
+        // Validates that a (nested) collection of models is valid as defined by their own validations
+        validCollection: function (value, attr, customValue, model) {
+            var errors = value.map(function (entry) {
+                return entry.isValid(true);
+            });
+  
+            if (_.indexOf(errors, false) !== -1) {
+              return this.format(defaultMessages.validCollection, this.formatLabel(attr, model));
+            }
         }
       };
     }());
