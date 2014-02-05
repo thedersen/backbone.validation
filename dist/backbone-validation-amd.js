@@ -242,10 +242,7 @@
                 allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
                 changedAttrs = flatten(attrs || allAttrs),
   
-                // Only validate the changed attributes on change (set),
-                // when save is being called, all attriubutes will be present
-                // in the changedAttrs property. (original: allAttrs)
-                result = validateModel(model, changedAttrs);
+                result = validateModel(model, allAttrs);
   
             model._isValid = result.isValid;
   
