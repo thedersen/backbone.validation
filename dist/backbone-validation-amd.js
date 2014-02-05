@@ -22,6 +22,7 @@
       forceUpdate: false,
       selector: 'name',
       labelFormatter: 'sentenceCase',
+      useChangedAttr: false,
       valid: Function.prototype,
       invalid: Function.prototype
     };
@@ -241,8 +242,9 @@
                 validatedAttrs = getValidatedAttrs(model),
                 allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
                 changedAttrs = flatten(attrs || allAttrs),
+                validationAttrs = (opt.useChangedAttr)?model.changed:allAttrs,
   
-                result = validateModel(model, allAttrs);
+                result = validateModel(model, validationAttrs);
   
             model._isValid = result.isValid;
   
