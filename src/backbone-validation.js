@@ -201,7 +201,7 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes);
+          var flattened = flatten(_.extend({}, this.attributes));
 
           if(_.isString(option)){
             return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
