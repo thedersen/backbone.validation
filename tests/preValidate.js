@@ -23,6 +23,9 @@ buster.testCase("preValidate", {
           },
           authenticated: {
             required: false
+          },
+          passwordConfirmation: {
+            equalsTo: 'password'
           }
         }
       });
@@ -63,6 +66,28 @@ buster.testCase("preValidate", {
 
       "returns nothing when value is valid": function() {
         refute(this.model.preValidate({name: 'name'}));
+      }
+    },
+
+    "and pre-validating hash of attributes against itself (2nd param is `true`)": {
+      "returns error object when value is not valid": function() {
+        var result = this.model.preValidate({password: 'password', passwordConfirmation: 'passWORT'}, true);
+        assert(result.passwordConfirmation);
+      },
+
+      "returns nothing when value is valid": function() {
+        refute(this.model.preValidate({password: 'password', passwordConfirmation: 'password'}, true));
+      }
+    },
+
+    "and pre-validating hash of attributes against another hash of attributes (2nd param is a hash)": {
+      "returns error object when value is not valid": function() {
+        var result = this.model.preValidate({passwordConfirmation: 'passWORT'}, {password: 'password'});
+        assert(result.passwordConfirmation);
+      },
+
+      "returns nothing when value is valid": function() {
+        refute(this.model.preValidate({passwordConfirmation: 'password'}, {password: 'password'});
       }
     }
   }

@@ -253,6 +253,8 @@ var isValid = model.isValid(['name', 'age']);
 
 Sometimes it can be useful to check (for instance on each key press) if the input is valid - without changing the model - to perform some sort of live validation. You can execute the set of validators for an attribute, or a hash of attributes, by calling the `preValidate` method and pass it the name of the attribute and the value to validate, or a hash of attributes.
 
+Optionally, it's possible to pass in a hash of attributes that will be used when comparing values, for example - in the `equalsTo` validator. This allows you to preValidate attributes against another set of attributes instead of your model's current attributes.
+
 If the value is not valid, the error message is returned (truthy), otherwise it returns a falsy value.
 
 ```js
@@ -266,7 +268,13 @@ var errorMessage = model.preValidate('attributeName', 'Value');
 //   name: 'Name is required',
 //   email: 'Email must be a valid email'
 // }
-var errors = model.preValidate({name: 'value', email: 'foo@example.com');
+var errors = model.preValidate({ name: 'value', email: 'foo@example.com' });
+
+// Validate a hash of attributes against itself
+// Pass in either `true` or an attribute hash as the 2nd parameter.
+// Neither of the examples below will result in any errors.
+var errors = model.preValidate({ password: 'value', passwordConfirmation: 'value' }, true);
+var errors = model.preValidate({ password: 'value' }, { passwordConfirmation: 'value' });
 ```
 
 ## Configuration
