@@ -177,14 +177,15 @@ Backbone.Validation = (function(_){
 
         // Check whether or not a value, or a hash of values
         // passes validation without updating the model
-        preValidate: function(attr, value) {
+        preValidate: function(attr, value, attrs) {
           var self = this,
               result = {},
               error;
+          if (attrs === void 0) attrs = {};
 
           if(_.isObject(attr)){
             _.each(attr, function(value, key) {
-              error = self.preValidate(key, value);
+              error = self.preValidate(key, value, attr);
               if(error){
                 result[key] = error;
               }
@@ -193,7 +194,8 @@ Backbone.Validation = (function(_){
             return _.isEmpty(result) ? undefined : result;
           }
           else {
-            return validateAttr(this, attr, value, _.extend({}, this.attributes));
+            var checkAttr = _.extend({}, this.attributes);
+            return validateAttr(this, attr, value, _.extend(checkAttr, attrs));
           }
         },
 
