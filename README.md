@@ -30,6 +30,10 @@ You can download the raw source from [GitHub](http://github.com/thedersen/backbo
 
     npm install backbone-validation
 
+### Bower
+
+    bower install backbone-validation
+
 ## Getting started
 
 It's easy to get up and running. You only need to have Backbone (including underscore.js) in your page before including the Backbone.Validation plugin. If you are using the default implementation of the callbacks, you also need to include jQuery.
