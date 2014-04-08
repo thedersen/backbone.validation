@@ -263,7 +263,8 @@
   
               if(invalid && (changed || validateAll)){
                 opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
-              }
+                if(opt.stopAtFirstError) return false;
+            }
             });
   
             // Trigger validated events.
