@@ -217,20 +217,28 @@ Backbone.Validation = (function(_){
           return this.validation ? this._isValid : true;
         },
 
+        validateAndStop: function(attrs, setOptions){
+          this.validate(attrs, setOptions, true);
+        },
+
         // This is called by Backbone when it needs to perform validation.
         // You can call it manually without any parameters to validate the
         // entire model.
-        validate: function(attrs, setOptions){
+        validate: function(attrs, setOptions, stopAfterFirstError){
           var model = this,
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
               validatedAttrs = getValidatedAttrs(model),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
-
-              result = validateModel(model, allAttrs);
+              result = validateModel(model, allAttrs),
+              errorEncountered = false;
 
           model._isValid = result.isValid;
+
+          if(_.isUndefined(stopAfterFirstError)) {
+            stopAfterFirstError = false;
+          }
 
           // After validation is performed, loop through all validated attributes
           // and call the valid callbacks so the view is updated.
@@ -248,8 +256,9 @@ Backbone.Validation = (function(_){
                 changed = changedAttrs.hasOwnProperty(attr);
 
             if(invalid && (changed || validateAll)){
+              if (stopAfterFirstError && errorEncountered) return false;
               opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
-              if(opt.stopAtFirstError) return false;
+              errorEncountered = true;
           }
           });
 
