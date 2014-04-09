@@ -23,7 +23,8 @@
       selector: 'name',
       labelFormatter: 'sentenceCase',
       valid: Function.prototype,
-      invalid: Function.prototype
+      invalid: Function.prototype,
+      stopAfterFirstError: false
     };
   
   
@@ -241,8 +242,8 @@
                 validatedAttrs = getValidatedAttrs(model),
                 allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
                 changedAttrs = flatten(attrs || allAttrs),
-  
-                result = validateModel(model, allAttrs);
+                result = validateModel(model, allAttrs),
+                errorEncountered = false;
   
             model._isValid = result.isValid;
   
@@ -262,7 +263,9 @@
                   changed = changedAttrs.hasOwnProperty(attr);
   
               if(invalid && (changed || validateAll)){
+                if (defaultOptions.stopAfterFirstError && errorEncountered) return false;
                 opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+                errorEncountered = true;
               }
             });
   
