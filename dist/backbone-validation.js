@@ -256,7 +256,7 @@ Backbone.Validation = (function(_){
                 changed = changedAttrs.hasOwnProperty(attr);
 
             if(invalid && (changed || validateAll)){
-              if (defaultOptions.stopAtFirstError && errorEncountered) return false;
+              if (defaultOptions.stopAfterFirstError && errorEncountered) return false;
               opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
               errorEncountered = true;
             }
