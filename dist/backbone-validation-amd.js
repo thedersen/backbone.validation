@@ -23,7 +23,8 @@
       selector: 'name',
       labelFormatter: 'sentenceCase',
       valid: Function.prototype,
-      invalid: Function.prototype
+      invalid: Function.prototype,
+      stopAfterFirstError: false
     };
   
   
@@ -231,14 +232,10 @@
             return this.validation ? this._isValid : true;
           },
   
-          validateAndStop: function(attrs, setOptions){
-            this.validate(attrs, setOptions, true);
-          },
-  
           // This is called by Backbone when it needs to perform validation.
           // You can call it manually without any parameters to validate the
           // entire model.
-          validate: function(attrs, setOptions, stopAfterFirstError){
+          validate: function(attrs, setOptions){
             var model = this,
                 validateAll = !attrs,
                 opt = _.extend({}, options, setOptions),
@@ -249,10 +246,6 @@
                 errorEncountered = false;
   
             model._isValid = result.isValid;
-  
-            if(_.isUndefined(stopAfterFirstError)) {
-              stopAfterFirstError = false;
-            }
   
             // After validation is performed, loop through all validated attributes
             // and call the valid callbacks so the view is updated.
@@ -270,10 +263,10 @@
                   changed = changedAttrs.hasOwnProperty(attr);
   
               if(invalid && (changed || validateAll)){
-                if (stopAfterFirstError && errorEncountered) return false;
+                if (defaultOptions.stopAtFirstError && errorEncountered) return false;
                 opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
                 errorEncountered = true;
-            }
+              }
             });
   
             // Trigger validated events.
