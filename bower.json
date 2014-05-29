@@ -1,0 +1,37 @@
+{
+  "name": "backbone.validation",
+  "description": "A validation plugin for Backbone.js that validates both your model as well as form input.",
+  "homepage": "http://thedersen.com/projects/backbone-validation/",
+  "main": [
+    "./dist/backbone-validation.js",
+    "./dist/backbone-validation-amd.js"
+  ],
+  "version": "0.9.1",
+  "keywords": [
+    "backbone",
+    "validation",
+    "client",
+    "browser"
+  ],
+  "author": {
+    "name": "Thomas Pedersen"
+  },
+  "ignore": [
+    ".gitignore",
+    "gruntfile.js",
+    "README.md",
+    "package.json",
+    "buster.js",
+    "docco.jst",
+    "docs",
+    "lib",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "1.0.0 - 1.1.2",
+    "underscore": "1.4.4 - 1.6.0"
+  },
+  "devDependencies": {
+    "jquery": "1.6.2",
+  }
+}
