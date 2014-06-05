@@ -76,6 +76,8 @@ buster.testCase("Backbone.Validation patterns", {
         this.valid('-123,000.45');
         this.valid('123,000.00');
         this.valid('-123,000.00');
+        this.valid('.10');
+        this.valid('123.');
 
         this.invalid('abc');
         this.invalid('abc123');
