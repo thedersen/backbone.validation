@@ -423,6 +423,7 @@ Backbone.Validation = (function(_){
     rangeLength: '{0} must be between {1} and {2} characters',
     oneOf: '{0} must be one of: {1}',
     equalTo: '{0} must be the same as {1}',
+    notEqualTo: '{0} must not be the same as {1}',
     digits: '{0} must only contain digits',
     number: '{0} must be a number',
     email: '{0} must be a valid email',
@@ -610,6 +611,15 @@ Backbone.Validation = (function(_){
       equalTo: function(value, attr, equalTo, model, computed) {
         if(value !== computed[equalTo]) {
           return this.format(defaultMessages.equalTo, this.formatLabel(attr, model), this.formatLabel(equalTo, model));
+        }
+      },
+
+      // notEqual to validator
+      // Validates that the value has to be not equal to the value of the attribute
+      // with the name specified
+      notEqualTo: function(value, attr, notEqualTo, model, computed) {
+        if(value === computed[notEqualTo]) {
+          return this.format(defaultMessages.notEqualTo, this.formatLabel(attr, model), this.formatLabel(notEqualTo, model));
         }
       },
 
