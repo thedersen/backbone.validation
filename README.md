@@ -79,7 +79,7 @@ var SomeModel = Backbone.Model.extend({
     return {
       name: {
         required: true
-      };
+      }
     }
   }
 });
