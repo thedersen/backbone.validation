@@ -228,7 +228,9 @@ Backbone.Validation = (function(_){
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
 
-              result = validateModel(model, allAttrs);
+              // If the option changedAttrs is passed and is true, then only validate against the changed attributes
+              // as opposed to the entire mode.
+              result = validateModel(model, opt.changedAttrs ? changedAttrs : allAttrs);
 
           model._isValid = result.isValid;
 
