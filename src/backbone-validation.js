@@ -212,7 +212,7 @@ Backbone.Validation = (function(_){
             }, true, this);
           }
           if(option === true) {
-            this.validate();
+            this.validationError = this.validate() || null;
           }
           return this.validation ? this._isValid : true;
         },
