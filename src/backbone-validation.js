@@ -182,9 +182,8 @@ Backbone.Validation = (function(_){
               result = {},
               error;
 
-          computed = computed || _.extend(this.attributes, attr);
-
           if(_.isObject(attr)){
+            computed = computed || _.extend({}, this.attributes, attr);
             _.each(attr, function(value, key) {
               error = self.preValidate(key, value, computed);
               if(error){
@@ -195,6 +194,9 @@ Backbone.Validation = (function(_){
             return _.isEmpty(result) ? undefined : result;
           }
           else {
+            var attrs = {};
+            attrs[attr] = value;
+            computed = computed || _.extend({}, this.attributes, attrs);
             return validateAttr(this, attr, value, computed);
           }
         },

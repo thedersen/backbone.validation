@@ -94,6 +94,14 @@ buster.testCase("preValidate", {
         assert(this.model.preValidate('name', ''));
       },
 
+      "returns nothing when value in model is empty and name is set to required": function() {
+        this.model.set('name_required', false);
+        this.model.set('name', '');
+        // After this name would be invalid, so the model would be invalid
+        // But just this preValidate will be valid because name_required has no validation
+        refute(this.model.preValidate('name_required', true));
+      },
+
       "returns nothing when name is empty and name is not required": function() {
         this.model.set('name_required', false);
         refute(this.model.preValidate('name', ''));
