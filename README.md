@@ -266,7 +266,7 @@ var errorMessage = model.preValidate('attributeName', 'Value');
 //   name: 'Name is required',
 //   email: 'Email must be a valid email'
 // }
-var errors = model.preValidate({name: 'value', email: 'foo@example.com');
+var errors = model.preValidate({name: 'value', email: 'foo@example.com'});
 ```
 
 ## Configuration
