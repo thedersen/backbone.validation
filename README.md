@@ -31,8 +31,8 @@ You can download the raw source from [GitHub](http://github.com/thedersen/backbo
     npm install backbone-validation
     
 #### Bower builds
-   `bower install backbone-validation`
-(bower `backbone.validation` leads to unsupported fork of this lib)
+
+    bower install backbone-validation
  
 ## Getting started
 
