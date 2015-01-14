@@ -1,4 +1,4 @@
-# Backbone.Validation
+# Backbone.Validation [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/thedersen/backbone.validation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
