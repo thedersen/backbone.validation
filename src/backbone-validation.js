@@ -56,7 +56,7 @@ Backbone.Validation = (function(_){
     prefix = prefix || '';
 
     _.each(obj, function(val, key) {
-      if(obj.hasOwnProperty(key)) {
+      if(Object.prototype.hasOwnProperty.call(obj, key)) {
         if (val && typeof val === 'object' && !(
           val instanceof Array ||
           val instanceof Date ||
@@ -235,7 +235,7 @@ Backbone.Validation = (function(_){
           // After validation is performed, loop through all validated attributes
           // and call the valid callbacks so the view is updated.
           _.each(validatedAttrs, function(val, attr){
-            var invalid = result.invalidAttrs.hasOwnProperty(attr);
+            var invalid = Object.prototype.hasOwnProperty.call(result.invalidAttrs, attr);
             if(!invalid){
               opt.valid(view, attr, opt.selector);
             }
@@ -244,8 +244,8 @@ Backbone.Validation = (function(_){
           // After validation is performed, loop through all validated and changed attributes
           // and call the invalid callback so the view is updated.
           _.each(validatedAttrs, function(val, attr){
-            var invalid = result.invalidAttrs.hasOwnProperty(attr),
-                changed = changedAttrs.hasOwnProperty(attr);
+            var invalid = Object.prototype.hasOwnProperty.call(result.invalidAttrs, attr),
+                changed = Object.prototype.hasOwnProperty.call(changedAttrs, attr);
 
             if(invalid && (changed || validateAll)){
               opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
