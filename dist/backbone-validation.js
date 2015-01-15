@@ -184,23 +184,49 @@ Backbone.Validation = (function(_){
 
         // Check whether or not a value, or a hash of values
         // passes validation without updating the model
-        preValidate: function(attr, value) {
+        preValidate: function(attr, enteredValue) {
           var self = this,
-              result = {},
-              error;
+          result = {},
+          error;
 
           if(_.isObject(attr)){
+
             _.each(attr, function(value, key) {
-              error = self.preValidate(key, value);
-              if(error){
-                result[key] = error;
+
+              if (typeof value === 'object' && !(
+                value instanceof Array ||
+                value instanceof Date ||
+                value instanceof RegExp ||
+                value instanceof Backbone.Model ||
+                value instanceof Backbone.Collection)
+              ) {
+                // We now have complex object, so we need to flatten
+                var flattened = flatten(value);
+
+                _.each(flattened, function (val, ki) {
+
+                  error = self.preValidate(key + '.' + ki, val);
+
+                  if(error){
+                    result[key + '.' + ki] = error;
+                  }
+                });
+
               }
+              else {
+                error = self.preValidate(key, value);
+                if(error) {
+                  result[key] = error;
+                }
+              }
+
             });
 
             return _.isEmpty(result) ? undefined : result;
           }
           else {
-            return validateAttr(this, attr, value, _.extend({}, this.attributes));
+
+            return validateAttr(this, attr, enteredValue, _.extend({}, this.attributes));
           }
         },
 
