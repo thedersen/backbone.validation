@@ -213,16 +213,29 @@
   
           // Check to see if an attribute, an array of attributes or the
           // entire model is valid. Passing true will force a validation
-          // of the model.
+          // of the entire model.
           isValid: function(option) {
-            var flattened = flatten(this.attributes);
+            var flattened = flatten(this.attributes),
+                error;
   
             if(_.isString(option)){
-              return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
+              error = validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
+              if (error) {
+                options.invalid(view, option, error, options.selector);
+              } else {
+                options.valid(view, option, options.selector);
+              }
+              return !error;
             }
             if(_.isArray(option)){
               return _.reduce(option, function(memo, attr) {
-                return memo && !validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+                error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+                if (error) {
+                  options.invalid(view, attr, error, options.selector);
+                } else {
+                  options.valid(view, attr, options.selector);
+                }
+                return memo && !error;
               }, true, this);
             }
             if(option === true) {
