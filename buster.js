@@ -4,7 +4,7 @@ config['Browser'] = {
   environment: 'browser',
   sources: [
     'lib/jquery-1.6.2.js',
-    'lib/underscore.js',
+    'lib/lodash.js',
     'lib/backbone-1.0.0.js',
     'dist/backbone-validation.js'
   ],
