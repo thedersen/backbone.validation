@@ -482,12 +482,14 @@ Backbone.Validation = (function(_){
   var defaultAttributeLoaders = Validation.attributeLoaders = {
     inputNames: function (view) {
       var attrs = [];
-      view.$('form [name]').each(function () {
-        if (/^(?:input|select|textarea)$/i.test(this.nodeName) && this.name &&
-          this.type !== 'submit' && attrs.indexOf(this.name) === -1) {
-          attrs.push(this.name);
-        }
-      });
+      if (view) {
+        view.$('form [name]').each(function () {
+          if (/^(?:input|select|textarea)$/i.test(this.nodeName) && this.name &&
+            this.type !== 'submit' && attrs.indexOf(this.name) === -1) {
+            attrs.push(this.name);
+          }
+        });
+      }
       return attrs;
     }
   };
