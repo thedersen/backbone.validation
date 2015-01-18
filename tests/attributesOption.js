@@ -2,7 +2,7 @@ buster.testCase("Setting options.attributes", {
     setUp: function () {
         var View = Backbone.View.extend({
             render: function () {
-                var html = $('<form><input type="text" name="name" /></form>');
+                var html = $('<form><input type="text" name="name" /><input type="radio" name="name" /><input type="submit" name="save"/><button name="cancel"></button></form>');
                 this.$el.append(html);
             }
         });
@@ -99,7 +99,7 @@ buster.testCase("Setting options.attributes", {
             }
         }
     },
-    "to 'form', the builtin attributeLoader": {
+    "to 'inputNames' builtin attributeLoader": {
         setUp: function () {
             Backbone.Validation.bind(this.view, {
                 attributes: 'inputNames'
@@ -117,6 +117,13 @@ buster.testCase("Setting options.attributes", {
             refute.defined(errors.password);
         },
 
+        "submit and buttons should not be included in attribute array": function () {
+            var attrs = Backbone.Validation.attributeLoaders.inputNames(this.view);
+            assert.equals(attrs.length, 1, 'Length of array returned by inputNames loader');
+            assert.contains(attrs, 'name');
+            refute.contains(attrs, 'save');
+            refute.contains(attrs, 'cancel');
+        },
         "when all the attributes present in form are valid": {
             setUp: function () {
                 this.model.set({
