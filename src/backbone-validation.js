@@ -77,12 +77,27 @@ Backbone.Validation = (function(_){
     // Returns an object with undefined properties for all
     // attributes on the model that has defined one or more
     // validation rules.
-    var getValidatedAttrs = function(model) {
-      return _.reduce(_.keys(_.result(model, 'validation') || {}), function(memo, key) {
+    var getValidatedAttrs = function(model, attrs) {
+      attrs = attrs || _.keys(_.result(model, 'validation') || {});
+      return _.reduce(attrs, function(memo, key) {
         memo[key] = void 0;
         return memo;
       }, {});
     };
+
+    // Returns an array with attributes passed through options
+    var getOptionsAttrs = function(options) {
+      var attrs = options.attributes;
+      if (_.isFunction(attrs)) {
+        attrs = attrs(options.view);
+      } else if (_.isString(attrs) && (_.isFunction(defaultAttributeLoaders[attrs]))) {
+        attrs = defaultAttributeLoaders[attrs](options.view);
+      }
+      if (_.isArray(attrs)) {
+        return attrs;
+      }
+    };
+
 
     // Looks on the model for validations for a specified
     // attribute. Returns an array of any validators defined,
@@ -197,7 +212,7 @@ Backbone.Validation = (function(_){
         isValid: function(option) {
           var flattened = flatten(this.attributes);
 
-          option = option || options.attributes;
+         option = option || getOptionsAttrs(options);
 
           if(_.isString(option)){
             return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
@@ -220,7 +235,7 @@ Backbone.Validation = (function(_){
           var model = this,
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
-              validatedAttrs = getValidatedAttrs(model),
+              validatedAttrs = getValidatedAttrs(model, getOptionsAttrs(options)),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
 
@@ -461,6 +476,25 @@ Backbone.Validation = (function(_){
       return (model.labels && model.labels[attrName]) || defaultLabelFormatters.sentenceCase(attrName, model);
     }
   };
+
+  // AttributeLoaders
+
+  var defaultAttributeLoaders = Validation.attributeLoaders = {
+    form: function(view) {
+      var attrs = [];
+      view.$('form')
+        .each(function(){
+          $(this).find(':input')
+            .each(function(){
+              if (this.name) {
+                attrs.push(this.name)
+              }
+            })
+        }
+      )
+      return attrs;
+    }
+  }
 
 
   // Built in validators
