@@ -86,12 +86,12 @@ Backbone.Validation = (function(_){
     };
 
     // Returns an array with attributes passed through options
-    var getOptionsAttrs = function(options) {
+    var getOptionsAttrs = function(options, view) {
       var attrs = options.attributes;
       if (_.isFunction(attrs)) {
-        attrs = attrs(options.view);
+        attrs = attrs(view);
       } else if (_.isString(attrs) && (_.isFunction(defaultAttributeLoaders[attrs]))) {
-        attrs = defaultAttributeLoaders[attrs](options.view);
+        attrs = defaultAttributeLoaders[attrs](view);
       }
       if (_.isArray(attrs)) {
         return attrs;
@@ -212,7 +212,7 @@ Backbone.Validation = (function(_){
         isValid: function(option) {
           var flattened = flatten(this.attributes);
 
-         option = option || getOptionsAttrs(options);
+         option = option || getOptionsAttrs(options, view);
 
           if(_.isString(option)){
             return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
@@ -235,7 +235,7 @@ Backbone.Validation = (function(_){
           var model = this,
               validateAll = !attrs,
               opt = _.extend({}, options, setOptions),
-              validatedAttrs = getValidatedAttrs(model, getOptionsAttrs(options)),
+              validatedAttrs = getValidatedAttrs(model, getOptionsAttrs(options, view)),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
 
