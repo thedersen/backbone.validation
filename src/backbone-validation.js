@@ -480,7 +480,7 @@ Backbone.Validation = (function(_){
   // AttributeLoaders
 
   var defaultAttributeLoaders = Validation.attributeLoaders = {
-    form: function(view) {
+    inputNames: function(view) {
       var attrs = [];
       view.$('form')
         .each(function(){

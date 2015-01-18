@@ -102,7 +102,7 @@ buster.testCase("Setting options.attributes", {
     "to 'form', the builtin attributeLoader": {
         setUp: function () {
             Backbone.Validation.bind(this.view, {
-                attributes: 'form'
+                attributes: 'inputNames'
             });
         },
         tearDown: function () {
