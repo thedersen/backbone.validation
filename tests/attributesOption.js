@@ -48,9 +48,9 @@ buster.testCase("Setting options.attributes", {
 
         "only the attributes in array should be validated": function () {
             var errors = this.model.validate();
-            assert.defined(errors['name']);
-            assert.defined(errors['age']);
-            refute.defined(errors['password']);
+            assert.defined(errors.name);
+            assert.defined(errors.age);
+            refute.defined(errors.password);
         },
 
         "when all the attributes in array are valid": {
@@ -81,9 +81,9 @@ buster.testCase("Setting options.attributes", {
 
         "only the attributes returned by the function should be validated": function () {
             var errors = this.model.validate();
-            assert.defined(errors['name']);
-            assert.defined(errors['age']);
-            refute.defined(errors['password']);
+            assert.defined(errors.name);
+            assert.defined(errors.age);
+            refute.defined(errors.password);
         },
 
         "when all the attributes returned by the function are valid": {
@@ -112,9 +112,9 @@ buster.testCase("Setting options.attributes", {
 
         "only the attributes with present in form should be validated": function () {
             var errors = this.model.validate();
-            assert.defined(errors['name']);
-            refute.defined(errors['age']);
-            refute.defined(errors['password']);
+            assert.defined(errors.name);
+            refute.defined(errors.age);
+            refute.defined(errors.password);
         },
 
         "when all the attributes present in form are valid": {
@@ -147,9 +147,9 @@ buster.testCase("Setting options.attributes", {
 
         "only the attributes returned by the registered function should be validated": function () {
             var errors = this.model.validate();
-            assert.defined(errors['age']);
-            refute.defined(errors['name']);
-            refute.defined(errors['password']);
+            assert.defined(errors.age);
+            refute.defined(errors.name);
+            refute.defined(errors.password);
         },
 
         "when all the attributes returned by registered the function are valid": {

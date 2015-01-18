@@ -487,14 +487,14 @@ Backbone.Validation = (function(_){
           $(this).find(':input')
             .each(function(){
               if (this.name) {
-                attrs.push(this.name)
+                attrs.push(this.name);
               }
-            })
+            });
         }
-      )
+      );
       return attrs;
     }
-  }
+  };
 
 
   // Built in validators
