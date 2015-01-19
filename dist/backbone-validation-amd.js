@@ -1,15 +1,15 @@
 // Backbone.Validation v0.9.1
 //
-// Copyright (c) 2011-2015 Thomas Pedersen
+// Copyright (c) 2011-2014 Thomas Pedersen
 // Distributed under MIT License
 //
 // Documentation and full license available at:
 // http://thedersen.com/projects/backbone-validation
 (function (factory) {
   if (typeof exports === 'object') {
-    module.exports = factory(require('backbone'), require('lodash'));
+    module.exports = factory(require('backbone'), require('underscore'));
   } else if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'lodash'], factory);
+    define(['backbone', 'underscore'], factory);
   }
 }(function (Backbone, _) {
   Backbone.Validation = (function(_){
@@ -71,7 +71,13 @@
   
       _.each(obj, function(val, key) {
         if(obj.hasOwnProperty(key)) {
-          if (_.isPlainObject(val)) {
+          if (val && typeof val === 'object' && !(
+            val instanceof Array ||
+            val instanceof Date ||
+            val instanceof RegExp ||
+            val instanceof Backbone.Model ||
+            val instanceof Backbone.Collection)
+          ) {
             flatten(val, into, prefix + key + '.');
           }
           else {
