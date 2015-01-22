@@ -1,6 +1,6 @@
 // Backbone.Validation v0.9.1
 //
-// Copyright (c) 2011-2014 Thomas Pedersen
+// Copyright (c) 2011-2015 Thomas Pedersen
 // Distributed under MIT License
 //
 // Documentation and full license available at:
@@ -241,22 +241,26 @@ Backbone.Validation = (function(_){
 
           // After validation is performed, loop through all validated attributes
           // and call the valid callbacks so the view is updated.
-          _.each(validatedAttrs, function(val, attr){
-            var invalid = result.invalidAttrs.hasOwnProperty(attr);
-            if(!invalid){
-              opt.valid(view, attr, opt.selector);
-            }
+          _.each(model.associatedViews, function(view){
+            _.each(validatedAttrs, function(val, attr){
+              var invalid = result.invalidAttrs.hasOwnProperty(attr);
+              if(!invalid){
+                opt.valid(view, attr, opt.selector);
+              }
+            });
           });
 
           // After validation is performed, loop through all validated and changed attributes
           // and call the invalid callback so the view is updated.
-          _.each(validatedAttrs, function(val, attr){
-            var invalid = result.invalidAttrs.hasOwnProperty(attr),
+          _.each(model.associatedViews, function(view){
+            _.each(validatedAttrs, function(val, attr){
+              var invalid = result.invalidAttrs.hasOwnProperty(attr),
                 changed = changedAttrs.hasOwnProperty(attr);
 
-            if(invalid && (changed || validateAll)){
-              opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
-            }
+              if(invalid && (changed || validateAll)){
+                opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+              }
+            });
           });
 
           // Trigger validated events.
@@ -279,14 +283,25 @@ Backbone.Validation = (function(_){
 
     // Helper to mix in validation on a model
     var bindModel = function(view, model, options) {
+      if (model.associatedViews) {
+        model.associatedViews.push(view);
+      } else {
+        model.associatedViews = [view];
+      }
       _.extend(model, mixin(view, options));
     };
 
-    // Removes the methods added to a model
-    var unbindModel = function(model) {
-      delete model.validate;
-      delete model.preValidate;
-      delete model.isValid;
+    // Removes view from associated views of the model or the methods
+    // added to a model if no view or single view provided
+    var unbindModel = function(model, view) {
+      if (view && model.associatedViews.length > 1){
+        model.associatedViews = _.without(model.associatedViews, view);
+      } else {
+        delete model.validate;
+        delete model.preValidate;
+        delete model.isValid;
+        delete model.associatedViews;
+      }
     };
 
     // Mix in validation on a model whenever a model is
@@ -345,11 +360,11 @@ Backbone.Validation = (function(_){
             collection = options.collection || view.collection;
 
         if(model) {
-          unbindModel(model);
+          unbindModel(model, view);
         }
         else if(collection) {
           collection.each(function(model){
-            unbindModel(model);
+            unbindModel(model, view);
           });
           collection.unbind('add', collectionAdd);
           collection.unbind('remove', collectionRemove);
