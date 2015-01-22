@@ -236,7 +236,7 @@ Backbone.Validation = (function(_){
           _.each(model.associatedViews, function(view){
 
             // After validation is performed, loop through all validated and changed attributes
-            // and call the invalid callback so the view is updated.
+            // and call the valid and invalid callbacks so the view is updated.
             _.each(validatedAttrs, function(val, attr){
                 var invalid = result.invalidAttrs.hasOwnProperty(attr),
                   changed = changedAttrs.hasOwnProperty(attr);
