@@ -232,27 +232,21 @@ Backbone.Validation = (function(_){
 
           model._isValid = result.isValid;
 
-          // After validation is performed, loop through all validated attributes
-          // and call the valid callbacks so the view is updated.
+          //After validation is performed, loop through all associated views
           _.each(model.associatedViews, function(view){
-            _.each(validatedAttrs, function(val, attr){
-              var invalid = result.invalidAttrs.hasOwnProperty(attr);
-              if(!invalid){
-                opt.valid(view, attr, opt.selector);
-              }
-            });
-          });
 
-          // After validation is performed, loop through all validated and changed attributes
-          // and call the invalid callback so the view is updated.
-          _.each(model.associatedViews, function(view){
+            // After validation is performed, loop through all validated and changed attributes
+            // and call the invalid callback so the view is updated.
             _.each(validatedAttrs, function(val, attr){
-              var invalid = result.invalidAttrs.hasOwnProperty(attr),
-                changed = changedAttrs.hasOwnProperty(attr);
+                var invalid = result.invalidAttrs.hasOwnProperty(attr),
+                  changed = changedAttrs.hasOwnProperty(attr);
 
-              if(invalid && (changed || validateAll)){
-                opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
-              }
+                if(!invalid){
+                  opt.valid(view, attr, opt.selector);
+                }
+                if(invalid && (changed || validateAll)){
+                  opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+                }
             });
           });
 
@@ -274,7 +268,7 @@ Backbone.Validation = (function(_){
       };
     };
 
-    // Helper to mix in validation on a model
+    // Helper to mix in validation on a model. Stores the view in the associated views array.
     var bindModel = function(view, model, options) {
       if (model.associatedViews) {
         model.associatedViews.push(view);
