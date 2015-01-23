@@ -882,6 +882,10 @@ Basic behaviour:
 
 ## Release notes
 
+#### v0.9.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.1...v0.9.2)
+
+* Fixed `flatten()` method causing `Maximum call stack size exceeded` errors. Fixes [#260](https://github.com/thedersen/backbone.validation/issues/260) [#180](https://github.com/thedersen/backbone.validation/issues/180) [#210](https://github.com/thedersen/backbone.validation/issues/210) [#224](https://github.com/thedersen/backbone.validation/issues/224) [#233](https://github.com/thedersen/backbone.validation/issues/233)
+
 #### v0.9.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.0...v0.9.1)
 
 * Upgraded buster.js to v0.7.8
