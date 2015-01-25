@@ -51,16 +51,45 @@ Backbone.Validation = (function(_){
   //       'address.street': 'Street',
   //       'address.zip': 1234
   //     };
-  var flatten = function (obj, into, prefix) {
+  // If preserveLevels is true, will also preserve intermediate levels of
+  // objects to allow for partial nesting of validators.
+  // eg:
+  //
+  //     var o = {
+  //       multiLevelObject: {
+  //         firstLevel: {
+  //           key: 'value'
+  //         }
+  //       }
+  //     };
+  //
+  // becomes:
+  //
+  //     var o = {
+  //       'multiLevelObject': {
+  //         firstLevel: {
+  //           key: 'value'
+  //         }
+  //       },
+  //       'multiLevelObject.firstLevel': {
+  //         key: 'value'
+  //       },
+  //       'multiLevelObject.firstLevel.key': 'value'
+  //     };
+  var flatten = function (obj, preserveLevels, into, prefix) {
     into = into || {};
     prefix = prefix || '';
 
     _.each(obj, function(val, key) {
       if(obj.hasOwnProperty(key)) {
-        if (!!val && typeof val === 'object' && val.constructor === Object) {
-          flatten(val, into, prefix + key + '.');
+        var shouldFlatten = !!val && typeof val === 'object' && val.constructor === Object;
+
+        if (shouldFlatten) {
+          flatten(val, preserveLevels, into, prefix + key + '.');
         }
-        else {
+
+        if (!shouldFlatten || preserveLevels) {
+          // Register the intermediate object
           into[prefix + key] = val;
         }
       }
@@ -164,7 +193,7 @@ Backbone.Validation = (function(_){
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs),
-          flattened = _.pick(flatten(attrs), validatedKeys);
+          flattened = _.pick(flatten(attrs, true), validatedKeys);
 
       _.each(flattened, function(val, attr) {
         error = validateAttr(model, attr, val, computed);
@@ -210,7 +239,7 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes);
+          var flattened = flatten(this.attributes, true);
 
          option = option || getOptionsAttrs(options, view);
 
@@ -237,7 +266,7 @@ Backbone.Validation = (function(_){
               opt = _.extend({}, options, setOptions),
               validatedAttrs = getValidatedAttrs(model, getOptionsAttrs(options, view)),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
-              changedAttrs = flatten(attrs || allAttrs),
+              changedAttrs = flatten(attrs || allAttrs, true),
 
               result = validateModel(model, allAttrs, _.keys(validatedAttrs));
 
