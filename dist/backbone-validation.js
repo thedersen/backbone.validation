@@ -1,6 +1,6 @@
 // Backbone.Validation v0.9.1
 //
-// Copyright (c) 2011-2014 Thomas Pedersen
+// Copyright (c) 2011-2015 Thomas Pedersen
 // Distributed under MIT License
 //
 // Documentation and full license available at:
@@ -263,8 +263,8 @@ Backbone.Validation = (function(_){
           // Need to defer this so the model is actually updated before
           // the event is triggered.
           _.defer(function() {
-            model.trigger('validated', model._isValid, model, result.invalidAttrs);
-            model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
+            model.trigger('validated', model._isValid, model, result.invalidAttrs, changedAttrs);
+            model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs, changedAttrs);
           });
 
           // Return any error messages to Backbone, unless the forceUpdate flag is set.
