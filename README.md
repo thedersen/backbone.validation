@@ -237,6 +237,12 @@ Check to see if an attribute, an array of attributes or the entire model is vali
 
 `isValid` returns `undefined` when no validation has occurred and the model has validation (except with Backbone v0.9.9 where validation is called from the constructor), otherwise, `true` or `false`.
 
+If you don't pass an argument, the properties defined by the `attributes` bind option will be validated. If no `attributes` option is used there will be no validation.
+
+```js
+var isValid = model.isValid();
+```
+
 If you pass `true` as an argument, this will force an validation before the result is returned:
 
 ```js
@@ -403,6 +409,42 @@ Backbone.Validation.configure({
 });
 ```
 
+### Attributes
+
+The `attributes` option passed in Backbone.Validation.bind determines what model attributes must be validated. It can be an array, a function returning an array or an string that points to an registered attribute loader. By default, the 'inputNames' attribute loader is provided. It returns the name attribute of input elements in the view.
+
+Per view when binding:
+
+```js
+var SomeView = Backbone.View.extend({
+  render: function(){
+    Backbone.Validation.bind(this, {
+        attributes: function(view) {
+          return ['name', 'age']; // only name and age will be validated
+        }
+      }
+    });
+  }
+});
+```
+
+Set default globally:
+
+```js
+Backbone.Validation.configure({
+  attributes: 'inputNames' // returns the name attributes of bound view input elements
+});
+```
+
+Register an attribute loader:
+
+```js
+_.extend(Backbone.Validation.attributeLoaders, {
+  myLoader: function(view) {
+    // return an array with the attributes to be validated
+  }
+});
+```
 
 ## Events
 
@@ -881,6 +923,14 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.10.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.2...v0.10.0)
+
+* `attributes` bind option allows to configure the attributes that will be validated
+
+#### v0.9.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.1...v0.9.2)
+
+* Fixed `flatten()` method causing `Maximum call stack size exceeded` errors. Fixes [#260](https://github.com/thedersen/backbone.validation/issues/260) [#180](https://github.com/thedersen/backbone.validation/issues/180) [#210](https://github.com/thedersen/backbone.validation/issues/210) [#224](https://github.com/thedersen/backbone.validation/issues/224) [#233](https://github.com/thedersen/backbone.validation/issues/233)
 
 #### v0.9.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.0...v0.9.1)
 
