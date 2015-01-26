@@ -924,7 +924,7 @@ Basic behaviour:
 
 ## Release notes
 
-#### v0.10 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.2...v0.10)
+#### v0.10.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.2...v0.10.0)
 
 * `attributes` bind option allows to configure the attributes that will be validated
 
