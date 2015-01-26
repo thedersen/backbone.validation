@@ -117,5 +117,28 @@ buster.testCase("Backbone.Validation events", {
                 age: 1
             }, {validate: true});
         }
+    },
+
+    "validated:invalid callback get a list of changed attributes as last argument": function (done) {
+      this.model.bind('validated:invalid', function(model, attrs, changedAttrs){
+        assert.equals({age: 0}, changedAttrs);
+        done();
+      }, this);
+
+      this.model.set({
+        age: 0
+      }, {validate: true});
+    },
+
+    "validated:valid callback get a list of changed attributes as last argument": function (done) {
+      this.model.bind('validated:valid', function(model, attrs, changedAttrs) {
+        assert.equals({age: 1, name: 1}, changedAttrs);
+        done();
+      }, this);
+
+      this.model.set({
+        age: 1,
+        name: 1
+      }, {validate: true});
     }
 });

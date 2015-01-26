@@ -264,8 +264,8 @@
             // Need to defer this so the model is actually updated before
             // the event is triggered.
             _.defer(function() {
-              model.trigger('validated', model._isValid, model, result.invalidAttrs);
-              model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs);
+              model.trigger('validated', model._isValid, model, result.invalidAttrs, changedAttrs);
+              model.trigger('validated:' + (model._isValid ? 'valid' : 'invalid'), model, result.invalidAttrs, changedAttrs);
             });
   
             // Return any error messages to Backbone, unless the forceUpdate flag is set.
