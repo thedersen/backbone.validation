@@ -1,4 +1,4 @@
-# Backbone.Validation
+# Backbone.Validation [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/thedersen/backbone.validation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
@@ -29,7 +29,11 @@ You can download the raw source from [GitHub](http://github.com/thedersen/backbo
 #### Node.js builds
 
     npm install backbone-validation
+    
+#### Bower builds
 
+    bower install backbone-validation
+ 
 ## Getting started
 
 It's easy to get up and running. You only need to have Backbone (including underscore.js) in your page before including the Backbone.Validation plugin. If you are using the default implementation of the callbacks, you also need to include jQuery.
@@ -79,7 +83,7 @@ var SomeModel = Backbone.Model.extend({
     return {
       name: {
         required: true
-      };
+      }
     }
   }
 });
@@ -877,6 +881,10 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.9.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.1...v0.9.2)
+
+* Fixed `flatten()` method causing `Maximum call stack size exceeded` errors. Fixes [#260](https://github.com/thedersen/backbone.validation/issues/260) [#180](https://github.com/thedersen/backbone.validation/issues/180) [#210](https://github.com/thedersen/backbone.validation/issues/210) [#224](https://github.com/thedersen/backbone.validation/issues/224) [#233](https://github.com/thedersen/backbone.validation/issues/233)
 
 #### v0.9.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.0...v0.9.1)
 
