@@ -159,12 +159,12 @@ Backbone.Validation = (function(_){
     // Loops through the model's attributes and validates them all.
     // Returns and object containing names of invalid attributes
     // as well as error messages.
-    var validateModel = function(model, attrs) {
+    var validateModel = function(model, attrs, validatedKeys) {
       var error,
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs),
-          flattened = flatten(attrs);
+          flattened = _.pick(flatten(attrs), validatedKeys);
 
       _.each(flattened, function(val, attr) {
         error = validateAttr(model, attr, val, computed);
@@ -239,7 +239,7 @@ Backbone.Validation = (function(_){
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               changedAttrs = flatten(attrs || allAttrs),
 
-              result = validateModel(model, allAttrs);
+              result = validateModel(model, allAttrs, _.keys(validatedAttrs));
 
           model._isValid = result.isValid;
 

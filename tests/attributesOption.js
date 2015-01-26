@@ -17,6 +17,9 @@ buster.testCase("Setting options.attributes", {
                 },
                 password: {
                     required: true
+                },
+                email: {
+                    pattern: 'email'
                 }
             }
         });
@@ -51,13 +54,15 @@ buster.testCase("Setting options.attributes", {
             assert.defined(errors.name);
             assert.defined(errors.age);
             refute.defined(errors.password);
+            refute.defined(errors.email);
         },
 
         "when all the attributes in array are valid": {
             setUp: function () {
                 this.model.set({
                     age: 1,
-                    name: 'hello'
+                    name: 'hello',
+                    email: 'invalidemail'
                 });
             },
             "validation will pass": function () {
@@ -84,13 +89,15 @@ buster.testCase("Setting options.attributes", {
             assert.defined(errors.name);
             assert.defined(errors.age);
             refute.defined(errors.password);
+            refute.defined(errors.email);
         },
 
         "when all the attributes returned by the function are valid": {
             setUp: function () {
                 this.model.set({
                     age: 1,
-                    name: 'hello'
+                    name: 'hello',
+                    email: 'invalidemail'
                 });
             },
             "validation will pass": function () {
@@ -115,6 +122,7 @@ buster.testCase("Setting options.attributes", {
             assert.defined(errors.name);
             refute.defined(errors.age);
             refute.defined(errors.password);
+            refute.defined(errors.email);
         },
 
         "submit and buttons should not be included in attribute array": function () {
@@ -127,7 +135,8 @@ buster.testCase("Setting options.attributes", {
         "when all the attributes present in form are valid": {
             setUp: function () {
                 this.model.set({
-                    name: 'hello'
+                    name: 'hello',
+                    email: 'invalidemail'
                 });
             },
             "validation will pass": function () {
@@ -159,10 +168,11 @@ buster.testCase("Setting options.attributes", {
             refute.defined(errors.password);
         },
 
-        "when all the attributes returned by registered the function are valid": {
+        "when all the attributes returned by the registered function are valid": {
             setUp: function () {
                 this.model.set({
-                    age: 1
+                    age: 1,
+                    email: 'invalidemail'
                 });
             },
             "validation will pass": function () {
