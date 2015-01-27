@@ -76,7 +76,7 @@ Backbone.Validation = (function(_){
   //       },
   //       'multiLevelObject.firstLevel.key': 'value'
   //     };
-  var flatten = function (obj, preserveLevels, into, prefix) {
+  var flatten = function (obj, into, prefix) {
     into = into || {};
     prefix = prefix || '';
 
@@ -85,13 +85,11 @@ Backbone.Validation = (function(_){
         var shouldFlatten = !!val && typeof val === 'object' && val.constructor === Object;
 
         if (shouldFlatten) {
-          flatten(val, preserveLevels, into, prefix + key + '.');
+          flatten(val, into, prefix + key + '.');
         }
 
-        if (!shouldFlatten || preserveLevels) {
-          // Register the intermediate object
-          into[prefix + key] = val;
-        }
+        // Register the intermediate object
+        into[prefix + key] = val;
       }
     });
 
@@ -193,7 +191,7 @@ Backbone.Validation = (function(_){
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs),
-          flattened = _.pick(flatten(attrs, true), validatedKeys);
+          flattened = _.pick(flatten(attrs), validatedKeys);
 
       _.each(flattened, function(val, attr) {
         error = validateAttr(model, attr, val, computed);
@@ -239,7 +237,7 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes, true);
+          var flattened = flatten(this.attributes);
 
          option = option || getOptionsAttrs(options, view);
 
@@ -266,7 +264,7 @@ Backbone.Validation = (function(_){
               opt = _.extend({}, options, setOptions),
               validatedAttrs = getValidatedAttrs(model, getOptionsAttrs(options, view)),
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
-              changedAttrs = flatten(attrs || allAttrs, true),
+              changedAttrs = flatten(attrs || allAttrs),
 
               result = validateModel(model, allAttrs, _.keys(validatedAttrs));
 
