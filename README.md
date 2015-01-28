@@ -193,6 +193,8 @@ It is possible to bind several views to the same model. This is specially useful
 
 When the model is validated all associated views with attributes from that model will validate its related elements.
 
+It is also possible to unbind each view separately without affecting other bindings.
+
 ### Binding to view with a collection
 
 For this to work, your view must have an instance property named *collection* that holds your collection before you perform the binding, or you can pass an optional collection in the options as shown in the example above.
