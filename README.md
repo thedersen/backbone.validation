@@ -29,11 +29,11 @@ You can download the raw source from [GitHub](http://github.com/thedersen/backbo
 #### Node.js builds
 
     npm install backbone-validation
-    
+
 #### Bower builds
 
     bower install backbone-validation
- 
+
 ## Getting started
 
 It's easy to get up and running. You only need to have Backbone (including underscore.js) in your page before including the Backbone.Validation plugin. If you are using the default implementation of the callbacks, you also need to include jQuery.
@@ -923,6 +923,10 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.10.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.10.0...v0.10.1)
+
+* Removed duplicated calls of `flatten` in `validate` method
 
 #### v0.10.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.9.2...v0.10.0)
 
