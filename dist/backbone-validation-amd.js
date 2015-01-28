@@ -170,17 +170,16 @@
         }, '');
       };
   
-      // Loops through the model's attributes and validates them all.
+      // Loops through the model's attributes and validates the specified attrs.
       // Returns and object containing names of invalid attributes
       // as well as error messages.
-      var validateModel = function(model, attrs, validatedKeys) {
+      var validateModel = function(model, attrs, validatedAttrs) {
         var error,
             invalidAttrs = {},
             isValid = true,
-            computed = _.clone(attrs),
-            flattened = _.pick(flatten(attrs), validatedKeys);
+            computed = _.clone(attrs);
   
-        _.each(flattened, function(val, attr) {
+        _.each(validatedAttrs, function(val, attr) {
           error = validateAttr(model, attr, val, computed);
           if (error) {
             invalidAttrs[attr] = error;
@@ -251,9 +250,9 @@
                 opt = _.extend({}, options, setOptions),
                 validatedAttrs = getValidatedAttrs(model, getOptionsAttrs(options, view)),
                 allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
-                changedAttrs = flatten(attrs || allAttrs),
-  
-                result = validateModel(model, allAttrs, _.keys(validatedAttrs));
+                flattened = flatten(allAttrs),
+                changedAttrs = attrs ? flatten(attrs) : flattened,
+                result = validateModel(model, allAttrs, _.pick(flattened, _.keys(validatedAttrs)));
   
             model._isValid = result.isValid;
   
