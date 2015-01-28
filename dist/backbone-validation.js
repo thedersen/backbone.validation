@@ -1,4 +1,4 @@
-// Backbone.Validation v0.10.0
+// Backbone.Validation v0.9.1
 //
 // Copyright (c) 2011-2015 Thomas Pedersen
 // Distributed under MIT License
@@ -64,7 +64,13 @@ Backbone.Validation = (function(_){
 
     _.each(obj, function(val, key) {
       if(obj.hasOwnProperty(key)) {
-        if (!!val && typeof val === 'object' && val.constructor === Object) {
+        if (val && typeof val === 'object' && !(
+          val instanceof Array ||
+          val instanceof Date ||
+          val instanceof RegExp ||
+          val instanceof Backbone.Model ||
+          val instanceof Backbone.Collection)
+        ) {
           flatten(val, into, prefix + key + '.');
         }
         else {

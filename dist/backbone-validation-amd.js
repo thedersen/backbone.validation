@@ -1,4 +1,4 @@
-// Backbone.Validation v0.10.0
+// Backbone.Validation v0.9.1
 //
 // Copyright (c) 2011-2015 Thomas Pedersen
 // Distributed under MIT License
@@ -71,7 +71,13 @@
   
       _.each(obj, function(val, key) {
         if(obj.hasOwnProperty(key)) {
-          if (!!val && typeof val === 'object' && val.constructor === Object) {
+          if (val && typeof val === 'object' && !(
+            val instanceof Array ||
+            val instanceof Date ||
+            val instanceof RegExp ||
+            val instanceof Backbone.Model ||
+            val instanceof Backbone.Collection)
+          ) {
             flatten(val, into, prefix + key + '.');
           }
           else {
@@ -91,27 +97,12 @@
       // Returns an object with undefined properties for all
       // attributes on the model that has defined one or more
       // validation rules.
-      var getValidatedAttrs = function(model, attrs) {
-        attrs = attrs || _.keys(_.result(model, 'validation') || {});
-        return _.reduce(attrs, function(memo, key) {
+      var getValidatedAttrs = function(model) {
+        return _.reduce(_.keys(_.result(model, 'validation') || {}), function(memo, key) {
           memo[key] = void 0;
           return memo;
         }, {});
       };
-  
-      // Returns an array with attributes passed through options
-      var getOptionsAttrs = function(options, view) {
-        var attrs = options.attributes;
-        if (_.isFunction(attrs)) {
-          attrs = attrs(view);
-        } else if (_.isString(attrs) && (_.isFunction(defaultAttributeLoaders[attrs]))) {
-          attrs = defaultAttributeLoaders[attrs](view);
-        }
-        if (_.isArray(attrs)) {
-          return attrs;
-        }
-      };
-  
   
       // Looks on the model for validations for a specified
       // attribute. Returns an array of any validators defined,
@@ -173,12 +164,12 @@
       // Loops through the model's attributes and validates them all.
       // Returns and object containing names of invalid attributes
       // as well as error messages.
-      var validateModel = function(model, attrs, validatedKeys) {
+      var validateModel = function(model, attrs) {
         var error,
             invalidAttrs = {},
             isValid = true,
             computed = _.clone(attrs),
-            flattened = _.pick(flatten(attrs), validatedKeys);
+            flattened = flatten(attrs);
   
         _.each(flattened, function(val, attr) {
           error = validateAttr(model, attr, val, computed);
@@ -226,8 +217,6 @@
           isValid: function(option) {
             var flattened = flatten(this.attributes);
   
-           option = option || getOptionsAttrs(options, view);
-  
             if(_.isString(option)){
               return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
             }
@@ -249,11 +238,11 @@
             var model = this,
                 validateAll = !attrs,
                 opt = _.extend({}, options, setOptions),
-                validatedAttrs = getValidatedAttrs(model, getOptionsAttrs(options, view)),
+                validatedAttrs = getValidatedAttrs(model),
                 allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
                 changedAttrs = flatten(attrs || allAttrs),
   
-                result = validateModel(model, allAttrs, _.keys(validatedAttrs));
+                result = validateModel(model, allAttrs);
   
             model._isValid = result.isValid;
   
@@ -261,7 +250,7 @@
             _.each(model.associatedViews, function(view){
   
               // After validation is performed, loop through all validated and changed attributes
-              // and call the valid and invalid callbacks so the view is updated.
+              // and call the invalid callback so the view is updated.
               _.each(validatedAttrs, function(val, attr){
                   var invalid = result.invalidAttrs.hasOwnProperty(attr),
                     changed = changedAttrs.hasOwnProperty(attr);
@@ -497,23 +486,6 @@
       //      });
       label: function(attrName, model) {
         return (model.labels && model.labels[attrName]) || defaultLabelFormatters.sentenceCase(attrName, model);
-      }
-    };
-  
-    // AttributeLoaders
-  
-    var defaultAttributeLoaders = Validation.attributeLoaders = {
-      inputNames: function (view) {
-        var attrs = [];
-        if (view) {
-          view.$('form [name]').each(function () {
-            if (/^(?:input|select|textarea)$/i.test(this.nodeName) && this.name &&
-              this.type !== 'submit' && attrs.indexOf(this.name) === -1) {
-              attrs.push(this.name);
-            }
-          });
-        }
-        return attrs;
       }
     };
   
