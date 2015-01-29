@@ -187,6 +187,14 @@ For this to work, your view must have an instance property named *model* that ho
 
 When binding to a view with a model, Backbone's [validate](http://documentcloud.github.com/backbone/#Model-validate) method on the model is overridden to perform the validation. In addition, the model's [isValid](http://backbonejs.org/#Model-isValid) method is also overridden to provide some extra functionality.
 
+### Binding multiple views to same model
+
+It is possible to bind several views to the same model. This is specially useful in UI structures where forms are made with components that share models.
+
+When the model is validated all associated views with attributes from that model will validate its related elements.
+
+It is also possible to unbind each view separately without affecting other bindings.
+
 ### Binding to view with a collection
 
 For this to work, your view must have an instance property named *collection* that holds your collection before you perform the binding, or you can pass an optional collection in the options as shown in the example above.
@@ -923,6 +931,10 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.11.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.10.0...v0.11.0)
+
+* Support for binding multiple views to same model
 
 #### v0.10.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.10.0...v0.10.1)
 

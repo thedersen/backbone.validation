@@ -363,3 +363,94 @@ buster.testCase('Binding to view with no model or collection', {
       });
     }
 });
+
+buster.testCase('Binding multiple views to same model', {
+  setUp: function() {
+    var Model = Backbone.Model.extend({
+      validation: {
+        name: function(val) {
+          if (!val) {
+            return 'Name is invalid';
+          }
+        },
+        surname: function(val) {
+          if (!val) {
+            return 'Surname is invalid';
+          }
+        }
+      }
+    });
+    var View = Backbone.View.extend({
+      initialize: function(data){
+        this.attributeName = data.attributeName;
+      },
+      render: function() {
+        var html = $('<input type="text" name="' + this.attributeName + '" />');
+        this.$el.append(html);
+        Backbone.Validation.bind(this);
+      }
+    });
+    this.model = new Model();
+    this.view1 = new View({
+      attributeName: 'name',
+      model: this.model
+    });
+    this.view2 = new View({
+      attributeName: 'surname',
+      model: this.model
+    });
+    this.view1.render();
+    this.view2.render();
+    this.name = $(this.view1.$('[name~=name]'));
+    this.surname = $(this.view2.$('[name~=surname]'));
+  },
+
+  tearDown: function() {
+    this.view1.remove();
+  },
+
+  "both elements receive invalid class and data-error message when validating the model": function() {
+    this.model.validate();
+
+    assert(this.name.hasClass('invalid'));
+    assert(this.surname.hasClass('invalid'));
+    assert.equals(this.name.data('error'), 'Name is invalid');
+    assert.equals(this.surname.data('error'), 'Surname is invalid');
+  },
+
+  "each element validates separately": {
+    setUp: function() {
+      this.model.set({
+        name: 'Rafael'
+      });
+      this.model.validate();
+    },
+
+    "first element should not have invalid class": function() {
+      refute(this.name.hasClass('invalid'));
+    },
+
+    "second element should have invalid class": function() {
+      assert(this.surname.hasClass('invalid'));
+    }
+  },
+
+  "each view can be unbind separately from the same model": {
+    setUp: function() {
+      this.model.set('name', '');
+      this.view2.render();
+      Backbone.Validation.unbind(this.view2);
+      this.model.validate();
+    },
+
+    "first element is invalid and has class invalid": function() {
+      refute(this.model.isValid('name'));
+      assert(this.name.hasClass('invalid'));
+    },
+
+    "second element is invalid and has not class invalid": function() {
+      refute(this.model.isValid('surname'));
+      refute(this.surname.hasClass('invalid'));
+    }
+  }
+});
