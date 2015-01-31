@@ -74,13 +74,11 @@ Backbone.Validation = (function(_){
 
     _.each(obj, function(val, key) {
       if(obj.hasOwnProperty(key)) {
-        var shouldFlatten = !!val && typeof val === 'object' && val.constructor === Object;
-
-        if (shouldFlatten) {
+        if (!!val && typeof val === 'object' && val.constructor === Object) {
           flatten(val, into, prefix + key + '.');
         }
 
-        // Register the intermediate object
+        // Register the current level object as well
         into[prefix + key] = val;
       }
     });
