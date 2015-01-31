@@ -39,43 +39,35 @@ Backbone.Validation = (function(_){
   // eg:
   //
   //     var o = {
-  //       address: {
+  //       owner: {
+  //         name: 'Backbone',
+  //         address: {
+  //           street: 'Street',
+  //           zip: 1234
+  //         }
+  //       }
+  //     };
+  //
+  // becomes:
+  //
+  //     var o = {
+  //       'owner': {
+  //         name: 'Backbone',
+  //         address: {
+  //           street: 'Street',
+  //           zip: 1234
+  //         }
+  //       },
+  //       'owner.name': 'Backbone',
+  //       'owner.address': {
   //         street: 'Street',
   //         zip: 1234
-  //       }
-  //     };
-  //
-  // becomes:
-  //
-  //     var o = {
-  //       'address.street': 'Street',
-  //       'address.zip': 1234
-  //     };
-  // If preserveLevels is true, will also preserve intermediate levels of
-  // objects to allow for partial nesting of validators.
-  // eg:
-  //
-  //     var o = {
-  //       multiLevelObject: {
-  //         firstLevel: {
-  //           key: 'value'
-  //         }
-  //       }
-  //     };
-  //
-  // becomes:
-  //
-  //     var o = {
-  //       'multiLevelObject': {
-  //         firstLevel: {
-  //           key: 'value'
-  //         }
   //       },
-  //       'multiLevelObject.firstLevel': {
-  //         key: 'value'
-  //       },
-  //       'multiLevelObject.firstLevel.key': 'value'
+  //       'owner.address.street': 'Street',
+  //       'owner.address.zip': 1234
   //     };
+  // This may seem redundant, but it allows for maximum flexibility
+  // in validation rules.
   var flatten = function (obj, into, prefix) {
     into = into || {};
     prefix = prefix || '';
