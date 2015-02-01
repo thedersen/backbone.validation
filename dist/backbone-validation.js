@@ -219,11 +219,6 @@ Backbone.Validation = (function(_){
           var flattened = flatten(this.attributes);
           var attrs, error, invalidAttrs;
 
-
-          if(option === true) {
-            this.validate();
-          }
-
           option = option || getOptionsAttrs(options, view);
 
           if(_.isString(option)){
@@ -245,12 +240,15 @@ Backbone.Validation = (function(_){
                 }
               }, this);
             }, this);
-            if (!invalidAttrs) return true;
-            this.trigger('invalid', this, invalidAttrs, {validationError: invalidAttrs});
-            return false;
           }
 
-          return this.validation ? this._isValid : true;
+          if(option === true) {
+            invalidAttrs = this.validate();
+          }
+          if (invalidAttrs) {
+            this.trigger('invalid', this, invalidAttrs, {validationError: invalidAttrs});
+          }
+          return attrs ? !invalidAttrs : this.validation ? this._isValid : true;
         },
 
         // This is called by Backbone when it needs to perform validation.
