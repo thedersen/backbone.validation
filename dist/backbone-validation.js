@@ -216,22 +216,39 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes);
+          var flattened, attrs, error, invalidAttrs;
 
-         option = option || getOptionsAttrs(options, view);
+          option = option || getOptionsAttrs(options, view);
 
           if(_.isString(option)){
-            return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
+            attrs = [option];
+          } else if(_.isArray(option)) {
+            attrs = option;
           }
-          if(_.isArray(option)){
-            return _.reduce(option, function(memo, attr) {
-              return memo && !validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
-            }, true, this);
+          if (attrs) {
+            flattened = flatten(this.attributes);
+            //Loop through all associated views
+            _.each(this.associatedViews, function(view) {
+              _.each(attrs, function (attr) {
+                error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+                if (error) {
+                  options.invalid(view, attr, error, options.selector);
+                  invalidAttrs = invalidAttrs || {};
+                  invalidAttrs[attr] = error;
+                } else {
+                  options.valid(view, attr, options.selector);
+                }
+              }, this);
+            }, this);
           }
+
           if(option === true) {
-            this.validate();
+            invalidAttrs = this.validate();
           }
-          return this.validation ? this._isValid : true;
+          if (invalidAttrs) {
+            this.trigger('invalid', this, invalidAttrs, {validationError: invalidAttrs});
+          }
+          return attrs ? !invalidAttrs : this.validation ? this._isValid : true;
         },
 
         // This is called by Backbone when it needs to perform validation.
