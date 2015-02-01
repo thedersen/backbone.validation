@@ -212,11 +212,6 @@ Backbone.Validation = (function(_){
           var flattened = flatten(this.attributes);
           var attrs, error, invalidAttrs;
 
-
-          if(option === true) {
-            this.validate();
-          }
-
           option = option || getOptionsAttrs(options, view);
 
           if(_.isString(option)){
@@ -243,6 +238,12 @@ Backbone.Validation = (function(_){
             return false;
           }
 
+          if(option === true) {
+            invalidAttrs = this.validate();
+          }
+          if (invalidAttrs) {
+            this.trigger('invalid', this, invalidAttrs, {validationError: invalidAttrs});
+          }
           return this.validation ? this._isValid : true;
         },
 
