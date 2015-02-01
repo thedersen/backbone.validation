@@ -216,8 +216,7 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes);
-          var attrs, error, invalidAttrs;
+          var flattened, attrs, error, invalidAttrs;
 
           option = option || getOptionsAttrs(options, view);
 
@@ -227,6 +226,7 @@ Backbone.Validation = (function(_){
             attrs = option;
           }
           if (attrs) {
+            flattened = flatten(this.attributes);
             //Loop through all associated views
             _.each(this.associatedViews, function(view) {
               _.each(attrs, function (attr) {
