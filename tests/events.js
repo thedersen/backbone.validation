@@ -70,7 +70,7 @@ buster.testCase("Backbone.Validation events", {
     },
 
     "when one invalid value is set": {
-        "validated event is triggered with false, model, and name of attributes with error": function(done) {
+        "validated event is triggered with false, model and an object with the names of the attributes with error": function(done) {
             this.model.bind('validated', function(valid, model, attr){
                 refute(valid);
                 assert.same(this.model, model);
@@ -81,8 +81,18 @@ buster.testCase("Backbone.Validation events", {
             this.model.set({age:0}, {validate: true});
         },
 
-        "validated:invalid event is triggered with model and name of attributes with error": function(done) {
+        "validated:invalid event is triggered with model and an object with the names of the attributes with error": function(done) {
             this.model.bind('validated:invalid', function(model, attr){
+                assert.same(this.model, model);
+                assert.equals({age: 'age', name: 'name'}, attr);
+                done();
+            }, this);
+
+            this.model.set({age:0}, {validate: true});
+        },
+
+        "invalid event is triggered with model and an object with the names of the attributes with error": function(done) {
+            this.model.bind('invalid', function(model, attr){
                 assert.same(this.model, model);
                 assert.equals({age: 'age', name: 'name'}, attr);
                 done();
@@ -93,7 +103,7 @@ buster.testCase("Backbone.Validation events", {
     },
 
     "when one valid value is set": {
-        "validated event is triggered with false, model, and an array with the names of the attributes with error": function(done) {
+        "validated event is triggered with false, model and an object with the names of the attributes with error": function(done) {
             this.model.bind('validated', function(valid, model, attrs){
                 refute(valid);
                 assert.same(this.model, model);
@@ -106,7 +116,7 @@ buster.testCase("Backbone.Validation events", {
             }, {validate: true});
         },
 
-        "validated:invalid event is triggered with model and an array with the names of the attributes with error": function(done) {
+        "validated:invalid event is triggered with model and an object with the names of the attributes with error": function(done) {
             this.model.bind('validated:invalid', function(model, attrs){
                 assert.same(this.model, model);
                 assert.equals({name: 'name'}, attrs);
