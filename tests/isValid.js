@@ -45,6 +45,13 @@ buster.testCase("isValid", {
 			assert(this.model.isValid(true) === false);
 		},
 
+    "invalid is triggered when model is invalid": function(done) {
+      this.model.bind('invalid', function(model, attrs) {
+        done();
+      });
+      refute(this.model.isValid(true));
+    },
+
 		"and passing name of attribute": {
 			setUp: function() {
 				this.model.validation = {
