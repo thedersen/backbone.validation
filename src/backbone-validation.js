@@ -210,20 +210,39 @@ Backbone.Validation = (function(_){
         // of the model.
         isValid: function(option) {
           var flattened = flatten(this.attributes);
+          var attrs, error, invalidAttrs;
 
-         option = option || getOptionsAttrs(options, view);
 
-          if(_.isString(option)){
-            return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
-          }
-          if(_.isArray(option)){
-            return _.reduce(option, function(memo, attr) {
-              return memo && !validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
-            }, true, this);
-          }
           if(option === true) {
             this.validate();
           }
+
+          option = option || getOptionsAttrs(options, view);
+
+          if(_.isString(option)){
+            attrs = [option];
+          } else if(_.isArray(option)) {
+            attrs = option;
+          }
+          if (attrs) {
+            //Loop through all associated views
+            _.each(this.associatedViews, function(view) {
+              _.each(attrs, function (attr) {
+                error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+                if (error) {
+                  options.invalid(view, attr, error, options.selector);
+                  invalidAttrs = invalidAttrs || {};
+                  invalidAttrs[attr] = error;
+                } else {
+                  options.valid(view, attr, options.selector);
+                }
+              }, this);
+            }, this);
+            if (!invalidAttrs) return true;
+            this.trigger('invalid', this, invalidAttrs, {validationError: invalidAttrs});
+            return false;
+          }
+
           return this.validation ? this._isValid : true;
         },
 
