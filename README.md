@@ -1,4 +1,10 @@
-# Backbone.Validation [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/thedersen/backbone.validation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+# Backbone.Validation
+
+![Version](https://img.shields.io/npm/v/backbone-validation.svg?style=flat)
+![Downlodas](https://img.shields.io/npm/dm/backbone-validation.svg?style=flat)
+![Dependencies](https://david-dm.org/thedersen/backbone.validation.svg?style=flat)
+![License](http://img.shields.io/npm/l/backbone.validation.svg?style=flat)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/thedersen/backbone.validation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
 
