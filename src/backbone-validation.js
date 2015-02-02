@@ -39,18 +39,35 @@ Backbone.Validation = (function(_){
   // eg:
   //
   //     var o = {
-  //       address: {
-  //         street: 'Street',
-  //         zip: 1234
+  //       owner: {
+  //         name: 'Backbone',
+  //         address: {
+  //           street: 'Street',
+  //           zip: 1234
+  //         }
   //       }
   //     };
   //
   // becomes:
   //
   //     var o = {
-  //       'address.street': 'Street',
-  //       'address.zip': 1234
+  //       'owner': {
+  //         name: 'Backbone',
+  //         address: {
+  //           street: 'Street',
+  //           zip: 1234
+  //         }
+  //       },
+  //       'owner.name': 'Backbone',
+  //       'owner.address': {
+  //         street: 'Street',
+  //         zip: 1234
+  //       },
+  //       'owner.address.street': 'Street',
+  //       'owner.address.zip': 1234
   //     };
+  // This may seem redundant, but it allows for maximum flexibility
+  // in validation rules.
   var flatten = function (obj, into, prefix) {
     into = into || {};
     prefix = prefix || '';
@@ -60,9 +77,9 @@ Backbone.Validation = (function(_){
         if (!!val && typeof val === 'object' && val.constructor === Object) {
           flatten(val, into, prefix + key + '.');
         }
-        else {
-          into[prefix + key] = val;
-        }
+
+        // Register the current level object as well
+        into[prefix + key] = val;
       }
     });
 
