@@ -932,6 +932,10 @@ Basic behaviour:
 
 ## Release notes
 
+#### v0.11.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.0...v0.11.1)
+
+* Support intermediate nested levels
+
 #### v0.11.0 [commits](https://github.com/thedersen/backbone.validation/compare/v0.10.0...v0.11.0)
 
 * Support for binding multiple views to same model
