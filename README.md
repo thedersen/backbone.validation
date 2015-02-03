@@ -3,7 +3,7 @@
 ![Version](https://img.shields.io/npm/v/backbone-validation.svg?style=flat)
 ![Downlodas](https://img.shields.io/npm/dm/backbone-validation.svg?style=flat)
 ![Dependencies](https://david-dm.org/thedersen/backbone.validation.svg?style=flat)
-![License](http://img.shields.io/npm/l/backbone.validation.svg?style=flat)
+![license](http://img.shields.io/npm/l/backbone.validation.svg?style=flat)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/thedersen/backbone.validation?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A validation plugin for [Backbone.js](http://documentcloud.github.com/backbone) that validates both your model as well as form input.
@@ -937,6 +937,10 @@ Basic behaviour:
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.11.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.1...v0.11.2)
+
+* Triggers 'invalid' event when calling `isValid` and call `valid`/`invalid` callbacks when passing array or name to `isValid`.
 
 #### v0.11.1 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.0...v0.11.1)
 
