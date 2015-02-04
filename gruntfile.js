@@ -61,7 +61,8 @@ module.exports = function(grunt) {
       app: {
         src: ['dist/backbone-validation.js'],
         options: {
-          template: 'docco.jst',
+          template: 'docco/docco.jst',
+          css: 'docco/docco.css',
           output: 'docs/'
         }
       }
