@@ -938,6 +938,10 @@ Basic behaviour:
 
 ## Release notes
 
+#### v0.11.3 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.2...v0.11.3)
+
+* Upgrading version in source file. Fixes #274.
+
 #### v0.11.2 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.1...v0.11.2)
 
 * Triggers 'invalid' event when calling `isValid` and call `valid`/`invalid` callbacks when passing array or name to `isValid`.
