@@ -922,7 +922,7 @@ The default implementation of the callbacks are a bit naïve, since it is very d
 
 My recommendation is to override the callbacks and implement your own strategy for displaying the error messages.
 
-Please refer to [this section](/#configuration/callbacks) for more details.
+Please refer to [this section](#callbacks) for more details.
 
 ### How can I use it with Twitter Bootstrap?
 
