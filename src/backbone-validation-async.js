@@ -1,4 +1,5 @@
-Backbone.Validation = (function(_) {
+Backbone.Validation = Backbone.Validation || {};
+Backbone.Validation.Async = (function(_) {
     'use strict';
 
     // Default options
@@ -182,10 +183,11 @@ Backbone.Validation = (function(_) {
                     try {
                         var ctx = _.extend({}, formatFunctions, defaultValidators),
                             error = validator.fn.call(ctx, value, attr, validator.val, model, computed, deferred);
+
                         // Resolve or reject promise directly if there is no async validation
                         if (!validator.async) {
                             if (error) {
-                                deferred.reject(error);
+                                deferred.reject(_.result(validator, 'msg') || error);
                             }
                             else {
                                 deferred.resolve();
@@ -210,7 +212,7 @@ Backbone.Validation = (function(_) {
             var invalidAttrs = {},
                 isValid = true,
                 computed = _.clone(attrs),
-                pairs = _.pairs(flatten(attrs)),
+                pairs = _.pairs(flatten(validatedAttrs)),
                 masterDeferred = $.Deferred();
 
             var invokeValidation = function(pair) {
@@ -250,34 +252,107 @@ Backbone.Validation = (function(_) {
                 validateAttr(result, model, attr, value, computed);
             };
 
-            invokeValidation(pairs.shift());
+            if (pairs.length) {
+                invokeValidation(pairs.shift());
+            }
+            else {
+                masterDeferred.resolve({
+                    invalidAttrs: invalidAttrs,
+                    isValid:      isValid
+                });
+            }
 
             return (masterDeferred.promise());
         };
-
+        var backboneModelSet = Backbone.Model.prototype.set;
         // Contains the methods that are mixed in on the model when binding
         var mixin = function(view, options) {
             return {
 
-                // Check whether or not a value, or a hash of values
-                // passes validation without updating the model
-                preValidate: function(attr, value) {
-                    var self = this,
-                        result = {},
-                        error;
+                /**
+                 * Override default set function 
+                 * to ensure invalid values are not set on model
+                 */
+                set: function(key, val, options) {
+                    var self, attrs;
+                    if (key == null) return this;
 
-                    if (_.isObject(attr)) {
-                        _.each(attr, function(value, key) {
-                            error = self.preValidate(key, value);
-                            if (error) {
-                                result[key] = error;
-                            }
+                    // Handle both `"key", value` and `{key: value}` -style arguments.
+                    if (typeof key === 'object') {
+                        attrs = key;
+                        options = val;
+                    } else {
+                        (attrs = {})[key] = val;
+                    }
+
+                    options || (options = {});
+                    self = this;
+                    // Run validation if requested
+                    if (options.validate) {
+                        attrs = _.extend({}, this.attributes, attrs);
+                        this.validate(attrs, options, function valid() {
+                            // Remove validation flag to just set properties on model
+                            delete options.validate;
+                            backboneModelSet.call(self, key, val, options);
                         });
-
-                        return _.isEmpty(result) ? undefined : result;
                     }
                     else {
-                        return validateAttr($.Deferred(), this, attr, value, _.extend({}, this.attributes));
+                        // No validation is requested, just super call set method
+                        return backboneModelSet.call(self, key, val, options);
+                    }
+                },
+
+                // Check whether or not a value, or a hash of values
+                // passes validation without updating the model
+                preValidate: function(attr, value, valid, invalid) {
+                    var self = this,
+                        result = {},
+                        error,
+                        masterDeferred = $.Deferred();
+                    masterDeferred.promise().then(valid || Function.prototype, invalid || Function.prototype);
+
+                    if (_.isObject(attr)) {
+                        // Convert object into list of key value pairs
+                        var attrs = _.pairs(attr);
+                        var errors = {};  
+                        var invokePreValidation = function(pair) {
+                            var deferred = $.Deferred(),
+                                key = pair[0],
+                                value = pair[1];
+
+                            deferred.promise().then(function valid() {
+                                var nextAttr = attrs.shift();
+
+                                if (nextAttr) {
+                                    invokePreValidation(nextAttr);
+                                }
+                                else {
+                                    if (_.keys(errors).length > 0) {
+                                        masterDeferred.reject(errors);
+                                    }
+                                    else {
+                                        masterDeferred.resolve();
+                                    }
+                                }
+                            }, function invalid(error) {
+                                var nextAttr = attrs.unshift();
+                                errors[key] = error;
+
+                                if (nextAttr) {
+                                    invokePreValidation(nextAttr);
+                                }
+                                else {
+                                    masterDeferred.reject(errors);
+                                }
+                            });
+
+                            validateAttr(deferred, self, key, value, _.extend({}, self.attributes))
+                        }
+
+                        invokePreValidation(attrs.shift());
+                    }
+                    else {
+                        validateAttr(masterDeferred, this, attr, value, _.extend({}, this.attributes));
                     }
                 },
 
@@ -285,11 +360,12 @@ Backbone.Validation = (function(_) {
                 // entire model is valid. Passing true will force a validation
                 // of the model.
                 isValid: function(option, success, failure) {
-                    var model, flattened, attrs, computed, invalidAttrs, masterDeferred;
+                    var model, flattened, attrs, computed, invalidAttrs, masterDeferred, promise;
 
                     option = option || getOptionsAttrs(options, view);
                     masterDeferred = $.Deferred();
-                    masterDeferred.promise().then(success || Function.prototype, failure || Function.prototype);
+                    promise = masterDeferred.promise();
+                    promise.then(success || Function.prototype, failure || Function.prototype);
                     computed = _.extend({}, this.attributes);
                     model = this;
 
@@ -307,6 +383,7 @@ Backbone.Validation = (function(_) {
                             result.promise().then(
                                 function() {
                                     options.valid(view, attr, options.selector);
+                                    invalidAttrs = invalidAttrs || {};
                                     // Get next attribute pair
                                     var nextAttr = attrs.shift();
                                     if (nextAttr) {
@@ -315,7 +392,8 @@ Backbone.Validation = (function(_) {
                                     // We have no more attributes to validate
                                     else {
                                         if (_.keys(invalidAttrs).length) {
-                                            masterDeferred.reject();
+                                            masterDeferred.reject(invalidAttrs);
+                                            model.trigger('invalid', model, invalidAttrs, {validationError: invalidAttrs});
                                         }
                                         else {
                                             masterDeferred.resolve();
@@ -333,35 +411,50 @@ Backbone.Validation = (function(_) {
                                     }
                                     // We have no more attributes to validate
                                     else {
-                                        masterDeferred.reject();
+                                        masterDeferred.reject(invalidAttrs);
+                                        model.trigger('invalid', model, invalidAttrs, {validationError: invalidAttrs});
                                     }
                                 }
                             );
 
-                            validateAttr(result, model, attr, value, computed)
-                        };
+                            validateAttr(result, model, attr, value, computed);
+                        };    
                         //Loop through all associated views
                         _.each(this.associatedViews, function(view) {
                             invokeValidation(view, attrs.shift());
                         }, this);
                     }
-
-                    if (option === true) {
-                        this.validate().then(function() {
+                    // Validate the whole model
+                    else if (option === true) {
+                        this.validate(null, null, function valid() {
                             masterDeferred.resolve();
-                        }, function(result) {
-                            masterDeferred.reject(result.invalidAttrs);
-                            this.trigger('invalid', this, invalidAttrs, {validationError: invalidAttrs});
+                        }, function invalid(invalidAttrs) {
+                            masterDeferred.reject(invalidAttrs);
+                            model.trigger('invalid', model, invalidAttrs, {validationError: invalidAttrs});
                         });
                     }
+                    // Check if we have validations specified
+                    else if (this.validation) {
+                        // Resolve if previous validation was done
+                        if (this._isValid) {
+                            masterDeferred.resolve();
+                        }
+                        else if (this._isValid === false) {
+                            masterDeferred.reject();
+                        }
+                    }
+                    // Noting to validate
+                    else {
+                        masterDeferred.resolve();
+                    }
 
-                    return (masterDeferred.promise());
+                    return promise;
                 },
 
                 // This is called by Backbone when it needs to perform validation.
                 // You can call it manually without any parameters to validate the
                 // entire model.
-                validate: function(attrs, setOptions) {
+                validate: function(attrs, setOptions, valid, invalid) {
                     var model = this,
                         validateAll = !attrs,
                         opt = _.extend({}, options, setOptions),
@@ -371,6 +464,7 @@ Backbone.Validation = (function(_) {
                         changedAttrs = attrs ? flatten(attrs) : flattened,
                         picked = _.pick(flattened, _.keys(validatedAttrs)),
                         deferred = $.Deferred();
+                        deferred.promise().then(valid || Function.prototype, invalid || Function.prototype);
 
                     validateModel(model, allAttrs, picked).then(function(result) {
 
@@ -410,18 +504,13 @@ Backbone.Validation = (function(_) {
                         // Then we do not return anything and fools Backbone to believe the validation was
                         // a success. That way Backbone will update the model regardless.
                         if (!opt.forceUpdate && _.intersection(_.keys(result.invalidAttrs), _.keys(changedAttrs)).length > 0) {
-                            return result.invalidAttrs;
-                        }
-
-                        if (model._isValid) {
-                            deferred.resolve();
+                            deferred.reject(result.invalidAttrs);
+                            model.trigger('invalid', model, result.invalidAttrs, {validationError: result.invalidAttrs});
                         }
                         else {
-                            deferred.reject(result);
+                            deferred.resolve();
                         }
                     });
-
-                    return deferred.promise();
                 }
             };
         };
@@ -463,7 +552,7 @@ Backbone.Validation = (function(_) {
             unbindModel(model);
         };
 
-        // Returns the public methods on Backbone.Validation
+        // Returns the public methods on Backbone.Validation.Async
         return {
 
             // Current version of the library
