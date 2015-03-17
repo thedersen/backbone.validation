@@ -933,7 +933,7 @@ https://gist.github.com/2909552
 Basic behaviour:
 
 * The control-group gets an error class so that inputs get the red border
-* By default error messages get rendered as &lt;p class="help-block"&gt; (which has red text because of the error class)
+* By default error messages get rendered as `<p class="help-block">` (which has red text because of the error class)
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
