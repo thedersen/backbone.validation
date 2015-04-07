@@ -301,7 +301,7 @@ The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`.
 
 The default implementation of `invalid` tries to look up an element within the view with an name attribute equal to the name of the attribute that is validated. If it finds one, an `invalid` class is added to the element as well as a `data-error` attribute with the error message. The `valid` method removes these if they exists.
 
-The implementation is a bit naïve, so I recomend that you override it with your own implementation
+The implementation is a bit naïve, so I recommend that you override it with your own implementation
 
 globally:
 
