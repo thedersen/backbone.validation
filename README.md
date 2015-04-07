@@ -257,7 +257,7 @@ If you don't pass an argument, the properties defined by the `attributes` bind o
 var isValid = model.isValid();
 ```
 
-If you pass `true` as an argument, this will force an validation before the result is returned:
+If you pass `true` as an argument, this will force a validation before the result is returned:
 
 ```js
 var isValid = model.isValid(true);
