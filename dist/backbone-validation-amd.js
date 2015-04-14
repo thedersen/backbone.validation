@@ -88,7 +88,12 @@
   
       _.each(obj, function(val, key) {
         if(obj.hasOwnProperty(key)) {
-          if (!!val && typeof val === 'object' && val.constructor === Object) {
+          if (!!val && _.isArray(val)) {
+            _.forEach(val, function(v, k) {
+              flatten(v, into, prefix + key + '.' + k + '.');
+              into[prefix + key + '.' + k] = v;
+            });
+          } else if (!!val && typeof val === 'object' && val.constructor === Object) {
             flatten(val, into, prefix + key + '.');
           }
   
