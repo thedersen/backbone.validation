@@ -938,6 +938,14 @@ Basic behaviour:
 
 ## Release notes
 
+#### v0.11.5 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.4...v0.11.5)
+
+* Check for no associatedViews in unbindModel().
+
+#### v0.11.4 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.3...v0.11.4)
+
+* Support arrays in the attributes.
+
 #### v0.11.3 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.2...v0.11.3)
 
 * Upgrading version in source file. Fixes #274.
