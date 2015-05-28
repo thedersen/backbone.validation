@@ -513,21 +513,28 @@ Backbone.Validation = (function(_){
       }).replace(/_/g, ' ');
     },
 
-    // Looks for a label configured on the model and returns it
+    // Looks for a label configured on the model and returns it.
+    // If the label is a function, it will be executed.
     //
     //      var Model = Backbone.Model.extend({
     //        validation: {
     //          someAttribute: {
+    //            required: true
+    //          },
+    //          otherAttribute: {
     //            required: true
     //          }
     //        },
     //
     //        labels: {
     //          someAttribute: 'Custom label'
+    //          otherAttribute: function() {
+    //            return 'Dynamic custom label';
+    //          }
     //        }
     //      });
     label: function(attrName, model) {
-      return (model.labels && model.labels[attrName]) || defaultLabelFormatters.sentenceCase(attrName, model);
+      return (model.labels && _.result(model.labels, attrName)) || defaultLabelFormatters.sentenceCase(attrName, model);
     }
   };
 

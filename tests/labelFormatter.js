@@ -11,11 +11,17 @@ buster.testCase('Label formatters', {
           },
           some_other_attribute: {
             required: true
+          },
+          otherAttribute: {
+            required: true
           }
         },
 
         labels: {
-          someAttribute: 'Custom label'
+          someAttribute: 'Custom label',
+          otherAttribute: function() {
+            return 'Dynamic custom label';
+          }
         }
       });
 
@@ -51,6 +57,10 @@ buster.testCase('Label formatters', {
 
       "looks up a label on the model": function(){
         assert.equals('Custom label is required', this.model.preValidate('someAttribute', ''));
+      },
+
+      "looks up a dynamic label on the model": function(){
+        assert.equals('Dynamic custom label is required', this.model.preValidate('otherAttribute', ''));
       },
 
       "returns sentence cased name when label is not found": function(){
