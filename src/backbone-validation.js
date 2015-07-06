@@ -74,7 +74,12 @@ Backbone.Validation = (function(_){
 
     _.each(obj, function(val, key) {
       if(obj.hasOwnProperty(key)) {
-        if (!!val && typeof val === 'object' && val.constructor === Object) {
+        if (!!val && _.isArray(val)) {
+          _.forEach(val, function(v, k) {
+            flatten(v, into, prefix + key + '.' + k + '.');
+            into[prefix + key + '.' + k] = v;
+          });
+        } else if (!!val && typeof val === 'object' && val.constructor === Object) {
           flatten(val, into, prefix + key + '.');
         }
 
@@ -325,7 +330,7 @@ Backbone.Validation = (function(_){
     // Removes view from associated views of the model or the methods
     // added to a model if no view or single view provided
     var unbindModel = function(model, view) {
-      if (view && model.associatedViews.length > 1){
+      if (view && model.associatedViews && model.associatedViews.length > 1){
         model.associatedViews = _.without(model.associatedViews, view);
       } else {
         delete model.validate;

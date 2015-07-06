@@ -52,6 +52,13 @@ buster.testCase("Backbone.Validation", {
         }
     },
 
+    "when unbinding view which was not bound": {
+        "nothing happens": function(){
+            Backbone.Validation.unbind(new Backbone.View({model:new Backbone.Model()}));
+            assert(true);
+        }
+    },
+
     "when bound to model with two validated attributes": {
         setUp: function() {
             Backbone.Validation.bind(this.view);
