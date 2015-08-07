@@ -21,7 +21,8 @@ Backbone.Validation = (function(_){
     // Uses the configured label formatter to format the attribute name
     // to make it more readable for the user
     formatLabel: function(attrName, model) {
-      return defaultLabelFormatters[defaultOptions.labelFormatter](attrName, model);
+      var options = this.options || defaultOptions;
+      return defaultLabelFormatters[options.labelFormatter](attrName, model);
     },
 
     // Replaces nummeric placeholders like {0} in a string with arguments
@@ -158,15 +159,17 @@ Backbone.Validation = (function(_){
     // for that attribute. If one or more errors are found,
     // the first error message is returned.
     // If the attribute is valid, an empty string is returned.
-    var validateAttr = function(model, attr, value, computed) {
+    var validateAttr = function(model, attr, value, computed, options) {
+      var ctx = _.extend({ options: options }, formatFunctions, defaultValidators);
+
       // Reduces the array of validators to an error message by
       // applying all the validators and returning the first error
       // message, if any.
+
       return _.reduce(getValidators(model, attr), function(memo, validator){
         // Pass the format functions plus the default
         // validators as the context to the validator
-        var ctx = _.extend({}, formatFunctions, defaultValidators),
-            result = validator.fn.call(ctx, value, attr, validator.val, model, computed);
+        var result = validator.fn.call(ctx, value, attr, validator.val, model, computed);
 
         if(result === false || memo === false) {
           return false;
@@ -181,14 +184,14 @@ Backbone.Validation = (function(_){
     // Loops through the model's attributes and validates the specified attrs.
     // Returns and object containing names of invalid attributes
     // as well as error messages.
-    var validateModel = function(model, attrs, validatedAttrs) {
+    var validateModel = function(model, attrs, validatedAttrs, options) {
       var error,
           invalidAttrs = {},
           isValid = true,
           computed = _.clone(attrs);
 
       _.each(validatedAttrs, function(val, attr) {
-        error = validateAttr(model, attr, val, computed);
+        error = validateAttr(model, attr, val, computed, options);
         if (error) {
           invalidAttrs[attr] = error;
           isValid = false;
@@ -223,7 +226,7 @@ Backbone.Validation = (function(_){
             return _.isEmpty(result) ? undefined : result;
           }
           else {
-            return validateAttr(this, attr, value, _.extend({}, this.attributes));
+            return validateAttr(this, attr, value, _.extend({}, this.attributes), options);
           }
         },
 
@@ -245,7 +248,7 @@ Backbone.Validation = (function(_){
             //Loop through all associated views
             _.each(this.associatedViews, function(view) {
               _.each(attrs, function (attr) {
-                error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+                error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes), options);
                 if (error) {
                   options.invalid(view, attr, error, options.selector);
                   invalidAttrs = invalidAttrs || {};
@@ -277,7 +280,7 @@ Backbone.Validation = (function(_){
               allAttrs = _.extend({}, validatedAttrs, model.attributes, attrs),
               flattened = flatten(allAttrs),
               changedAttrs = attrs ? flatten(attrs) : flattened,
-              result = validateModel(model, allAttrs, _.pick(flattened, _.keys(validatedAttrs)));
+              result = validateModel(model, allAttrs, _.pick(flattened, _.keys(validatedAttrs)), opt);
 
           model._isValid = result.isValid;
 
@@ -692,10 +695,33 @@ Backbone.Validation = (function(_){
     };
   }());
 
-  // Set the correct context for all validators
-  // when used from within a method validator
-  _.each(defaultValidators, function(validator, key){
-    defaultValidators[key] = _.bind(defaultValidators[key], _.extend({}, formatFunctions, defaultValidators));
+  // Workaround to set a sensible context around validator functions when
+  // invoked directly. We can't use _.bind because this prevents options from
+  // being passed along (i.e., because using validator.fn.call has no real
+  // effect if an inner _.bind has a different calling context).
+  // Instead we will wrap each function to see if `this` is the
+  // Backbone.Validator.validators object; if so, we will create a new context
+  // and use that instead. Otherwise we will happily use the existing `this`.
+  // TODO: Consider changing how default validators are exposed/called. Either
+  // `.call(this)` should be required, or we should provide an alternative way
+  // to access the default validators.
+  // (E.g., `this.callValidator("length", ...)`) As is, the custom and default
+  // validator handling is inconsistent and will continue to be problematic.
+  // FIXME: Issue #282 is not yet fixed for validators which call default
+  // validators, because the example in the README does not use `.call(this)`
+  // and so the other validator is called on `defaultValidators`. Workaround is
+  // to use `.call(this)` when invoking other validator. Otherwise, options
+  // will not be passed in to format() and formatLabel() functions and it will
+  // fall back to defaultOptions. This is no worse than the state of the code
+  // before this change.
+  _.each(defaultValidators, function (validatorFn, validatorName, obj) {
+    obj[validatorName] = _.wrap(validatorFn, function (wrappedFn) {
+      var ctx = this;
+      if (ctx === defaultValidators) {
+        ctx = _.extend({}, formatFunctions, defaultValidators);
+      }
+      return wrappedFn.apply(ctx, _.rest(arguments));
+    });
   });
 
   return Validation;

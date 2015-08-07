@@ -454,3 +454,34 @@ buster.testCase('Binding multiple views to same model', {
     }
   }
 });
+
+buster.testCase('Binding view to model with custom formatter', {
+    setUp :function () {
+        var View = Backbone.View.extend({
+        });
+        var Model = Backbone.Model.extend({
+            validation: {
+                Email: {
+                    pattern: 'email'
+                }
+            },
+            labels: {
+                Email: 'E-mail'
+            }
+        });
+        this.model = new Model();
+        this.view = new View({
+            model: this.model
+        });
+    },
+
+    "validation error should use correct labelFormatter": function () {
+        Backbone.Validation.bind(this.view, {
+            labelFormatter: 'label',
+            invalid: function (view, attr, error) {
+                assert.equals(error.split(/\s+/)[0], "E-mail");
+            }
+        });
+        this.model.set("Email", "notAnEmail", { validate: true });
+    }
+});
