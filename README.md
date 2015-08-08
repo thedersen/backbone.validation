@@ -406,11 +406,17 @@ var Model = Backbone.Model.extend({
   validation: {
     someAttribute: {
       required: true
+    },
+    otherAttribute: {
+      required: true
     }
   },
 
   labels: {
-    someAttribute: 'Custom label'
+    someAttribute: 'Custom label',
+    otherAttribute: function() {
+      return 'Dynamic custom label';
+    }
   }
 });
 ```
