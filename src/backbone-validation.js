@@ -587,7 +587,7 @@ Backbone.Validation = (function(_){
           return false; // overrides all other validators
         }
         if (isRequired && !hasValue(value)) {
-          return this.format(defaultMessages.required, this.formatLabel(attr, model));
+          return this.format(_.result(defaultMessages, 'required'), this.formatLabel(attr, model));
         }
       },
 
@@ -596,7 +596,7 @@ Backbone.Validation = (function(_){
       // `true` or 'true' are valid
       acceptance: function(value, attr, accept, model) {
         if(value !== 'true' && (!_.isBoolean(value) || value === false)) {
-          return this.format(defaultMessages.acceptance, this.formatLabel(attr, model));
+          return this.format(_.result(defaultMessages, 'acceptance'), this.formatLabel(attr, model));
         }
       },
 
@@ -605,7 +605,7 @@ Backbone.Validation = (function(_){
       // the min value specified
       min: function(value, attr, minValue, model) {
         if (!isNumber(value) || value < minValue) {
-          return this.format(defaultMessages.min, this.formatLabel(attr, model), minValue);
+          return this.format(_.result(defaultMessages, 'min'), this.formatLabel(attr, model), minValue);
         }
       },
 
@@ -614,7 +614,7 @@ Backbone.Validation = (function(_){
       // the max value specified
       max: function(value, attr, maxValue, model) {
         if (!isNumber(value) || value > maxValue) {
-          return this.format(defaultMessages.max, this.formatLabel(attr, model), maxValue);
+          return this.format(_.result(defaultMessages, 'max'), this.formatLabel(attr, model), maxValue);
         }
       },
 
@@ -623,7 +623,7 @@ Backbone.Validation = (function(_){
       // the two numbers specified
       range: function(value, attr, range, model) {
         if(!isNumber(value) || value < range[0] || value > range[1]) {
-          return this.format(defaultMessages.range, this.formatLabel(attr, model), range[0], range[1]);
+          return this.format(_.result(defaultMessages, 'range'), this.formatLabel(attr, model), range[0], range[1]);
         }
       },
 
@@ -632,7 +632,7 @@ Backbone.Validation = (function(_){
       // the length value specified
       length: function(value, attr, length, model) {
         if (!_.isString(value) || value.length !== length) {
-          return this.format(defaultMessages.length, this.formatLabel(attr, model), length);
+          return this.format(_.result(defaultMessages, 'length'), this.formatLabel(attr, model), length);
         }
       },
 
@@ -641,7 +641,7 @@ Backbone.Validation = (function(_){
       // the min length value specified
       minLength: function(value, attr, minLength, model) {
         if (!_.isString(value) || value.length < minLength) {
-          return this.format(defaultMessages.minLength, this.formatLabel(attr, model), minLength);
+          return this.format(_.result(defaultMessages, 'minLength'), this.formatLabel(attr, model), minLength);
         }
       },
 
@@ -650,7 +650,7 @@ Backbone.Validation = (function(_){
       // the max length value specified
       maxLength: function(value, attr, maxLength, model) {
         if (!_.isString(value) || value.length > maxLength) {
-          return this.format(defaultMessages.maxLength, this.formatLabel(attr, model), maxLength);
+          return this.format(_.result(defaultMessages, 'maxLength'), this.formatLabel(attr, model), maxLength);
         }
       },
 
@@ -659,7 +659,7 @@ Backbone.Validation = (function(_){
       // the two numbers specified
       rangeLength: function(value, attr, range, model) {
         if (!_.isString(value) || value.length < range[0] || value.length > range[1]) {
-          return this.format(defaultMessages.rangeLength, this.formatLabel(attr, model), range[0], range[1]);
+          return this.format(_.result(defaultMessages, 'rangeLength'), this.formatLabel(attr, model), range[0], range[1]);
         }
       },
 
@@ -668,7 +668,7 @@ Backbone.Validation = (function(_){
       // the specified array. Case sensitive matching
       oneOf: function(value, attr, values, model) {
         if(!_.include(values, value)){
-          return this.format(defaultMessages.oneOf, this.formatLabel(attr, model), values.join(', '));
+          return this.format(_.result(defaultMessages, 'oneOf'), this.formatLabel(attr, model), values.join(', '));
         }
       },
 
@@ -677,7 +677,7 @@ Backbone.Validation = (function(_){
       // with the name specified
       equalTo: function(value, attr, equalTo, model, computed) {
         if(value !== computed[equalTo]) {
-          return this.format(defaultMessages.equalTo, this.formatLabel(attr, model), this.formatLabel(equalTo, model));
+          return this.format(_.result(defaultMessages, 'equalTo'), this.formatLabel(attr, model), this.formatLabel(equalTo, model));
         }
       },
 
@@ -686,7 +686,7 @@ Backbone.Validation = (function(_){
       // Can be a regular expression or the name of one of the built in patterns
       pattern: function(value, attr, pattern, model) {
         if (!hasValue(value) || !value.toString().match(defaultPatterns[pattern] || pattern)) {
-          return this.format(defaultMessages[pattern] || defaultMessages.inlinePattern, this.formatLabel(attr, model), pattern);
+          return this.format(_.result(defaultMessages, pattern) || defaultMessages.inlinePattern, this.formatLabel(attr, model), pattern);
         }
       }
     };
