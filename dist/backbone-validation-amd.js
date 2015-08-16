@@ -256,14 +256,17 @@
             }
             if (attrs) {
               flattened = flatten(this.attributes);
-              //Loop through all associated views
-              _.each(this.associatedViews, function(view) {
-                _.each(attrs, function (attr) {
-                  error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
-                  if (error) {
-                    options.invalid(view, attr, error, options.selector);
+              //Loop through all attributes and marke attributes invalid if appropriate
+              _.each(attrs, function (attr) {
+                error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
+                if (error) {
                     invalidAttrs = invalidAttrs || {};
                     invalidAttrs[attr] = error;
+                }
+                //trigger valid/invalid events for each associated view
+                _.each(this.associatedViews, function(view) {
+                  if (error) {
+                    options.invalid(view, attr, error, options.selector);
                   } else {
                     options.valid(view, attr, options.selector);
                   }
