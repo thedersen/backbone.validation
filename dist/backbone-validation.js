@@ -254,11 +254,11 @@ Backbone.Validation = (function(_){
               _.each(attrs, function (attr) {
                 error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
                 if (error) {
-                  options.invalid(view, attr, error, options.selector);
+                  options.invalid(view, attr, error, options.selector, this);
                   invalidAttrs = invalidAttrs || {};
                   invalidAttrs[attr] = error;
                 } else {
-                  options.valid(view, attr, options.selector);
+                  options.valid(view, attr, options.selector, this);
                 }
               }, this);
             }, this);
@@ -298,10 +298,10 @@ Backbone.Validation = (function(_){
                   changed = changedAttrs.hasOwnProperty(attr);
 
                 if(!invalid){
-                  opt.valid(view, attr, opt.selector);
+                  opt.valid(view, attr, opt.selector, model);
                 }
                 if(invalid && (changed || validateAll)){
-                  opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector);
+                  opt.invalid(view, attr, result.invalidAttrs[attr], opt.selector, model);
                 }
             });
           });
@@ -429,7 +429,7 @@ Backbone.Validation = (function(_){
     // Gets called when a previously invalid field in the
     // view becomes valid. Removes any error message.
     // Should be overridden with custom functionality.
-    valid: function(view, attr, selector) {
+    valid: function(view, attr, selector, model) {
       view.$('[' + selector + '~="' + attr + '"]')
           .removeClass('invalid')
           .removeAttr('data-error');
@@ -438,7 +438,7 @@ Backbone.Validation = (function(_){
     // Gets called when a field in the view becomes invalid.
     // Adds a error message.
     // Should be overridden with custom functionality.
-    invalid: function(view, attr, error, selector) {
+    invalid: function(view, attr, error, selector, model) {
       view.$('[' + selector + '~="' + attr + '"]')
           .addClass('invalid')
           .attr('data-error', error);
