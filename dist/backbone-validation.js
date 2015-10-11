@@ -429,7 +429,7 @@ Backbone.Validation = (function(_){
     // Gets called when a previously invalid field in the
     // view becomes valid. Removes any error message.
     // Should be overridden with custom functionality.
-    valid: function(view, attr, selector) {
+    valid: function(view, attr, selector, model) {
       view.$('[' + selector + '~="' + attr + '"]')
           .removeClass('invalid')
           .removeAttr('data-error');
@@ -438,7 +438,7 @@ Backbone.Validation = (function(_){
     // Gets called when a field in the view becomes invalid.
     // Adds a error message.
     // Should be overridden with custom functionality.
-    invalid: function(view, attr, error, selector) {
+    invalid: function(view, attr, error, selector, model) {
       view.$('[' + selector + '~="' + attr + '"]')
           .addClass('invalid')
           .attr('data-error', error);
