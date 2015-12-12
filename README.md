@@ -710,7 +710,7 @@ Validates that the value has to be equal to one of the elements in the specified
 var SomeModel = Backbone.Model.extend({
   validation: {
     country: {
-      oneOf: ['Norway', 'Sweeden']
+      oneOf: ['Norway', 'Sweden']
     }
   }
 });
