@@ -1,6 +1,6 @@
 {
   "name": "backbone.validation",
-  "version": "0.11.3",
+  "version": "0.11.5",
   "main": "dist/backbone-validation.js",
   "dependencies": {
     "underscore": ">=1.5.0",
