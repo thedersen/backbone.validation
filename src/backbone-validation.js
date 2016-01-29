@@ -565,7 +565,7 @@ Backbone.Validation = (function(_){
 
     // Determines whether or not a value is empty
     var hasValue = function(value) {
-      return !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) && trim(value) === '') || (_.isArray(value) && _.isEmpty(value)));
+      return !(_.isNull(value) || _.isUndefined(value) || (_.isString(value) && value === '') || (_.isArray(value) && _.isEmpty(value)));
     };
 
     return {
