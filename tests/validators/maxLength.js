@@ -28,7 +28,15 @@ buster.testCase("maxLength validator", {
         this.model.set({name:'aaa'}, {validate: true});
     },
 
-    "string with length longer than maxLenght is invalid": function() {
+    "has default error message for array": function(done) {
+        this.model.bind('validated:invalid', function(model, error){
+            assert.equals({name: 'Name must contain at most 2 elements'}, error);
+            done();
+        });
+        this.model.set({name:['a','a','a']}, {validate: true});
+    },
+
+    "string with length longer than maxLength is invalid": function() {
         refute(this.model.set({
             name: 'aaa'
         }, {validate: true}));
@@ -55,6 +63,24 @@ buster.testCase("maxLength validator", {
     "non strings are treated as an error": function() {
         refute(this.model.set({
             name: 123
+        }, {validate: true}));
+    },
+
+    "array with length longer than maxLength is invalid": function() {
+        refute(this.model.set({
+            name: ['a', 'a', 'a']
+        }, {validate: true}));
+    },
+
+    "array with length equal to maxLength is valid": function() {
+        assert(this.model.set({
+            name: ['a', 'a']
+        }, {validate: true}));
+    },
+
+    "array with length shorter than maxLength is valid": function() {
+        assert(this.model.set({
+            name: ['a']
         }, {validate: true}));
     },
 

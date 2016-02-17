@@ -28,6 +28,14 @@ buster.testCase("rangeLength validator", {
         this.model.set({name:'a'}, {validate: true});
     },
 
+    "has default error message for arrays": function(done) {
+        this.model.bind('validated:invalid', function(model, error){
+            assert.equals({name: 'Name must contain between 2 and 4 elements'}, error);
+            done();
+        });
+        this.model.set({name:['a']}, {validate: true});
+    },
+
     "string with length shorter than first value is invalid": function() {
         refute(this.model.set({
             name: 'a'
@@ -55,6 +63,36 @@ buster.testCase("rangeLength validator", {
     "string with length within range is valid": function() {
         assert(this.model.set({
             name: 'aaa'
+        }, {validate: true}));
+    },
+
+    "array with length shorter than first value is invalid": function() {
+        refute(this.model.set({
+            name: ['a']
+        }, {validate: true}));
+    },
+
+    "array with length equal to first value is valid": function() {
+        assert(this.model.set({
+            name: ['a','a']
+        }, {validate: true}));
+    },
+
+    "array with length longer than last value is invalid": function() {
+        refute(this.model.set({
+            name: ['a', 'a', 'a', 'a', 'a']
+        }, {validate: true}));
+    },
+
+    "array with length equal to last value is valid": function() {
+        assert(this.model.set({
+            name: ['a', 'a', 'a', 'a']
+        }, {validate: true}));
+    },
+
+    "array with length within range is valid": function() {
+        assert(this.model.set({
+            name: ['a', 'a', 'a']
         }, {validate: true}));
     },
 

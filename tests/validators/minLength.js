@@ -28,7 +28,15 @@ buster.testCase("minLength validator", {
         this.model.set({name:''}, {validate: true});
     },
 
-    "string with length shorter than minLenght is invalid": function() {
+    "has default error message for array": function(done) {
+        this.model.bind('validated:invalid', function(model, error){
+            assert.equals({name: 'Name must contain at least 2 elements'}, error);
+            done();
+        });
+        this.model.set({name:[]}, {validate: true});
+    },
+
+    "string with length shorter than minLength is invalid": function() {
         refute(this.model.set({
             name: 'a'
         }, {validate: true}));
@@ -55,6 +63,24 @@ buster.testCase("minLength validator", {
     "non strings are treated as an error": function() {
         refute(this.model.set({
             name: 123
+        }, {validate: true}));
+    },
+
+    "array with length shorter than minLength is invalid": function() {
+        refute(this.model.set({
+            name: ['a']
+        }, {validate: true}));
+    },
+
+    "array with length equal to minLength is valid": function() {
+        assert(this.model.set({
+            name: ['a', 'a']
+        }, {validate: true}));
+    },
+
+    "array with length greater than minLength is valid": function() {
+        assert(this.model.set({
+            name: ['a', 'a', 'a', 'a']
         }, {validate: true}));
     },
 
