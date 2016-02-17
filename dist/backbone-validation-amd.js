@@ -1,6 +1,6 @@
 // Backbone.Validation v0.11.5
 //
-// Copyright (c) 2011-2015 Thomas Pedersen
+// Copyright (c) 2011-2016 Thomas Pedersen
 // Distributed under MIT License
 //
 // Documentation and full license available at:
@@ -486,6 +486,10 @@
       minLength: '{0} must be at least {1} characters',
       maxLength: '{0} must be at most {1} characters',
       rangeLength: '{0} must be between {1} and {2} characters',
+      lengthArray: '{0} must contain {1} elements',
+      minLengthArray: '{0} must contain at least {1} elements',
+      maxLengthArray: '{0} must contain at most {1} elements',
+      rangeLengthArray: '{0} must contain between {1} and {2} elements',
       oneOf: '{0} must be one of: {1}',
       equalTo: '{0} must be the same as {1}',
       digits: '{0} must only contain digits',
@@ -645,8 +649,11 @@
         // Validates that the value has to be a string with length equal to
         // the length value specified
         length: function(value, attr, length, model) {
-          if (!_.isString(value) || value.length !== length) {
-            return this.format(defaultMessages.length, this.formatLabel(attr, model), length);
+          var isString = _.isString(value);
+          var isArray = _.isArray(value);
+  
+          if ((!isString && !isArray) || value.length !== length) {
+            return this.format(isArray ? defaultMessages.lengthArray : defaultMessages.length, this.formatLabel(attr, model), length);
           }
         },
   
@@ -654,8 +661,11 @@
         // Validates that the value has to be a string with length equal to or greater than
         // the min length value specified
         minLength: function(value, attr, minLength, model) {
-          if (!_.isString(value) || value.length < minLength) {
-            return this.format(defaultMessages.minLength, this.formatLabel(attr, model), minLength);
+          var isString = _.isString(value);
+          var isArray = _.isArray(value);
+  
+          if ((!isString && !isArray) || value.length < minLength) {
+            return this.format(isArray ? defaultMessages.minLengthArray : defaultMessages.minLength, this.formatLabel(attr, model), minLength);
           }
         },
   
@@ -663,8 +673,11 @@
         // Validates that the value has to be a string with length equal to or less than
         // the max length value specified
         maxLength: function(value, attr, maxLength, model) {
-          if (!_.isString(value) || value.length > maxLength) {
-            return this.format(defaultMessages.maxLength, this.formatLabel(attr, model), maxLength);
+          var isString = _.isString(value);
+          var isArray = _.isArray(value);
+  
+          if ((!isString && !isArray) || value.length > maxLength) {
+            return this.format(isArray ? defaultMessages.maxLengthArray : defaultMessages.maxLength, this.formatLabel(attr, model), maxLength);
           }
         },
   
@@ -672,8 +685,11 @@
         // Validates that the value has to be a string and equal to or between
         // the two numbers specified
         rangeLength: function(value, attr, range, model) {
-          if (!_.isString(value) || value.length < range[0] || value.length > range[1]) {
-            return this.format(defaultMessages.rangeLength, this.formatLabel(attr, model), range[0], range[1]);
+          var isString = _.isString(value);
+          var isArray = _.isArray(value);
+  
+          if ((!isString && !isArray) || value.length < range[0] || value.length > range[1]) {
+            return this.format(isArray ? defaultMessages.rangeLengthArray : defaultMessages.rangeLength, this.formatLabel(attr, model), range[0], range[1]);
           }
         },
   

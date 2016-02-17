@@ -28,6 +28,14 @@ buster.testCase("length validator", {
         this.model.set({postalCode:''}, {validate: true});
     },
 
+    "has default error message for array": function(done) {
+        this.model.bind('validated:invalid', function(model, error){
+            assert.equals({postalCode: 'Postal code must contain 2 elements'}, error);
+            done();
+        });
+        this.model.set({postalCode:[]}, {validate: true});
+    },
+
     "string with length shorter than length is invalid": function() {
         refute(this.model.set({
             postalCode: 'a'
@@ -55,6 +63,24 @@ buster.testCase("length validator", {
     "non strings are treated as an error": function() {
         refute(this.model.set({
             postalCode: 123
+        }, {validate: true}));
+    },
+
+    "array with length shorter than length is invalid": function() {
+        refute(this.model.set({
+            postalCode: ['a']
+        }, {validate: true}));
+    },
+
+    "array with length longer than length is invalid": function() {
+        refute(this.model.set({
+            postalCode: ['a', 'a', 'a']
+        }, {validate: true}));
+    },
+
+    "array with length equal to length is valid": function() {
+        assert(this.model.set({
+            postalCode: ['a', 'a']
         }, {validate: true}));
     },
 
