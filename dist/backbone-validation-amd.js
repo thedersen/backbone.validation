@@ -141,13 +141,6 @@
       var getValidators = function(model, attr) {
         var attrValidationSet = model.validation ? _.result(model, 'validation')[attr] || {} : {};
   
-        // If the validator is a function or a string, wrap it in a function validator
-        if (_.isFunction(attrValidationSet) || _.isString(attrValidationSet)) {
-          attrValidationSet = {
-            fn: attrValidationSet
-          };
-        }
-  
         // Stick the validator object into an array
         if(!_.isArray(attrValidationSet)) {
           attrValidationSet = [attrValidationSet];
@@ -157,6 +150,14 @@
         // with a validation method to call, the value to validate against
         // and the specified error message, if any
         return _.reduce(attrValidationSet, function(memo, attrValidation) {
+          
+          // If the validator is a function or a string, wrap it in a function validator
+          if (_.isFunction(attrValidation) || _.isString(attrValidation)) {
+            attrValidation = {
+              fn: attrValidation
+            };
+          }
+          
           _.each(_.without(_.keys(attrValidation), 'msg'), function(validator) {
             memo.push({
               fn: defaultValidators[validator],
