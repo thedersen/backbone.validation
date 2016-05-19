@@ -1,18 +1,13 @@
 {
   "name": "backbone-validation",
   "title": "Backbone.Validation",
-  "version": "0.11.3",
+  "version": "0.11.5",
   "author": {
     "name": "Thomas Pedersen",
     "url": "http://thedersen.com/"
   },
   "homepage": "http://thedersen.com/projects/backbone-validation",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://thedersen.mit-license.org/"
-    }
-  ],
+  "license": "MIT",
   "bugs": {
     "url": "http://github.com/thedersen/backbone.validation/issues"
   },

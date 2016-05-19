@@ -257,7 +257,7 @@ If you don't pass an argument, the properties defined by the `attributes` bind o
 var isValid = model.isValid();
 ```
 
-If you pass `true` as an argument, this will force an validation before the result is returned:
+If you pass `true` as an argument, this will force a validation before the result is returned:
 
 ```js
 var isValid = model.isValid(true);
@@ -301,7 +301,7 @@ The `Backbone.Validation.callbacks` contains two methods: `valid` and `invalid`.
 
 The default implementation of `invalid` tries to look up an element within the view with an name attribute equal to the name of the attribute that is validated. If it finds one, an `invalid` class is added to the element as well as a `data-error` attribute with the error message. The `valid` method removes these if they exists.
 
-The implementation is a bit naïve, so I recomend that you override it with your own implementation
+The implementation is a bit naïve, so I recommend that you override it with your own implementation
 
 globally:
 
@@ -922,7 +922,7 @@ The default implementation of the callbacks are a bit naïve, since it is very d
 
 My recommendation is to override the callbacks and implement your own strategy for displaying the error messages.
 
-Please refer to [this section](/#configuration/callbacks) for more details.
+Please refer to [this section](#callbacks) for more details.
 
 ### How can I use it with Twitter Bootstrap?
 
@@ -933,10 +933,18 @@ https://gist.github.com/2909552
 Basic behaviour:
 
 * The control-group gets an error class so that inputs get the red border
-* By default error messages get rendered as &lt;p class="help-block"&gt; (which has red text because of the error class)
+* By default error messages get rendered as `<p class="help-block">` (which has red text because of the error class)
 * You may use &lt;input .... data-error-style="inline"&gt; in your form to force rendering of a &lt;span class="help-inline"&gt;
 
 ## Release notes
+
+#### v0.11.5 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.4...v0.11.5)
+
+* Check for no associatedViews in unbindModel().
+
+#### v0.11.4 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.3...v0.11.4)
+
+* Support arrays in the attributes.
 
 #### v0.11.3 [commits](https://github.com/thedersen/backbone.validation/compare/v0.11.2...v0.11.3)
 
