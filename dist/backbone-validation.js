@@ -468,7 +468,7 @@ Backbone.Validation = (function(_){
   // --------------
 
   // Error message for the build in validators.
-  // {x} gets swapped out with arguments form the validator.
+  // {x} gets swapped out with arguments from the validator.
   var defaultMessages = Validation.messages = {
     required: '{0} is required',
     acceptance: '{0} must be accepted',
