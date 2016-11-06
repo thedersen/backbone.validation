@@ -1,15 +1,15 @@
 // Backbone.Validation v0.11.5
 //
-// Copyright (c) 2011-2015 Thomas Pedersen
+// Copyright (c) 2011-2016 Thomas Pedersen
 // Distributed under MIT License
 //
 // Documentation and full license available at:
 // http://thedersen.com/projects/backbone-validation
 (function (factory) {
   if (typeof exports === 'object') {
-    module.exports = factory(require('backbone'), require('underscore'));
+    module.exports = factory(require('backbone'), require('lodash'));
   } else if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'underscore'], factory);
+    define(['backbone', 'lodash'], factory);
   }
 }(function (Backbone, _) {
   Backbone.Validation = (function(_){
