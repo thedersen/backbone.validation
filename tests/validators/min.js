@@ -106,5 +106,29 @@ buster.testCase("min validator", {
                 age: null
             }, {validate: true}));
         }
+    },
+
+    "when min:0, 0 < val < 1": {
+        setUp: function() {
+            this.model.validation.aFloat = {
+                min: 0
+            };
+        },
+        "val is string, no leading zero, e.g. '.2'": function() {
+            assert(this.model.set({
+                aFloat: '.2'
+            }, {validate: true}));
+        },
+        "val is string, leading zero, e.g. '0.2'": function() {
+            assert(this.model.set({
+                aFloat: '0.2'
+            }, {validate: true}));
+        },
+        "val is number, leading zero, e.g. 0.2": function() {
+            assert(this.model.set({
+                aFloat: 0.2
+            }, {validate: true}));
+        }
     }
+
 });
