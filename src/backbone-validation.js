@@ -425,7 +425,8 @@ Backbone.Validation = (function(_){
     valid: function(view, attr, selector) {
       view.$('[' + selector + '~="' + attr + '"]')
           .removeClass('invalid')
-          .removeAttr('data-error');
+          .removeAttr('data-error')
+          .trigger('valid');
     },
 
     // Gets called when a field in the view becomes invalid.
@@ -434,7 +435,8 @@ Backbone.Validation = (function(_){
     invalid: function(view, attr, error, selector) {
       view.$('[' + selector + '~="' + attr + '"]')
           .addClass('invalid')
-          .attr('data-error', error);
+          .attr('data-error', error)
+          .trigger('invalid');
     }
   };
 
