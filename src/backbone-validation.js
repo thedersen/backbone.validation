@@ -668,7 +668,7 @@ Backbone.Validation = (function(_){
       // Validates that the value has to be equal to one of the elements in
       // the specified array. Case sensitive matching
       oneOf: function(value, attr, values, model) {
-        if(!_.include(values, value)){
+        if(!_.includes(values, value)){
           return this.format(defaultMessages.oneOf, this.formatLabel(attr, model), values.join(', '));
         }
       },
