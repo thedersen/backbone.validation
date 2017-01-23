@@ -25,7 +25,7 @@
   "main": "./dist/backbone-validation-amd.js",
   "dependencies": {
     "backbone": ">=1.0.0",
-    "underscore": ">=1.4.3"
+    "lodash": "^4.0.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
