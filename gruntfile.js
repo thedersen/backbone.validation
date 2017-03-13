@@ -44,16 +44,6 @@ module.exports = function(grunt) {
       files: '<%=grunt.config.get("lint").files%>',
       tasks: 'default'
     },
-    buster: {
-      test: {
-        'config': 'buster.js',
-        'color': 'none',
-        'config-group': 'Browser'
-      },
-      server: {
-        'port': '1111'
-      }
-    },
     jshint: {
       all: ['grunt.js', 'src/**/*.js', 'tests/**/*.js']
     },
@@ -124,12 +114,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['rig', 'jshint', 'buster', 'uglify']);
+  grunt.registerTask('default', ['rig', 'jshint', 'uglify']);
   grunt.registerTask('publish', ['docco', 'shell']);
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-buster');
   grunt.loadNpmTasks('grunt-docco');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-rigger');
