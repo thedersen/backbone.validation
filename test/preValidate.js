@@ -1,19 +1,4 @@
-var assert = require('chai').assert;
-var refute = assert.isNotOk;
-var _ = require('underscore');
-var Backbone = require('backbone');
-require('../dist/backbone-validation-amd');
-
 module.exports = {
-
-  before: function() {
-    this.jsdom = require('jsdom-global')()
-    Backbone.$ = $ = require('jquery')(window)
-  },
-
-  after: function() {
-    this.jsdom()
-  },
 
   "preValidate": {
 

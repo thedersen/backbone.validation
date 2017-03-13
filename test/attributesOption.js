@@ -1,26 +1,4 @@
-var assert = require('chai').assert;
-var _ = require('underscore');
-var Backbone = require('backbone');
-require('../dist/backbone-validation-amd');
-
-assert.defined = assert.isDefined;
-assert.equals = assert.equal;
-assert.contains = assert.include;
-var refute = assert.isNotOk;
-refute.contains = assert.notInclude;
-refute.defined = assert.isUndefined;
-
 module.exports = {
-
-    before: function () {
-        this.jsdom = require('jsdom-global')()
-        Backbone.$ = $ = require('jquery')(window)
-    },
-
-    after: function () {
-        this.jsdom()
-    },
-
     "Setting options.attributes": {
         beforeEach: function () {
             var View = Backbone.View.extend({

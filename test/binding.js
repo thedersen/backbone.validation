@@ -1,32 +1,4 @@
-var assert = require('chai').assert;
-var sinon = require('sinon');
-var _ = require('underscore');
-var Backbone = require('backbone');
-require('../dist/backbone-validation-amd');
-
-assert.defined = assert.isDefined;
-assert.equals = assert.equal;
-assert.contains = assert.include;
-assert.same = assert.strictEqual;
-assert.exception = assert.throws;
-var refute = assert.isNotOk;
-refute.contains = assert.notInclude;
-refute.defined = assert.isUndefined;
-refute.same = assert.notStrictEqual;
-refute.exception = assert.doesNotThrow;
-
 module.exports = {
-
-    before: function () {
-        this.jsdom = require('jsdom-global')()
-        Backbone.$ = $ = require('jquery')(window)
-    },
-
-    after: function () {
-        this.jsdom()
-    },
-
-
     'Binding to view with model': {
         beforeEach: function () {
             var View = Backbone.View.extend({
@@ -116,7 +88,7 @@ module.exports = {
                     name: ''
                 }, { validate: true });
 
-                assert(this.invalid.calledWith( this.view, 'name', 'Name is invalid', 'some-selector'));
+                assert(this.invalid.calledWith(this.view, 'name', 'Name is invalid', 'some-selector'));
             }
         },
 
