@@ -24,27 +24,28 @@
     "url": "http://github.com/thedersen/backbone.validation.git"
   },
   "scripts": {
-    "test": "mocha --ui exports",
+    "test": "mocha --ui exports --recursive",
     "prepublish": "grunt"
   },
   "main": "./dist/backbone-validation-amd.js",
-  "dependencies": {
+  "peerDependencies": {
     "backbone": "^1.3.3",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "backbone": "^1.3.3",
     "chai": "^3.5.0",
-    "grunt": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-docco": "*",
-    "grunt-rigger": "*",
-    "grunt-shell": "*",
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^2.2.0",
+    "grunt-docco": "^0.5.0",
+    "grunt-rigger": "^0.6.0",
+    "grunt-shell": "^2.1.0",
     "jquery": "^3.1.1",
-    "jsdom": "^9.11.0",
+    "jsdom": "^9.12.0",
     "jsdom-global": "^2.1.1",
     "mocha": "^3.2.0",
-    "mocha-phantomjs": "^4.1.0",
-    "sinon": "^1.17.7"
+    "sinon": "^1.17.7",
+    "underscore": "^1.8.3"
   }
 }
