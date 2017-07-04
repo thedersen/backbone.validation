@@ -1,6 +1,6 @@
 // Backbone.Validation v0.11.5
 //
-// Copyright (c) 2011-2015 Thomas Pedersen
+// Copyright (c) 2011-2017 Thomas Pedersen
 // Distributed under MIT License
 //
 // Documentation and full license available at:
@@ -257,8 +257,8 @@
             if (attrs) {
               flattened = flatten(this.attributes);
               //Loop through all associated views
-              _.each(this.associatedViews, function(view) {
-                _.each(attrs, function (attr) {
+              _.each(this.associatedViews, _.bind(function(view) {
+                _.each(attrs, _.bind(function (attr) {
                   error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
                   if (error) {
                     options.invalid(view, attr, error, options.selector);
@@ -267,8 +267,8 @@
                   } else {
                     options.valid(view, attr, options.selector);
                   }
-                }, this);
-              }, this);
+                }, this));
+              }, this));
             }
   
             if(option === true) {

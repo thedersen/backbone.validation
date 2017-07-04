@@ -243,8 +243,8 @@ Backbone.Validation = (function(_){
           if (attrs) {
             flattened = flatten(this.attributes);
             //Loop through all associated views
-            _.each(this.associatedViews, function(view) {
-              _.each(attrs, function (attr) {
+            _.each(this.associatedViews, _.bind(function(view) {
+              _.each(attrs, _.bind(function (attr) {
                 error = validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
                 if (error) {
                   options.invalid(view, attr, error, options.selector);
@@ -253,8 +253,8 @@ Backbone.Validation = (function(_){
                 } else {
                   options.valid(view, attr, options.selector);
                 }
-              }, this);
-            }, this);
+              }, this));
+            }, this));
           }
 
           if(option === true) {
