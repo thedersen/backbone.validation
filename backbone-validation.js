@@ -1,10 +1,3 @@
-// Backbone.Validation v0.11.5
-//
-// Copyright (c) 2011-2015 Thomas Pedersen
-// Distributed under MIT License
-//
-// Documentation and full license available at:
-// http://thedersen.com/projects/backbone-validation
 Backbone.Validation = (function(_){
   'use strict';
 
@@ -674,7 +667,7 @@ Backbone.Validation = (function(_){
       // Validates that the value has to be equal to one of the elements in
       // the specified array. Case sensitive matching
       oneOf: function(value, attr, values, model) {
-        if(!_.include(values, value)){
+        if(!_.includes(values, value)){
           return this.format(defaultMessages.oneOf, this.formatLabel(attr, model), values.join(', '));
         }
       },
